@@ -1,0 +1,35 @@
+images {
+  image: "/assets/images/background.png"
+}
+images {
+  image: "/assets/images/logo.png"
+}
+images {
+  image: "/builtins/graphics/particle_blob.png"
+}
+images {
+  image: "/assets/images/enemies/circlebot.png"
+}
+images {
+  image: "/assets/images/enemies/hovercraftbot.png"
+}
+images {
+  image: "/assets/images/enemies/minibot1.png"
+}
+images {
+  image: "/assets/images/enemies/squarebot.png"
+}
+images {
+  image: "/assets/images/enemies/tallbot.png"
+}
+images {
+  image: "/assets/images/flower/flower3.png"
+}
+images {
+  image: "/assets/images/grass_background.png"
+}
+images {
+  image: "/assets/images/missile.png"
+  pivot_x: 0.25
+}
+extrude_borders: 2

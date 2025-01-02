@@ -1,0 +1,14 @@
+local health_module = require("main._scripts.modules.health_module")
+go.property("max_health", 100)
+
+function init(self)
+	health_module.init(self)
+end
+
+function on_message(self, message_id, message, sender)
+	if message_id == hash("bulletHit") then
+		local damage = message.damage
+		health_module.apply_damage(self, damage)
+	end
+end
+

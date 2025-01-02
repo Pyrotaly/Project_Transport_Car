@@ -1,0 +1,101 @@
+-- ---------------------------------------------------------
+-- This is to make screen coordinates to world cooridnates
+-- ---------------------------------------------------------
+local DISPLAY_WIDTH = sys.get_config_int("display.width")
+local DISPLAY_HEIGHT = sys.get_config_int("display.height")
+
+-- convert screen to world coordinates taking into account
+-- the view and projection of a specific camera
+local function screen_to_world(x, y, z, camera)
+	local projection = go.get(camera, "projection")
+	local view = go.get(camera, "view")
+	local w, h = window.get_size()
+	-- The window.get_size() function will return the scaled window size,
+	-- ie taking into account display scaling (Retina screens on macOS for
+	-- instance). We need to adjust for display scaling in our calculation.
+	w = w / (w / DISPLAY_WIDTH)
+	h = h / (h / DISPLAY_HEIGHT)
+
+	-- https://defold.com/manuals/camera/#converting-mouse-to-world-coordinates
+	local inv = vmath.inv(projection * view)
+	x = (2 * x / w) - 1
+	y = (2 * y / h) - 1
+	z = (2 * z) - 1
+	local x1 = x * inv.m00 + y * inv.m01 + z * inv.m02 + inv.m03
+	local y1 = x * inv.m10 + y * inv.m11 + z * inv.m12 + inv.m13
+	local z1 = x * inv.m20 + y * inv.m21 + z * inv.m22 + inv.m23
+	return x1, y1, z1
+end
+
+-- ---------------------------------------------------------
+-- This is to handle orbiting
+-- ---------------------------------------------------------
+local orbitCenter
+local orbitRadius = 70
+local additionalRotation = math.pi  -- 90 degrees in radians
+
+local canShoot = true 
+local world = vmath.vector3(0, 0, 1)
+local currentGun = "1"
+
+local items = {
+	gun1 = { damage = 50, speed = 5000, name = "Blaster", life = 0.4 },
+	gun2 = { damage = 35, speed = 2.0, name = "Pistol", life = 0.4 },
+	gun3 = { damage = 75, speed = 1.0, name = "Rocket Launcher", life = 0.4 }
+}
+
+function init(self)
+	self.dir = vmath.vector3()
+
+	orbitCenter = go.get_position()
+end
+
+function fixed_update(self, dt)
+	orbitCenter = go.get_position()
+
+	local diff = world - orbitCenter -- Calculate the difference between mouse position and orbit center
+	local angle = math.atan2(diff.y, diff.x) -- Calculate the angle from the difference
+
+	-- Calculate the new position on the orbit path
+	local orbitPosition = orbitCenter + vmath.vector3(math.cos(angle) * orbitRadius, 
+	math.sin(angle) * orbitRadius, 0) 
+	go.set_position(orbitPosition, "satellite")
+
+	angle = math.atan2(orbitPosition.y - orbitCenter.y, orbitPosition.x - orbitCenter.x) -- Calculate the rotation angle to point outward from the center
+	go.set_rotation(vmath.quat_rotation_z(angle + 2*additionalRotation), "satellite") -- Set the rotation of the object to point outward from the center
+	self.direction = angle + 2*additionalRotation
+end
+
+function on_message(self, message_id, message, sender)
+	if message_id == hash("shoot") and canShoot then
+		print("shoot")
+		canShoot = false
+
+		-- Spawn a bullet
+		local bullet_position = go.get_position("satellite") -- Get the position of the OrbitingTool game object
+		local bullet_rotation = go.get_rotation("satellite") -- Get the rotation of the OrbitingTool game object
+		factory.create("factories#bullet_" .. currentGun, bullet_position, bullet_rotation, 
+		{
+			-- go.property("speed", 0)
+			-- go.property("life", 0)
+			-- go.property("bulletDamage", 0)
+			-- go.property("mask", hash("___"))
+			speed = items["gun" .. currentGun].speed,
+			life = items["gun" .. currentGun].life,
+			bulletDamage = items["gun" .. currentGun].damage,
+			mask = hash("enemy")
+		},
+		 0.6)
+		
+		timer.delay(0.5, false, function()
+			canShoot = true
+		end)
+	end
+end
+
+function on_input(self, action_id, action)
+	local worldx, worldy = screen_to_world(action.x, action.y, 0, "player#camera")
+
+	world = vmath.vector3(worldx, worldy, 1)
+end
+

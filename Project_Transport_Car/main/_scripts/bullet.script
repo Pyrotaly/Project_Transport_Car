@@ -1,0 +1,43 @@
+go.property("speed", 0)
+go.property("life", 0)
+go.property("bulletDamage", 0)
+go.property("mask", hash("___"))
+
+function init(self)
+	-- self.speed = 2000
+	-- self.life = .4
+	local rot = go.get_rotation()
+	self.dir = vmath.rotate(rot, vmath.vector3(1, 0, 0))
+end
+
+function final(self)
+	-- Add finalization code here
+	-- Learn more: https://defold.com/manuals/script/
+	-- Remove this function if not needed
+end
+
+function update(self, dt)
+	-- Add update code here
+	-- Learn more: https://defold.com/manuals/script/
+	-- Remove this function if not needed
+end
+
+function fixed_update(self, dt)
+	local pos = go.get_position()                   
+	pos = pos + self.dir * self.speed * dt          
+	go.set_position(pos) 
+
+	self.life = self.life - dt 
+	if self.life < 0 then
+		go.delete()
+	end
+end
+
+function on_message(self, message_id, message, sender)
+	if message_id == hash("trigger_response") then
+		if message.group == hash(self.mask) then
+			msg.post(message.other_id, "bulletHit", {damage = self.bulletDamage})
+			go.delete()
+		end
+	end
+end
