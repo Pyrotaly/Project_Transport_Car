@@ -1,5 +1,6 @@
 [project]
 title = Project_Transport_Car
+dependencies#0 = https://github.com/rgrams/debug-draw/archive/master.zip
 
 [bootstrap]
 main_collection = /main/levelCollections/0_main_menu.collectionc

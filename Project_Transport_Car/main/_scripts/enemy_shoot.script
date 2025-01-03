@@ -1,33 +1,81 @@
-local function spawn_object()
-	-- Replace this with the actual spawning code, for example:
-	-- factory.create("bullet_factory", bullet_position, bullet_rotation, ...)
-	print("Object spawned!")
+go.property("speed", 0)
+go.property("life", 0)
+go.property("bulletDamage", 0)
+go.property("bulletMask", hash("___"))
+go.property("raytraceMask", hash("___"))
+go.property("target", hash("___"))
+go.property("radius", 500)
+
+local function spawn_object(self)
+	local player_position = go.get_position(self.target) 
+	local direction = player_position - go.get_position()
+	local angle = math.atan2(direction.y, direction.x)
+
+	local rotation = vmath.quat_rotation_z(angle)
+
+	factory.create("#enemy_bullet", nil, rotation, 
+	{
+		-- go.property("speed", 0)
+		-- go.property("life", 0)
+		-- go.property("bulletDamage", 0)
+		-- go.property("mask", hash("___"))
+		speed = self.speed,
+		life = self.life,
+		bulletDamage = self.bulletDamage,
+		mask = hash("bulletMask")
+	},
+	0.6)
 end
 
-local function start_spawning()
-	-- Create a repeating timer that triggers every 1 second
-	go.timer(1, function()
-		spawn_object()  -- Spawn the object
-		return true  -- This ensures the timer keeps repeating every 1 second
-	end)
+local function check_and_shoot(self)
+	local thisPos = go.get_position()
+	local target_position = go.get_position(self.target)
+	local distance = vmath.length(target_position - thisPos)
+
+	if distance <= self.radius then
+		-- Perform raycast
+		local hit = physics.raycast(thisPos, target_position, { self.raytraceMask })
+
+		-- If the ray hits nothing or only hits the target, spawn the bullet
+		if not hit then
+			spawn_object(self)
+		end
+	end
 end
 
 function init(self)
-	-- Add initialization code here
-	-- Learn more: https://defold.com/manuals/script/
-	-- Remove this function if not needed
+	timer.delay(0.5, true, function()
+		check_and_shoot(self) -- Check radius and raytrace, then spawn object
+	end)
 end
 
 function final(self)
-	-- Add finalization code here
-	-- Learn more: https://defold.com/manuals/script/
-	-- Remove this function if not needed
+
+end
+
+-- ---------------------------------------------------------
+-- Debugging
+-- ---------------------------------------------------------
+
+local debugdraw = require ("debug-draw.debug-draw")
+
+local function draw_line(from, to)
+	msg.post("@render:", "draw_line", { start_point = from, end_point = to, color = vmath.vector4(1,0,0,1) })
 end
 
 function update(self, dt)
-	-- Add update code here
-	-- Learn more: https://defold.com/manuals/script/
-	-- Remove this function if not needed
+	local thisPos = go.get_position()
+	local player_position = go.get_position(self.target) 
+	debugdraw.circle(thisPos.x, thisPos.y, 500, "red")
+
+	local from = go.get_position()
+	local to = player_position
+	local result = physics.raycast(from, to, { hash("car") })
+	if result then
+		draw_line(from, result.position)
+	else
+		draw_line(from, to)
+	end
 end
 
 function fixed_update(self, dt)
@@ -42,23 +90,5 @@ end
 function on_message(self, message_id, message, sender)
 	-- Add message-handling code here
 	-- Learn more: https://defold.com/manuals/message-passing/
-	-- Remove this function if not needed
-end
-
-function on_input(self, action_id, action)
-	-- Add input-handling code here. The game object this script is attached to
-	-- must have acquired input focus:
-	--
-	--    msg.post(".", "acquire_input_focus")
-	--
-	-- All mapped input bindings will be received. Mouse and touch input will
-	-- be received regardless of where on the screen it happened.
-	-- Learn more: https://defold.com/manuals/input/
-	-- Remove this function if not needed
-end
-
-function on_reload(self)
-	-- Add reload-handling code here
-	-- Learn more: https://defold.com/manuals/hot-reload/
 	-- Remove this function if not needed
 end

@@ -35,9 +35,7 @@ end
 
 function on_message(self, message_id, message, sender)
 	if message_id == hash("trigger_response") then
-		if message.group == hash(self.mask) then
-			msg.post(message.other_id, "bulletHit", {damage = self.bulletDamage})
-			go.delete()
-		end
+		msg.post(message.other_id, "bulletHit", {damage = self.bulletDamage})
+		go.delete()
 	end
 end

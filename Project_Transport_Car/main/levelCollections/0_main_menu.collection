@@ -15,9 +15,29 @@ instances {
     y: 120.0
   }
 }
+instances {
+  id: "player_enemy_shoot"
+  prototype: "/main/gameObjects/playerEnemies/player_enemy_shoot.go"
+  position {
+    x: 729.0
+    y: 573.0
+  }
+}
 collection_instances {
   id: "player"
   collection: "/main/collections/player.collection"
+  position {
+    x: 1040.0
+    y: 231.0
+  }
+}
+collection_instances {
+  id: "car"
+  collection: "/main/collections/car.collection"
+  position {
+    x: 943.0
+    y: 466.0
+  }
 }
 scale_along_z: 0
 embedded_instances {
@@ -25,17 +45,6 @@ embedded_instances {
   data: "components {\n"
   "  id: \"main\"\n"
   "  component: \"/main/_scripts/main.script\"\n"
-  "}\n"
-  "embedded_components {\n"
-  "  id: \"logo\"\n"
-  "  type: \"sprite\"\n"
-  "  data: \"default_animation: \\\"logo\\\"\\n"
-  "material: \\\"/builtins/materials/sprite.material\\\"\\n"
-  "textures {\\n"
-  "  sampler: \\\"texture_sampler\\\"\\n"
-  "  texture: \\\"/assets/atlases/main.atlas\\\"\\n"
-  "}\\n"
-  "\"\n"
   "}\n"
   "embedded_components {\n"
   "  id: \"background\"\n"
@@ -51,19 +60,16 @@ embedded_instances {
   "    z: -0.5\n"
   "  }\n"
   "}\n"
-  "embedded_components {\n"
-  "  id: \"camera\"\n"
-  "  type: \"camera\"\n"
-  "  data: \"aspect_ratio: 0.6\\n"
-  "fov: 1.0\\n"
-  "near_z: -10.0\\n"
-  "far_z: 10.0\\n"
-  "orthographic_projection: 1\\n"
-  "\"\n"
-  "}\n"
   ""
   position {
     x: 640.0
     y: 360.0
   }
+}
+embedded_instances {
+  id: "enemyFolder"
+  children: "car_enemy_fast"
+  children: "car_enemy_fast1"
+  children: "player_enemy_shoot"
+  data: ""
 }
