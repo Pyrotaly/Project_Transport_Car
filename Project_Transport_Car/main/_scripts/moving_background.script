@@ -1,0 +1,54 @@
+function init(self)
+	self.speed = 500  -- Adjust speed as needed
+end
+
+function update(self, dt)
+	local pos = go.get_position("/background/environmentFolder")
+
+	local screen_width = tonumber(sys.get_config("display.width"))
+	
+	pos.x = pos.x - self.speed * dt  -- Move downward
+
+	-- If background moves off-screen, reset its position
+	if pos.x < -screen_width then
+		pos.x = screen_width
+	end
+
+	go.set_position(pos, "/background/environmentFolder")
+end
+
+--[[
+
+function init(self)
+	self.speed = 300  -- Adjust base speed
+end
+
+function update(self, dt)
+	local bg_far = go.get_position("bg_far")    -- Farthest background
+	local bg_mid = go.get_position("bg_mid")    -- Midground
+	local bg_near = go.get_position("bg_near")  -- Closest (fastest moving)
+
+	-- Move layers at different speeds
+	bg_far.x = bg_far.x + (self.speed * 0.3) * dt
+	bg_mid.x = bg_mid.x + (self.speed * 0.6) * dt
+	bg_near.x = bg_near.x + (self.speed * 1.0) * dt
+
+	-- Loop backgrounds when off-screen
+	local screen_width = tonumber(sys.get_config("display.width")) -- Get screen width
+	if bg_far.x > screen_width then
+		bg_far.x = -screen_width
+	end
+	if bg_mid.x > screen_width then
+		bg_mid.x = -screen_width
+	end
+	if bg_near.x > screen_width then
+		bg_near.x = -screen_width
+	end
+
+	-- Apply new positions
+	go.set_position(bg_far, "bg_far")
+	go.set_position(bg_mid, "bg_mid")
+	go.set_position(bg_near, "bg_near")
+end
+
+]]--

@@ -41,6 +41,10 @@ components {
   id: "enemy_bullet"
   component: "/main/factories/enemy_bullet.factory"
 }
+components {
+  id: "health_manager"
+  component: "/main/_scripts/health_manager.script"
+}
 embedded_components {
   id: "sprite"
   type: "sprite"
