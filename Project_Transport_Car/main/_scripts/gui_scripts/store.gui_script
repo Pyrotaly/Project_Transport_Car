@@ -1,0 +1,48 @@
+local upgrades = require("main._scripts.modules.upgrades_module")
+
+function init(self)
+	msg.post(".", "acquire_input_focus")
+
+	self.upgrade_buttons = {
+		{ node = gui.get_node("car_speed"), upgrade_type = "max_speed", entity = "car" },
+		{ node = gui.get_node("car_health"), upgrade_type = "max_health", entity = "car" },
+		{ node = gui.get_node("car_heal"), upgrade_type = "heal", entity = "car" },
+		{ node = gui.get_node("player_heal"), upgrade_type = "heal", entity = "player" },
+		{ node = gui.get_node("player_health"), upgrade_type = "health", entity = "player" },
+		{ node = gui.get_node("player_damage"), upgrade_type = "damage", entity = "player" }
+	}
+end
+
+function final(self)
+	-- Add finalization code here
+	-- Learn more: https://defold.com/manuals/script/
+	-- Remove this function if not needed
+end
+
+function update(self, dt)
+	-- Add update code here
+	-- Learn more: https://defold.com/manuals/script/
+	-- Remove this function if not needed
+end
+
+function on_message(self, message_id, message, sender)
+	-- Add message-handling code here
+	-- Learn more: https://defold.com/manuals/message-passing/
+	-- Remove this function if not needed
+end
+
+function on_input(self, action_id, action)
+	if action_id == hash("leftTrigger") and action.pressed then
+		for _, button in ipairs(self.upgrade_buttons) do
+			if gui.pick_node(button.node, action.x, action.y) then
+				upgrades.buy_upgrade(button.entity, button.upgrade_type)
+			end
+		end
+	end
+end
+
+function on_reload(self)
+	-- Add reload-handling code here
+	-- Learn more: https://defold.com/manuals/hot-reload/
+	-- Remove this function if not needed
+end

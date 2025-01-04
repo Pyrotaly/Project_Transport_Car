@@ -5,8 +5,22 @@
 -- health_manager.lua
 local M = {}
 
+local playerUpgrade = require("main._scripts.modules.upgrades_module")
+local enemyScaling = require("main._scripts.modules.enemy_scaling_module")
+
 function M.init(entity)
-	entity.health = entity.max_health or 100
+	entity.health_type = hash(entity.health_type) or hash("player")
+
+	if entity.health_type == hash("player") then
+
+		entity.health = entity.max_health + playerUpgrade.player_upgrades_base.health
+	elseif entity.health_type == hash("car") then
+		entity.health = entity.max_health + playerUpgrade.car_upgrades_base.max_health
+	else
+		entity.health = entity.max_health + enemyScaling.upgraded_health
+	end
+
+	print(entity.health)
 end
 
 function M.apply_damage(entity, damage)

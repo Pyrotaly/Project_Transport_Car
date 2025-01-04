@@ -1,0 +1,305 @@
+script: "/main/_scripts/gui_scripts/store.gui_script"
+fonts {
+  name: "default"
+  font: "/builtins/fonts/default.font"
+}
+nodes {
+  position {
+    x: 527.0
+    y: 57.0
+  }
+  size {
+    x: 200.0
+    y: 100.0
+  }
+  color {
+    x: 0.8
+    y: 0.4
+    z: 0.2
+  }
+  type: TYPE_BOX
+  id: "toggle_store"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+}
+nodes {
+  scale {
+    x: 5.84
+    y: 5.84
+    z: 5.84
+  }
+  size {
+    x: 200.0
+    y: 100.0
+  }
+  type: TYPE_TEXT
+  text: "X\n"
+  ""
+  font: "default"
+  id: "text"
+  parent: "toggle_store"
+  inherit_alpha: true
+}
+nodes {
+  size {
+    x: 200.0
+    y: 100.0
+  }
+  type: TYPE_BOX
+  id: "store_folder"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+  visible: false
+}
+nodes {
+  position {
+    x: 642.0
+    y: 488.0
+  }
+  scale {
+    x: 5.489935
+    y: 4.360397
+    z: 4.360397
+  }
+  size {
+    x: 200.0
+    y: 100.0
+  }
+  color {
+    y: 0.702
+    z: 0.4
+  }
+  type: TYPE_BOX
+  id: "box"
+  parent: "store_folder"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+}
+nodes {
+  size {
+    x: 200.0
+    y: 100.0
+  }
+  type: TYPE_BOX
+  id: "car_upgrades"
+  parent: "box"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+  visible: false
+}
+nodes {
+  position {
+    x: -60.63742
+    y: 18.418875
+  }
+  scale {
+    x: 0.2112
+    y: 0.2112
+    z: 0.2112
+  }
+  size {
+    x: 200.0
+    y: 100.0
+  }
+  color {
+    x: 0.702
+    y: 0.102
+    z: 0.102
+  }
+  type: TYPE_BOX
+  id: "car_speed"
+  parent: "car_upgrades"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+}
+nodes {
+  position {
+    x: -3.104305
+    y: 18.418875
+  }
+  scale {
+    x: 0.2112
+    y: 0.2112
+    z: 0.2112
+  }
+  size {
+    x: 200.0
+    y: 100.0
+  }
+  color {
+    x: 0.702
+    y: 0.102
+    z: 0.102
+  }
+  type: TYPE_BOX
+  id: "car_health"
+  parent: "car_upgrades"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+}
+nodes {
+  position {
+    x: 58.36093
+    y: 18.418875
+  }
+  scale {
+    x: 0.2112
+    y: 0.2112
+    z: 0.2112
+  }
+  size {
+    x: 200.0
+    y: 100.0
+  }
+  color {
+    x: 0.702
+    y: 0.102
+    z: 0.102
+  }
+  type: TYPE_BOX
+  id: "car_heal"
+  parent: "car_upgrades"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+}
+nodes {
+  size {
+    x: 200.0
+    y: 100.0
+  }
+  type: TYPE_BOX
+  id: "player_upgrades"
+  parent: "box"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+  visible: false
+}
+nodes {
+  position {
+    x: -60.63742
+    y: -18.62583
+  }
+  scale {
+    x: 0.2112
+    y: 0.2112
+    z: 0.2112
+  }
+  size {
+    x: 200.0
+    y: 100.0
+  }
+  color {
+    x: 0.702
+    y: 0.102
+    z: 0.102
+  }
+  type: TYPE_BOX
+  id: "player_heal"
+  parent: "player_upgrades"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+}
+nodes {
+  position {
+    x: -3.104305
+    y: -18.62583
+  }
+  scale {
+    x: 0.2112
+    y: 0.2112
+    z: 0.2112
+  }
+  size {
+    x: 200.0
+    y: 100.0
+  }
+  color {
+    x: 0.702
+    y: 0.102
+    z: 0.102
+  }
+  type: TYPE_BOX
+  id: "player_health"
+  parent: "player_upgrades"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+}
+nodes {
+  position {
+    x: 58.36093
+    y: -18.62583
+  }
+  scale {
+    x: 0.2112
+    y: 0.2112
+    z: 0.2112
+  }
+  size {
+    x: 200.0
+    y: 100.0
+  }
+  color {
+    x: 0.702
+    y: 0.102
+    z: 0.102
+  }
+  type: TYPE_BOX
+  id: "player_damage"
+  parent: "player_upgrades"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+}
+nodes {
+  scale {
+    x: 1.674
+    y: 1.674
+    z: 1.674
+  }
+  size {
+    x: 200.0
+    y: 100.0
+  }
+  type: TYPE_TEXT
+  text: "player Damage"
+  font: "default"
+  id: "text2"
+  parent: "player_damage"
+  inherit_alpha: true
+}
+nodes {
+  position {
+    x: 756.0
+    y: 56.0
+  }
+  size {
+    x: 200.0
+    y: 100.0
+  }
+  color {
+    y: 0.8
+    z: 0.4
+  }
+  type: TYPE_BOX
+  id: "next_area"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+}
+nodes {
+  scale {
+    x: 6.4
+    y: 6.4
+    z: 6.4
+  }
+  size {
+    x: 200.0
+    y: 100.0
+  }
+  type: TYPE_TEXT
+  text: "->"
+  font: "default"
+  id: "text1"
+  parent: "next_area"
+  inherit_alpha: true
+}
+material: "/builtins/materials/gui.material"
+adjust_reference: ADJUST_REFERENCE_PARENT

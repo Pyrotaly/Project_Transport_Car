@@ -23,9 +23,17 @@ instances {
     y: 573.0
   }
 }
+instances {
+  id: "main"
+  prototype: "/main/gameObjects/main.go"
+  position {
+    x: 640.0
+    y: 360.0
+  }
+}
 collection_instances {
   id: "background"
-  collection: "/main/collections/background.collection"
+  collection: "/main/collections/road_background.collection"
   position {
     z: -1.0
   }
@@ -52,21 +60,5 @@ embedded_instances {
   children: "car_enemy_fast"
   children: "car_enemy_fast1"
   children: "player_enemy_shoot"
-  data: ""
-}
-embedded_instances {
-  id: "go"
-  data: "components {\n"
-  "  id: \"main\"\n"
-  "  component: \"/main/_scripts/main.script\"\n"
-  "}\n"
-  ""
-  position {
-    x: 640.0
-    y: 360.0
-  }
-}
-embedded_instances {
-  id: "go1"
   data: ""
 }

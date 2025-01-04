@@ -1,5 +1,6 @@
 local health_module = require("main._scripts.modules.health_module")
 go.property("max_health", 100)
+go.property("health_type", hash("___")) -- player, enemy, car
 
 function init(self)
 	health_module.init(self)

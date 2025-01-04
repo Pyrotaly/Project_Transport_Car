@@ -1,6 +1,6 @@
 components {
   id: "enemy_shoot"
-  component: "/main/_scripts/enemy_shoot.script"
+  component: "/main/_scripts/entities/enemy_shoot.script"
   properties {
     id: "speed"
     value: "1000.0"
@@ -43,7 +43,12 @@ components {
 }
 components {
   id: "health_manager"
-  component: "/main/_scripts/health_manager.script"
+  component: "/main/_scripts/entities/health_manager.script"
+  properties {
+    id: "health_type"
+    value: "enemy"
+    type: PROPERTY_TYPE_HASH
+  }
 }
 embedded_components {
   id: "sprite"

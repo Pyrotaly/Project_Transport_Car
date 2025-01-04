@@ -44,6 +44,8 @@ local items = {
 	gun3 = { damage = 75, speed = 1.0, name = "Rocket Launcher", life = 0.4 }
 }
 
+local upgrades = require("main._scripts.modules.upgrades_module")
+
 function init(self)
 	self.dir = vmath.vector3()
 
@@ -70,6 +72,10 @@ function on_message(self, message_id, message, sender)
 	if message_id == hash("shoot") and canShoot then
 		canShoot = false
 
+		local base_damage = items["gun" .. currentGun].damage
+		local damage_bonus = upgrades.get_upgrade_value("player", "damage")
+		local total_damage = base_damage + damage_bonus
+		
 		-- Spawn a bullet
 		local bullet_position = go.get_position("satellite") -- Get the position of the OrbitingTool game object
 		local bullet_rotation = go.get_rotation("satellite") -- Get the rotation of the OrbitingTool game object
@@ -81,7 +87,7 @@ function on_message(self, message_id, message, sender)
 			-- go.property("mask", hash("___"))
 			speed = items["gun" .. currentGun].speed,
 			life = items["gun" .. currentGun].life,
-			bulletDamage = items["gun" .. currentGun].damage,
+			bulletDamage = total_damage,
 			mask = hash("enemy")
 		},
 		 0.6)
@@ -93,7 +99,7 @@ function on_message(self, message_id, message, sender)
 end
 
 function on_input(self, action_id, action)
-	local worldx, worldy = screen_to_world(action.x, action.y, 0, "player#camera")
+	local worldx, worldy = screen_to_world(action.x, action.y, 0, "/main#camera")
 
 	world = vmath.vector3(worldx, worldy, 1)
 end

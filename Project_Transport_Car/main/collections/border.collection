@@ -1,0 +1,10 @@
+name: "border"
+collection_instances {
+  id: "background"
+  collection: "/main/collections/road_background.collection"
+}
+scale_along_z: 0
+embedded_instances {
+  id: "go"
+  data: ""
+}

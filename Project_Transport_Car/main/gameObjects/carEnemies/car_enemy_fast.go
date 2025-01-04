@@ -1,10 +1,15 @@
 components {
   id: "health_manager"
-  component: "/main/_scripts/health_manager.script"
+  component: "/main/_scripts/entities/health_manager.script"
   properties {
     id: "max_health"
     value: "100.0"
     type: PROPERTY_TYPE_NUMBER
+  }
+  properties {
+    id: "health_type"
+    value: "enemy"
+    type: PROPERTY_TYPE_HASH
   }
 }
 embedded_components {

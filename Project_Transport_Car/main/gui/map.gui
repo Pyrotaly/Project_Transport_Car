@@ -1,6 +1,22 @@
+script: "/main/_scripts/gui_scripts/map.gui_script"
 fonts {
   name: "default"
   font: "/builtins/fonts/default.font"
+}
+textures {
+  name: "main"
+  texture: "/assets/atlases/main.atlas"
+}
+nodes {
+  size {
+    x: 200.0
+    y: 100.0
+  }
+  type: TYPE_BOX
+  id: "map_folder"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+  visible: false
 }
 nodes {
   position {
@@ -18,133 +34,131 @@ nodes {
   }
   type: TYPE_BOX
   id: "background"
+  parent: "map_folder"
   inherit_alpha: true
   alpha: 0.9
   size_mode: SIZE_MODE_AUTO
 }
 nodes {
   position {
-    x: 102.0
-    y: 296.0
+    x: 377.0
+    y: 336.0
   }
   size {
     x: 100.0
     y: 100.0
   }
   type: TYPE_BOX
-  id: "box"
+  id: "0_5_box"
+  parent: "map_folder"
   inherit_alpha: true
   size_mode: SIZE_MODE_AUTO
 }
 nodes {
   position {
-    x: 295.0
-    y: 405.0
+    x: 490.0
+    y: 567.0
   }
   size {
     x: 100.0
     y: 100.0
   }
   type: TYPE_BOX
-  id: "box1"
+  id: "1_2_box"
+  parent: "map_folder"
   inherit_alpha: true
   size_mode: SIZE_MODE_AUTO
 }
 nodes {
   position {
-    x: 299.0
-    y: 244.0
+    x: 481.0
+    y: 212.0
   }
   size {
     x: 100.0
     y: 100.0
   }
   type: TYPE_BOX
-  id: "box2"
+  id: "7_2_box"
+  parent: "map_folder"
   inherit_alpha: true
   size_mode: SIZE_MODE_AUTO
 }
 nodes {
   position {
-    x: 548.0
-    y: 431.0
+    x: 667.0
+    y: 509.0
   }
   size {
     x: 100.0
     y: 100.0
   }
   type: TYPE_BOX
-  id: "box3"
+  id: "2_5_box"
+  parent: "map_folder"
   inherit_alpha: true
   size_mode: SIZE_MODE_AUTO
 }
 nodes {
   position {
-    x: 533.0
-    y: 246.0
+    x: 731.0
+    y: 273.0
   }
   size {
     x: 100.0
     y: 100.0
   }
   type: TYPE_BOX
-  id: "box4"
+  id: "6_6_box"
+  parent: "map_folder"
   inherit_alpha: true
   size_mode: SIZE_MODE_AUTO
 }
 nodes {
   position {
-    x: 771.0
-    y: 532.0
+    x: 957.0
+    y: 390.0
   }
   size {
     x: 100.0
     y: 100.0
   }
   type: TYPE_BOX
-  id: "box5"
+  id: "4_10_box"
+  parent: "map_folder"
   inherit_alpha: true
   size_mode: SIZE_MODE_AUTO
 }
 nodes {
   position {
-    x: 759.0
-    y: 335.0
+    x: 343.0
+    y: 651.0
   }
-  size {
-    x: 100.0
-    y: 100.0
+  scale {
+    x: 2.7
+    y: 2.7
+    z: 2.7
   }
   type: TYPE_BOX
-  id: "box6"
+  texture: "main/OIP"
+  id: "grid"
+  parent: "map_folder"
   inherit_alpha: true
+  alpha: 0.61
   size_mode: SIZE_MODE_AUTO
+  visible: false
 }
 nodes {
   position {
-    x: 794.0
-    y: 130.0
+    x: 128.0
+    y: 65.0
   }
   size {
-    x: 100.0
+    x: 200.0
     y: 100.0
   }
   type: TYPE_BOX
-  id: "box7"
-  inherit_alpha: true
-  size_mode: SIZE_MODE_AUTO
-}
-nodes {
-  position {
-    x: 1018.0
-    y: 347.0
-  }
-  size {
-    x: 100.0
-    y: 100.0
-  }
-  type: TYPE_BOX
-  id: "box8"
+  id: "time"
   inherit_alpha: true
   size_mode: SIZE_MODE_AUTO
 }
@@ -154,218 +168,47 @@ nodes {
     y: 100.0
   }
   type: TYPE_BOX
-  id: "lineFolder"
+  id: "confirmation_prompt"
   inherit_alpha: true
   size_mode: SIZE_MODE_AUTO
   visible: false
 }
 nodes {
   position {
-    x: 232.0
-    y: 234.0
-  }
-  rotation {
-    z: -14.229
+    x: 1077.0
+    y: 108.0
   }
   scale {
-    y: 0.04883
+    x: 1.89383
+    y: 1.89383
+    z: 1.89383
   }
   size {
     x: 200.0
     y: 100.0
   }
   color {
-    x: 0.702
-    y: 0.102
-    z: 0.102
+    y: 0.502
+    z: 0.502
   }
   type: TYPE_BOX
-  id: "box9"
-  parent: "lineFolder"
+  id: "box"
+  parent: "confirmation_prompt"
   inherit_alpha: true
   size_mode: SIZE_MODE_AUTO
 }
 nodes {
   position {
-    x: 229.0
-    y: 355.0
-  }
-  rotation {
-    z: 19.004
-  }
-  scale {
-    y: 0.04883
+    x: 1074.0
+    y: 101.0
   }
   size {
     x: 200.0
     y: 100.0
   }
-  color {
-    x: 0.702
-    y: 0.102
-    z: 0.102
-  }
   type: TYPE_BOX
-  id: "box10"
-  parent: "lineFolder"
-  inherit_alpha: true
-  size_mode: SIZE_MODE_AUTO
-}
-nodes {
-  position {
-    x: 434.0
-    y: 416.0
-  }
-  rotation {
-    z: 19.004
-  }
-  scale {
-    y: 0.04883
-  }
-  size {
-    x: 200.0
-    y: 100.0
-  }
-  color {
-    x: 0.702
-    y: 0.102
-    z: 0.102
-  }
-  type: TYPE_BOX
-  id: "box11"
-  parent: "lineFolder"
-  inherit_alpha: true
-  size_mode: SIZE_MODE_AUTO
-}
-nodes {
-  position {
-    x: 668.0
-    y: 463.0
-  }
-  rotation {
-    z: 19.004
-  }
-  scale {
-    y: 0.04883
-  }
-  size {
-    x: 200.0
-    y: 100.0
-  }
-  color {
-    x: 0.702
-    y: 0.102
-    z: 0.102
-  }
-  type: TYPE_BOX
-  id: "box12"
-  parent: "lineFolder"
-  inherit_alpha: true
-  size_mode: SIZE_MODE_AUTO
-}
-nodes {
-  position {
-    x: 425.0
-    y: 240.0
-  }
-  rotation {
-    z: -14.229
-  }
-  scale {
-    y: 0.04883
-  }
-  size {
-    x: 200.0
-    y: 100.0
-  }
-  color {
-    x: 0.702
-    y: 0.102
-    z: 0.102
-  }
-  type: TYPE_BOX
-  id: "box13"
-  parent: "lineFolder"
-  inherit_alpha: true
-  size_mode: SIZE_MODE_AUTO
-}
-nodes {
-  position {
-    x: 663.0
-    y: 192.0
-  }
-  rotation {
-    z: -14.229
-  }
-  scale {
-    y: 0.04883
-  }
-  size {
-    x: 200.0
-    y: 100.0
-  }
-  color {
-    x: 0.702
-    y: 0.102
-    z: 0.102
-  }
-  type: TYPE_BOX
-  id: "box14"
-  parent: "lineFolder"
-  inherit_alpha: true
-  size_mode: SIZE_MODE_AUTO
-}
-nodes {
-  position {
-    x: 904.0
-    y: 433.0
-  }
-  rotation {
-    z: -34.366
-  }
-  scale {
-    x: 1.435714
-    y: 0.04883
-  }
-  size {
-    x: 200.0
-    y: 100.0
-  }
-  color {
-    x: 0.702
-    y: 0.102
-    z: 0.102
-  }
-  type: TYPE_BOX
-  id: "box15"
-  parent: "lineFolder"
-  inherit_alpha: true
-  size_mode: SIZE_MODE_AUTO
-}
-nodes {
-  position {
-    x: 909.0
-    y: 174.0
-  }
-  rotation {
-    z: 41.9
-  }
-  scale {
-    x: 1.45412
-    y: 0.04883
-  }
-  size {
-    x: 200.0
-    y: 100.0
-  }
-  color {
-    x: 0.702
-    y: 0.102
-    z: 0.102
-  }
-  type: TYPE_BOX
-  id: "box16"
-  parent: "lineFolder"
+  id: "confirm_button"
+  parent: "confirmation_prompt"
   inherit_alpha: true
   size_mode: SIZE_MODE_AUTO
 }
