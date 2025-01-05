@@ -25,7 +25,7 @@ instances {
 }
 instances {
   id: "main"
-  prototype: "/main/gameObjects/main.go"
+  prototype: "/main/gameObjects/backend/main.go"
   position {
     x: 640.0
     y: 360.0

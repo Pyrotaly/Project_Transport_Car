@@ -2,6 +2,7 @@ local game_manager = require("main._scripts.modules.persistant_data_module")
 
 function init(self)
 	msg.post(".", "acquire_input_focus")
+	
 	self.selected_nodes = {}
 	self.pending_selection = nil
 
@@ -9,12 +10,12 @@ function init(self)
 	gui.set_enabled(self.confirmNode, false)
 	
 	self.coordinates = {
-		{0, 5},
-		{1, 2},
-		{7, 2},
-		{2, 5},
-		{6, 6},
-		{4, 10}
+		{0, 5, 1},
+		{1, 2, 1},
+		{7, 2, 2},
+		{2, 5, 2},
+		{6, 6, 1},
+		{4, 10, 3}
 	}
 
 	-- Loop through each coordinate pair
@@ -48,33 +49,42 @@ end
 
 function on_input(self, action_id, action)
 	if action_id == hash("leftTrigger") and action.pressed then
-		
+
 		if gui.pick_node(self.confirmNode, action.x, action.y) then
-			print("Confirmed destination: " .. self.pending_selection)
-			game_manager.mark_selected(self.pending_selection)  -- Save selection globally
+			print("Confirmed destination: " .. self.pending_selection.node_name .. ", Load Level: " .. self.pending_selection.level)
+			game_manager.mark_selected(self.pending_selection.node_name)  -- Save selection globally
+
+
+			-- /proxy_loader#level_loader_manager
+			msg.post("0_game_managers:/proxy_loader#level_loader_manager", "unloadGUI", { guiNumber = 1 })
+
+			print(self.pending_selection.level)
+
+			msg.post("0_game_managers:/proxy_loader#level_loader_manager", "loadLevel", { newNewLevel = self.pending_selection.level })
+
 			self.pending_selection = nil
 		end
 
-		
 		-- Check if any node is clicked
 		for _, coord in ipairs(self.coordinates) do
-			local x, y = coord[1], coord[2]
+			local x, y, level = coord[1], coord[2], coord[3]
 			local node_name = tostring(x) .. "_" .. tostring(y) .. "_box"
 			local node = self["map_" .. x .. "_" .. y]
 
 			-- If the node is clicked and hasn't been selected before
 			if gui.pick_node(node, action.x, action.y) and not game_manager.is_selected(node_name) then
-				print("Node " .. node_name .. " clicked at coordinates: (" .. x .. ", " .. y .. ")")
+				print("Node " .. node_name .. " clicked at coordinates: (" .. x .. ", " .. y .. "), Level: " .. level)
 
 				-- Store the selected node temporarily for confirmation
-				self.pending_selection = node_name
+				self.pending_selection = {node_name = node_name, level = level}
 
 				-- Allow player to confirm their destination
 				gui.set_enabled(self.confirmNode, true)
 			end
 		end
-	end	
+	end 
 end
+
 
 function on_reload(self)
 	-- Add reload-handling code here

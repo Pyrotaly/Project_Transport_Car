@@ -1,6 +1,8 @@
 function init(self)
 	self.current_level = 0
 	self.new_level = 0
+
+	msg.post(".", "acquire_input_focus")
 end
 
 function final(self)
@@ -25,28 +27,55 @@ function fixed_update(self, dt)
 end
 
 function on_message(self, message_id, message, sender)
-	if message_id == hash("loadLevel") then
-		self.currentLevel = message.newCurrentLevel
-		self.newLevel = message.newNewLevel
 
+	if message_id == hash("test") then
+		print("asfdafsd")
+	end
+	
+	if message_id == hash("loadLevel") then
+		self.oldLevel = message.newCurrentLevel
+		self.newLevel = message.newNewLevel
+		self.loadingLevel = true
+		
 		local nextProxy = "#proxy_level_" .. self.newLevel
 		msg.post(nextProxy, "load")
+	end
 
-		if message_id == hash("proxy_loaded") then
+	if message_id == hash("loadGUI") then
+		self.loadingGUI = true
+		
+		local guiProxy = "#gui_" .. message.guiNumber
+		msg.post(guiProxy, "load")
+	end
+
+	if message_id == hash("unloadGUI") then
+		local guiProxy = "#gui_" .. message.guiNumber
+		msg.post(guiProxy, "disable")
+		msg.post(guiProxy, "final")
+		msg.post(guiProxy, "unload")
+	end
+
+	if message_id == hash("proxy_loaded") then
+		if self.loadingLevel then
 			msg.post(sender, "init")
 			msg.post(sender, "enable")
 
-			local currentProxy = "#proxy_level_" .. self.currentLevel
+			local currentProxy = "#proxy_level_" .. self.oldLevel
 			msg.post(currentProxy, "disable")
 			msg.post(currentProxy, "final")
 			msg.post(currentProxy, "unload")
-		end
 
-		if message_id == hash("proxy_unloaded") then
-			-- Ok, the world is unloaded...
+			self.loadingLevel = false
+		elseif self.loadingGUI then
+			msg.post(sender, "init")
+			msg.post(sender, "enable")
+
+			-- Reset GUI loading flag
+			self.loadingGUI = false
 		end
 	end
 end
+
 
 function on_input(self, action_id, action)
 	-- Add input-handling code here. The game object this script is attached to

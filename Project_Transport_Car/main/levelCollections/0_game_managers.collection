@@ -1,2 +1,14 @@
-name: "main"
+name: "0_game_managers"
+instances {
+  id: "proxy_loader"
+  prototype: "/main/gameObjects/backend/proxy_loader.go"
+}
 scale_along_z: 0
+embedded_instances {
+  id: "game_manager_go"
+  data: "components {\n"
+  "  id: \"game_manager\"\n"
+  "  component: \"/main/_scripts/game_manager.script\"\n"
+  "}\n"
+  ""
+}

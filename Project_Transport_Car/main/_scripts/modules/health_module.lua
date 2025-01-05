@@ -49,6 +49,13 @@ end
 function M.on_death(entity)
 	print("has died!")
 	-- Add your own death logic here, like playing an animation or removing the entity
+	-- TODO: add currency
+	-- TODO: explsoion 
+
+	if entity.health_type == hash("player") then
+
+	end
+	
 	go.delete()
 end
 

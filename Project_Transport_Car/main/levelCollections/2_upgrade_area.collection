@@ -1,7 +1,7 @@
 name: "2_upgrade_area"
 instances {
   id: "main"
-  prototype: "/main/gameObjects/main.go"
+  prototype: "/main/gameObjects/backend/main.go"
   position {
     x: 640.0
     y: 360.0
@@ -83,20 +83,4 @@ embedded_instances {
   scale3 {
     x: 0.87357
   }
-}
-embedded_instances {
-  id: "ui_holder"
-  data: "components {\n"
-  "  id: \"main_game\"\n"
-  "  component: \"/main/gui/main_game.gui\"\n"
-  "}\n"
-  ""
-}
-embedded_instances {
-  id: "ui_holder1"
-  data: "components {\n"
-  "  id: \"upgrade_area\"\n"
-  "  component: \"/main/gui/upgrade_area.gui\"\n"
-  "}\n"
-  ""
 }
