@@ -1,3 +1,8 @@
+script: "/main/_scripts/gui_scripts/main_game.gui_script"
+fonts {
+  name: "default"
+  font: "/builtins/fonts/default.font"
+}
 nodes {
   position {
     x: 666.0
@@ -7,10 +12,32 @@ nodes {
     x: 200.0
     y: 100.0
   }
+  color {
+    x: 0.8
+    y: 0.6
+    z: 0.8
+  }
   type: TYPE_BOX
   id: "time_remaining"
   inherit_alpha: true
   size_mode: SIZE_MODE_AUTO
+}
+nodes {
+  scale {
+    x: 6.52
+    y: 6.52
+    z: 6.52
+  }
+  size {
+    x: 200.0
+    y: 100.0
+  }
+  type: TYPE_TEXT
+  text: "0"
+  font: "default"
+  id: "time_text"
+  parent: "time_remaining"
+  inherit_alpha: true
 }
 nodes {
   position {
@@ -20,6 +47,11 @@ nodes {
   size {
     x: 200.0
     y: 100.0
+  }
+  color {
+    x: 0.8
+    y: 0.6
+    z: 0.8
   }
   type: TYPE_BOX
   id: "player_health"
@@ -35,6 +67,11 @@ nodes {
     x: 200.0
     y: 100.0
   }
+  color {
+    x: 0.8
+    y: 0.6
+    z: 0.8
+  }
   type: TYPE_BOX
   id: "car_health"
   inherit_alpha: true
@@ -49,10 +86,32 @@ nodes {
     x: 200.0
     y: 100.0
   }
+  color {
+    x: 0.8
+    y: 0.6
+    z: 0.8
+  }
   type: TYPE_BOX
   id: "scrap_amount"
   inherit_alpha: true
   size_mode: SIZE_MODE_AUTO
+}
+nodes {
+  scale {
+    x: 4.8
+    y: 4.8
+    z: 4.8
+  }
+  size {
+    x: 200.0
+    y: 100.0
+  }
+  type: TYPE_TEXT
+  text: "500"
+  font: "default"
+  id: "scrap_amount_text"
+  parent: "scrap_amount"
+  inherit_alpha: true
 }
 material: "/builtins/materials/gui.material"
 adjust_reference: ADJUST_REFERENCE_PARENT

@@ -5,6 +5,7 @@
 -- health_manager.lua
 local M = {}
 
+local pers_data = require("main._scripts.modules.persistant_data_module")
 local playerUpgrade = require("main._scripts.modules.upgrades_module")
 local enemyScaling = require("main._scripts.modules.enemy_scaling_module")
 
@@ -12,15 +13,12 @@ function M.init(entity)
 	entity.health_type = hash(entity.health_type) or hash("player")
 
 	if entity.health_type == hash("player") then
-
 		entity.health = entity.max_health + playerUpgrade.player_upgrades_base.health
 	elseif entity.health_type == hash("car") then
 		entity.health = entity.max_health + playerUpgrade.car_upgrades_base.max_health
 	else
 		entity.health = entity.max_health + enemyScaling.upgraded_health
 	end
-
-	print(entity.health)
 end
 
 function M.apply_damage(entity, damage)
@@ -51,9 +49,9 @@ function M.on_death(entity)
 	-- Add your own death logic here, like playing an animation or removing the entity
 	-- TODO: add currency
 	-- TODO: explsoion 
-
-	if entity.health_type == hash("player") then
-
+	
+	if entity.health_type == hash("enemy") then
+		pers_data.adjust_currency(40)
 	end
 	
 	go.delete()

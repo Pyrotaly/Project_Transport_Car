@@ -1,7 +1,8 @@
-local game_manager = require("main._scripts.modules.persistant_data_module")
+local pers_data = require("main._scripts.modules.persistant_data_module")
 
 function init(self)
 	msg.post(".", "acquire_input_focus")
+	gui.set_render_order(2)
 	
 	self.selected_nodes = {}
 	self.pending_selection = nil
@@ -10,11 +11,11 @@ function init(self)
 	gui.set_enabled(self.confirmNode, false)
 	
 	self.coordinates = {
-		{0, 5, 1},
+		{0, 5, 0},
 		{1, 2, 1},
-		{7, 2, 2},
+		{7, 2, 1},
 		{2, 5, 2},
-		{6, 6, 1},
+		{6, 6, 2},
 		{4, 10, 3}
 	}
 
@@ -24,7 +25,7 @@ function init(self)
 		local node_name = tostring(x) .. "_" .. tostring(y) .. "_box"
 		self["map_" .. x .. "_" .. y] = gui.get_node(node_name)
 
-		print("Assigned node:", node_name)
+-- 		print("Assigned node:", node_name)
 	end
 	
 end
@@ -51,18 +52,22 @@ function on_input(self, action_id, action)
 	if action_id == hash("leftTrigger") and action.pressed then
 
 		if gui.pick_node(self.confirmNode, action.x, action.y) then
-			print("Confirmed destination: " .. self.pending_selection.node_name .. ", Load Level: " .. self.pending_selection.level)
-			game_manager.mark_selected(self.pending_selection.node_name)  -- Save selection globally
+			-- print("Confirmed destination: " .. self.pending_selection.node_name .. ", Load Level: " .. self.pending_selection.level)
 
+			local lastSelectedNodeCoordiantes = pers_data.get_latest_selected()
 
-			-- /proxy_loader#level_loader_manager
+			local payload = {
+				newLevel = self.pending_selection.level,
+				newCoords = {x = self.pending_selection.x, y = self.pending_selection.y},
+				lastCoords = lastSelectedNodeCoordiantes and {x = lastSelectedNodeCoordiantes.x, y = lastSelectedNodeCoordiantes.y}
+			}
+
+			-- unload map and upgrade
 			msg.post("0_game_managers:/proxy_loader#level_loader_manager", "unloadGUI", { guiNumber = 1 })
+			msg.post("0_game_managers:/proxy_loader#level_loader_manager", "unloadGUI", { guiNumber = 4 })
 
-			print(self.pending_selection.level)
-
-			msg.post("0_game_managers:/proxy_loader#level_loader_manager", "loadLevel", { newNewLevel = self.pending_selection.level })
-
-			self.pending_selection = nil
+			pers_data.mark_selected(self.pending_selection.node_name)
+			msg.post("0_game_managers:/game_manager_go#game_manager", "loadCombatZone", payload )
 		end
 
 		-- Check if any node is clicked
@@ -72,11 +77,10 @@ function on_input(self, action_id, action)
 			local node = self["map_" .. x .. "_" .. y]
 
 			-- If the node is clicked and hasn't been selected before
-			if gui.pick_node(node, action.x, action.y) and not game_manager.is_selected(node_name) then
-				print("Node " .. node_name .. " clicked at coordinates: (" .. x .. ", " .. y .. "), Level: " .. level)
+			if gui.pick_node(node, action.x, action.y) and not pers_data.is_selected(node_name) then
+				-- print("Node " .. node_name .. " clicked at coordinates: (" .. x .. ", " .. y .. "), Level: " .. level)
 
-				-- Store the selected node temporarily for confirmation
-				self.pending_selection = {node_name = node_name, level = level}
+				self.pending_selection = {node_name = node_name, x = x, y = y, level = level}
 
 				-- Allow player to confirm their destination
 				gui.set_enabled(self.confirmNode, true)

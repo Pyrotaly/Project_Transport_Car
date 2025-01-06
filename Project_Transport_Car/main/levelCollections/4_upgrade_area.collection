@@ -7,14 +7,6 @@ instances {
     y: 360.0
   }
 }
-instances {
-  id: "car_enemy_fast"
-  prototype: "/main/gameObjects/carEnemies/car_enemy_fast.go"
-  position {
-    x: 946.0
-    y: 133.0
-  }
-}
 collection_instances {
   id: "player"
   collection: "/main/collections/player.collection"

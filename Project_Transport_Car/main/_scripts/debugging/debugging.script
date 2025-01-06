@@ -1,8 +1,7 @@
 function init(self)
-	self.current_level = 0
-	self.new_level = 0
-
-	msg.post(".", "acquire_input_focus")
+	-- Add initialization code here
+	-- Learn more: https://defold.com/manuals/script/
+	-- Remove this function if not needed
 end
 
 function final(self)
@@ -27,47 +26,10 @@ function fixed_update(self, dt)
 end
 
 function on_message(self, message_id, message, sender)
-	if message_id == hash("loadLevel") then
-		self.oldLevel = self.newLevel
-		self.newLevel = message.newLevel
-		self.loadingLevel = true
-
-		local nextProxy = "#proxy_level_" .. self.newLevel
-		msg.post(nextProxy, "load")
-	end
-
-	if message_id == hash("loadGUI") then
-		local guiProxy = "#gui_" .. message.guiNumber
-		msg.post(guiProxy, "load")
-	end
-
-	if message_id == hash("unloadGUI") then
-		local guiProxy = "#gui_" .. message.guiNumber
-		msg.post(guiProxy, "disable")
-		msg.post(guiProxy, "final")
-		msg.post(guiProxy, "unload")
-	end
-
-	if message_id == hash("proxy_loaded") then
-		if self.loadingLevel then
-			msg.post(sender, "init")
-			msg.post(sender, "enable")
-
-			if (self.oldLevel ~= nil) then
-				local currentProxy = "#proxy_level_" .. self.oldLevel
-				msg.post(currentProxy, "disable")
-				msg.post(currentProxy, "final")
-				msg.post(currentProxy, "unload")
-			end
-
-			self.loadingLevel = false
-		else
-			msg.post(sender, "init")
-			msg.post(sender, "enable")
-		end
-	end
+	-- Add message-handling code here
+	-- Learn more: https://defold.com/manuals/message-passing/
+	-- Remove this function if not needed
 end
-
 
 function on_input(self, action_id, action)
 	-- Add input-handling code here. The game object this script is attached to

@@ -36,13 +36,12 @@ nodes {
   id: "background"
   parent: "map_folder"
   inherit_alpha: true
-  alpha: 0.9
   size_mode: SIZE_MODE_AUTO
 }
 nodes {
   position {
     x: 377.0
-    y: 336.0
+    y: 412.0
   }
   size {
     x: 100.0
@@ -57,7 +56,7 @@ nodes {
 nodes {
   position {
     x: 490.0
-    y: 567.0
+    y: 643.0
   }
   size {
     x: 100.0
@@ -72,7 +71,7 @@ nodes {
 nodes {
   position {
     x: 481.0
-    y: 212.0
+    y: 288.0
   }
   size {
     x: 100.0
@@ -87,7 +86,7 @@ nodes {
 nodes {
   position {
     x: 667.0
-    y: 509.0
+    y: 585.0
   }
   size {
     x: 100.0
@@ -102,7 +101,7 @@ nodes {
 nodes {
   position {
     x: 731.0
-    y: 273.0
+    y: 349.0
   }
   size {
     x: 100.0
@@ -117,7 +116,7 @@ nodes {
 nodes {
   position {
     x: 957.0
-    y: 390.0
+    y: 466.0
   }
   size {
     x: 100.0
@@ -149,20 +148,6 @@ nodes {
   visible: false
 }
 nodes {
-  position {
-    x: 128.0
-    y: 65.0
-  }
-  size {
-    x: 200.0
-    y: 100.0
-  }
-  type: TYPE_BOX
-  id: "time"
-  inherit_alpha: true
-  size_mode: SIZE_MODE_AUTO
-}
-nodes {
   size {
     x: 200.0
     y: 100.0
@@ -175,7 +160,7 @@ nodes {
 }
 nodes {
   position {
-    x: 1077.0
+    x: 1049.0
     y: 108.0
   }
   scale {
@@ -199,7 +184,7 @@ nodes {
 }
 nodes {
   position {
-    x: 1074.0
+    x: 1046.0
     y: 101.0
   }
   size {

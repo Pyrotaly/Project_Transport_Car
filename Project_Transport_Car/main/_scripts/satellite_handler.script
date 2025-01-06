@@ -34,7 +34,6 @@ local orbitCenter
 local orbitRadius = 70
 local additionalRotation = math.pi  -- 90 degrees in radians
 
-local canShoot = true 
 local world = vmath.vector3(0, 0, 1)
 local currentGun = "1"
 
@@ -50,6 +49,7 @@ function init(self)
 	self.dir = vmath.vector3()
 
 	orbitCenter = go.get_position()
+	self.canShoot = true
 end
 
 function fixed_update(self, dt)
@@ -69,8 +69,9 @@ function fixed_update(self, dt)
 end
 
 function on_message(self, message_id, message, sender)
-	if message_id == hash("shoot") and canShoot then
-		canShoot = false
+	if message_id == hash("shoot") and self.canShoot then
+
+		self.canShoot = false
 
 		local base_damage = items["gun" .. currentGun].damage
 		local damage_bonus = upgrades.get_upgrade_value("player", "damage")
@@ -93,7 +94,7 @@ function on_message(self, message_id, message, sender)
 		 0.6)
 		
 		timer.delay(0.5, false, function()
-			canShoot = true
+			self.canShoot = true
 		end)
 	end
 end

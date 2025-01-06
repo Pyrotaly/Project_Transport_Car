@@ -1,18 +1,26 @@
-name: "1_level"
-instances {
-  id: "player_enemy_shoot"
-  prototype: "/main/gameObjects/playerEnemies/player_enemy_shoot.go"
-  position {
-    x: 729.0
-    y: 573.0
-  }
-}
+name: "2_area"
 instances {
   id: "main"
   prototype: "/main/gameObjects/backend/main.go"
   position {
     x: 640.0
     y: 360.0
+  }
+}
+instances {
+  id: "car_enemy_fast"
+  prototype: "/main/gameObjects/carEnemies/car_enemy_fast.go"
+  position {
+    x: 348.0
+    y: 341.0
+  }
+}
+instances {
+  id: "player_enemy_shoot"
+  prototype: "/main/gameObjects/playerEnemies/player_enemy_shoot.go"
+  position {
+    x: 729.0
+    y: 573.0
   }
 }
 collection_instances {
@@ -41,6 +49,7 @@ collection_instances {
 scale_along_z: 0
 embedded_instances {
   id: "enemyFolder"
+  children: "car_enemy_fast"
   children: "player_enemy_shoot"
   data: ""
 }

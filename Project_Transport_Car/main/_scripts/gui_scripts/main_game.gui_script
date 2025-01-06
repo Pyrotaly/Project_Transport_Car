@@ -1,0 +1,62 @@
+local function update_timer_text(remaining_time, nodeString)
+	local timer_node = gui.get_node(hash(nodeString))  -- Convert the string to a hash
+	gui.set_text(timer_node, tostring(remaining_time))
+end
+
+
+function init(self)
+	gui.set_render_order(0)
+end
+
+function final(self)
+	-- Add finalization code here
+	-- Learn more: https://defold.com/manuals/script/
+	-- Remove this function if not needed
+end
+
+function update(self, dt)
+	-- Add update code here
+	-- Learn more: https://defold.com/manuals/script/
+	-- Remove this function if not needed
+end
+
+function on_message(self, message_id, message, sender)
+	if message_id == hash("updateCurrency") then
+		local text = gui.get_node("scrap_amount_text")
+		gui.set_text(text, tostring(message.newCurrencyTotal))
+	end	
+
+	if message_id == hash("startTimer") then
+		self.winCounter = message.time
+		
+		timer.delay(0.1, true, function(_, handle, time_elapsed) 
+			self.winCounter = self.winCounter - 0.1
+			update_timer_text(string.format("%.1f", self.winCounter), "time_text")
+
+			if self.winCounter <= 0 then
+				self.winCounter = 0
+				update_timer_text('', "time_text")
+				timer.cancel(handle)
+				msg.post("0_game_managers:/game_manager_go#game_manager", "finishCombatZone")	
+			end
+		end)
+	end
+end
+
+function on_input(self, action_id, action)
+	-- Add input-handling code here. The game object this script is attached to
+	-- must have acquired input focus:
+	--
+	--    msg.post(".", "acquire_input_focus")
+	--
+	-- All mapped input bindings will be received. Mouse and touch input will
+	-- be received regardless of where on the screen it happened.
+	-- Learn more: https://defold.com/manuals/input/
+	-- Remove this function if not needed
+end
+
+function on_reload(self)
+	-- Add reload-handling code here
+	-- Learn more: https://defold.com/manuals/hot-reload/
+	-- Remove this function if not needed
+end

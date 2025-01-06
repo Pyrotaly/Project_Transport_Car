@@ -30,3 +30,7 @@ components {
   id: "gui_4"
   component: "/main/levelCollections/proxyCollections/gui_proxys/gui_4.collectionproxy"
 }
+components {
+  id: "proxy_level_4"
+  component: "/main/levelCollections/proxyCollections/level_proxys/proxy_level_4.collectionproxy"
+}
