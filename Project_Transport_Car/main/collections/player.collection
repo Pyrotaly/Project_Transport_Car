@@ -64,6 +64,10 @@ embedded_instances {
   "  id: \"bullet_1\"\n"
   "  component: \"/main/factories/bullet_1.factory\"\n"
   "}\n"
+  "components {\n"
+  "  id: \"missile\"\n"
+  "  component: \"/main/factories/missile.factory\"\n"
+  "}\n"
   ""
 }
 embedded_instances {
@@ -78,6 +82,9 @@ embedded_instances {
   "  texture: \\\"/assets/atlases/main.atlas\\\"\\n"
   "}\\n"
   "\"\n"
+  "  position {\n"
+  "    y: 22.0\n"
+  "  }\n"
   "  scale {\n"
   "    x: 0.5\n"
   "    y: 0.5\n"

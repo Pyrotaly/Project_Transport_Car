@@ -2,7 +2,10 @@ local M = {
 	player_upgrades_base = {
 		heal = 5,
 		health = 10,
-		damage = 0
+		damage = 0,
+		missile = 0,  -- Track if missile shooting is unlocked
+		spray = 0,  -- Track extra projectiles unlocked
+		shoot_back = 0,  -- Track backward shooting upgrade
 	},
 	player_upgrades_increment = {
 		heal = 10,
@@ -23,7 +26,10 @@ local M = {
 		player = {
 			heal = 50,
 			health = 100,
-			damage = 75
+			damage = 75,
+			missile = 200,
+			spray = 150,
+			shoot_back = 100
 		},
 		car = {
 			max_speed = 200,
@@ -46,10 +52,20 @@ function M.apply_player_upgrade(upgrade)
 	if M.player_upgrades_increment[upgrade] then
 		M.player_upgrades_base[upgrade] = M.player_upgrades_increment[upgrade] + M.player_upgrades_base[upgrade]
 		print("Player Upgrade Applied: ", upgrade, " -> ", M.player_upgrades_base[upgrade])
+	elseif upgrade == "missile" then
+		M.player_upgrades_base[upgrade] = 1  -- Unlock missile
+		print("Missile Upgrade Applied!")
+	elseif upgrade == "spray" then
+		M.player_upgrades_base[upgrade] = 1  -- Unlock extra projectiles
+		print("Extra Projectiles Upgrade Applied!")
+	elseif upgrade == "shoot_back" then
+		M.player_upgrades_base[upgrade] = 1  -- Unlock shoot-back functionality
+		print("Shoot Back Upgrade Applied!")
 	else
 		print("Invalid Player Upgrade: ", upgrade)
 	end
 end
+
 
 function M.apply_car_upgrade(upgrade)
 	if M.car_upgrades_increment[upgrade] then

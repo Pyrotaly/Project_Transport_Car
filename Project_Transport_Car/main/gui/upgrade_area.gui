@@ -76,6 +76,9 @@ nodes {
   size_mode: SIZE_MODE_AUTO
 }
 nodes {
+  position {
+    y: 7.797455
+  }
   size {
     x: 200.0
     y: 100.0
@@ -90,7 +93,7 @@ nodes {
 nodes {
   position {
     x: -60.63742
-    y: 18.418875
+    y: 26.21633
   }
   scale {
     x: 0.2112
@@ -113,9 +116,26 @@ nodes {
   size_mode: SIZE_MODE_AUTO
 }
 nodes {
+  scale {
+    x: 2.392
+    y: 2.392
+    z: 2.392
+  }
+  size {
+    x: 200.0
+    y: 100.0
+  }
+  type: TYPE_TEXT
+  text: "car speed"
+  font: "default"
+  id: "text10"
+  parent: "car_speed"
+  inherit_alpha: true
+}
+nodes {
   position {
     x: -3.104305
-    y: 18.418875
+    y: 26.21633
   }
   scale {
     x: 0.2112
@@ -138,9 +158,26 @@ nodes {
   size_mode: SIZE_MODE_AUTO
 }
 nodes {
+  scale {
+    x: 2.392
+    y: 2.392
+    z: 2.392
+  }
+  size {
+    x: 200.0
+    y: 100.0
+  }
+  type: TYPE_TEXT
+  text: "car max health"
+  font: "default"
+  id: "text9"
+  parent: "car_health"
+  inherit_alpha: true
+}
+nodes {
   position {
     x: 58.36093
-    y: 18.418875
+    y: 26.21633
   }
   scale {
     x: 0.2112
@@ -163,6 +200,26 @@ nodes {
   size_mode: SIZE_MODE_AUTO
 }
 nodes {
+  scale {
+    x: 2.392
+    y: 2.392
+    z: 2.392
+  }
+  size {
+    x: 200.0
+    y: 100.0
+  }
+  type: TYPE_TEXT
+  text: "car heal"
+  font: "default"
+  id: "text8"
+  parent: "car_heal"
+  inherit_alpha: true
+}
+nodes {
+  position {
+    y: 21.098997
+  }
   size {
     x: 200.0
     y: 100.0
@@ -200,6 +257,23 @@ nodes {
   size_mode: SIZE_MODE_AUTO
 }
 nodes {
+  scale {
+    x: 2.12
+    y: 2.12
+    z: 2.12
+  }
+  size {
+    x: 200.0
+    y: 100.0
+  }
+  type: TYPE_TEXT
+  text: "player heal"
+  font: "default"
+  id: "text7"
+  parent: "player_heal"
+  inherit_alpha: true
+}
+nodes {
   position {
     x: -3.104305
     y: -18.62583
@@ -223,6 +297,23 @@ nodes {
   parent: "player_upgrades"
   inherit_alpha: true
   size_mode: SIZE_MODE_AUTO
+}
+nodes {
+  scale {
+    x: 1.74
+    y: 1.74
+    z: 1.74
+  }
+  size {
+    x: 200.0
+    y: 100.0
+  }
+  type: TYPE_TEXT
+  text: "player max health"
+  font: "default"
+  id: "text6"
+  parent: "player_health"
+  inherit_alpha: true
 }
 nodes {
   position {
@@ -264,6 +355,133 @@ nodes {
   font: "default"
   id: "text2"
   parent: "player_damage"
+  inherit_alpha: true
+}
+nodes {
+  position {
+    x: -60.63742
+    y: -50.044987
+  }
+  scale {
+    x: 0.2112
+    y: 0.2112
+    z: 0.2112
+  }
+  size {
+    x: 200.0
+    y: 100.0
+  }
+  color {
+    x: 0.702
+    y: 0.102
+    z: 0.102
+  }
+  type: TYPE_BOX
+  id: "player_missile"
+  parent: "player_upgrades"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+}
+nodes {
+  scale {
+    x: 1.64
+    y: 1.64
+    z: 1.64
+  }
+  size {
+    x: 200.0
+    y: 100.0
+  }
+  type: TYPE_TEXT
+  text: "player missile"
+  font: "default"
+  id: "text5"
+  parent: "player_missile"
+  inherit_alpha: true
+}
+nodes {
+  position {
+    x: -3.104305
+    y: -50.044987
+  }
+  scale {
+    x: 0.2112
+    y: 0.2112
+    z: 0.2112
+  }
+  size {
+    x: 200.0
+    y: 100.0
+  }
+  color {
+    x: 0.702
+    y: 0.102
+    z: 0.102
+  }
+  type: TYPE_BOX
+  id: "player_backwards_shot"
+  parent: "player_upgrades"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+}
+nodes {
+  scale {
+    x: 1.98
+    y: 1.98
+    z: 1.98
+  }
+  size {
+    x: 200.0
+    y: 100.0
+  }
+  type: TYPE_TEXT
+  text: "player reverse \n"
+  "shot"
+  font: "default"
+  id: "text4"
+  parent: "player_backwards_shot"
+  inherit_alpha: true
+}
+nodes {
+  position {
+    x: 58.36093
+    y: -50.044987
+  }
+  scale {
+    x: 0.2112
+    y: 0.2112
+    z: 0.2112
+  }
+  size {
+    x: 200.0
+    y: 100.0
+  }
+  color {
+    x: 0.702
+    y: 0.102
+    z: 0.102
+  }
+  type: TYPE_BOX
+  id: "player_spray"
+  parent: "player_upgrades"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+}
+nodes {
+  scale {
+    x: 1.674
+    y: 1.674
+    z: 1.674
+  }
+  size {
+    x: 200.0
+    y: 100.0
+  }
+  type: TYPE_TEXT
+  text: "player spray"
+  font: "default"
+  id: "text3"
+  parent: "player_spray"
   inherit_alpha: true
 }
 nodes {
