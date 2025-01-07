@@ -8,12 +8,12 @@ instances {
   }
 }
 instances {
+  id: "TESTING_deadzone"
+  prototype: "/main/gameObjects/backend/TESTING_deadzone.go"
+}
+instances {
   id: "camera"
   prototype: "/orthographic/camera.go"
-  position {
-    x: 640.0
-    y: 360.0
-  }
   component_properties {
     id: "script"
     properties {
@@ -28,7 +28,42 @@ instances {
     }
     properties {
       id: "zoom"
-      value: "2.0"
+      value: "0.5"
+      type: PROPERTY_TYPE_NUMBER
+    }
+    properties {
+      id: "projection"
+      value: "FIXED_AUTO"
+      type: PROPERTY_TYPE_HASH
+    }
+    properties {
+      id: "follow"
+      value: "true"
+      type: PROPERTY_TYPE_BOOLEAN
+    }
+    properties {
+      id: "follow_target"
+      value: "/player"
+      type: PROPERTY_TYPE_HASH
+    }
+    properties {
+      id: "deadzone_left"
+      value: "600.0"
+      type: PROPERTY_TYPE_NUMBER
+    }
+    properties {
+      id: "deadzone_bottom"
+      value: "500.0"
+      type: PROPERTY_TYPE_NUMBER
+    }
+    properties {
+      id: "deadzone_right"
+      value: "600.0"
+      type: PROPERTY_TYPE_NUMBER
+    }
+    properties {
+      id: "deadzone_top"
+      value: "500.0"
       type: PROPERTY_TYPE_NUMBER
     }
   }

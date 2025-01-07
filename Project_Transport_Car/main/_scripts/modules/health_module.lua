@@ -8,6 +8,7 @@ local M = {}
 local pers_data = require("main._scripts.modules.persistant_data_module")
 local playerUpgrade = require("main._scripts.modules.upgrades_module")
 local enemyScaling = require("main._scripts.modules.enemy_scaling_module")
+local visualHandler = require("main._scripts.modules.entity_visual_module")
 
 function M.init(entity)
 	entity.health_type = hash(entity.health_type) or hash("player")
@@ -29,12 +30,9 @@ function M.apply_damage(entity, damage)
 
 	-- Set the time-step to 1/50 for a micro-pause
 	msg.post("0_game_managers:/proxy_loader#proxy_level_1", "set_time_step", {factor = 1/2, mode = 1})
+	visualHandler.flash_red(entity)
 
-	-- Use a timer to reset the time-step after a short delay
-
-	
 	entity.health = entity.health - damage
-	print("Entity health updated to:", entity.health)
 
 	if entity.health <= 0 then
 		M.on_death(entity)

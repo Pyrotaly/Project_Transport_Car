@@ -1,4 +1,12 @@
-name: "2_upgrade_area"
+name: "4_upgrade_area"
+instances {
+  id: "dummy"
+  prototype: "/main/gameObjects/dummy.go"
+  position {
+    x: 1098.0
+    y: 89.0
+  }
+}
 instances {
   id: "camera"
   prototype: "/orthographic/camera.go"
@@ -20,22 +28,19 @@ instances {
     }
     properties {
       id: "zoom"
-      value: "0.25"
+      value: "0.5"
       type: PROPERTY_TYPE_NUMBER
     }
     properties {
       id: "projection"
-      value: "FIXED_ZOOM"
+      value: "FIXED_AUTO"
       type: PROPERTY_TYPE_HASH
     }
-  }
-}
-collection_instances {
-  id: "player"
-  collection: "/main/collections/player.collection"
-  position {
-    x: 610.0
-    y: 290.0
+    properties {
+      id: "follow"
+      value: "false"
+      type: PROPERTY_TYPE_BOOLEAN
+    }
   }
 }
 collection_instances {
@@ -44,6 +49,14 @@ collection_instances {
   position {
     x: 1082.0
     y: 522.0
+  }
+}
+collection_instances {
+  id: "player"
+  collection: "/main/collections/player.collection"
+  position {
+    x: 1040.0
+    y: 231.0
   }
 }
 scale_along_z: 0
