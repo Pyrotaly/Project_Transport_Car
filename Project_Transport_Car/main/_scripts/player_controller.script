@@ -1,6 +1,10 @@
 local camera = require "orthographic.camera"
 local CAMERA_ID = hash("/camera")
 
+local MAX_SPEED_X = 600
+local ACCELERATION_X = 200
+local DECELERATION_X = 500
+
 function init(self)
 	camera.follow(CAMERA_ID, "/player/player", {lerp=0.3})
 	camera.deadzone(CAMERA_ID, 600.0, 500.0, 600.0, 500.0)
@@ -11,7 +15,10 @@ function init(self)
 	self.moving = false
 	self.input = vmath.vector3()
 	self.dir = vmath.vector3(0, 1, 0)
-	self.speed = 600
+	self.speed_y = 600
+	self.speed_x = 0 
+
+	self.last_dir_x = 0
 end
 
 function final(self)
@@ -36,17 +43,27 @@ function update(self, dt)
 end
 
 function fixed_update(self, dt)
-	if self.moving then 
-		local pos = go.get_position()
-		pos = pos + self.dir * self.speed * dt
-		go.set_position(pos)
+	local pos = go.get_position()
 
-		self.input.x = 0
-		self.input.y = 0
-		self.moving = false
+	-- Accelerate if there's input
+	if self.moving then
+		self.speed_x = math.min(self.speed_x + ACCELERATION_X * dt, MAX_SPEED_X)
+		self.last_dir_x = self.input.x -- Remember last movement direction
 	else
-		self.timer = 0
+		-- Decelerate in the last movement direction
+		self.speed_x = math.max(self.speed_x - DECELERATION_X * dt, 0)
 	end
+
+	-- Apply movement in the correct direction
+	pos.x = pos.x + (self.last_dir_x * self.speed_x * dt) -- Use last_dir_x when no input
+	pos.y = pos.y + (self.input.y * self.speed_y * dt)
+
+	go.set_position(pos)
+
+	-- Reset input after applying movement
+	self.input.x = 0
+	self.input.y = 0
+	self.moving = false
 
 	if self.firing then
 		msg.post("#satellite", "shoot")
