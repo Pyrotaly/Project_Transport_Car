@@ -1,9 +1,9 @@
 local camera = require "orthographic.camera"
 local CAMERA_ID = hash("/camera")
 
-local MAX_SPEED_X = 600
-local ACCELERATION_X = 200
-local DECELERATION_X = 500
+local MAX_SPEED_X = 800
+local ACCELERATION_X = 1500
+local DECELERATION_X = 1500
 
 function init(self)
 	camera.follow(CAMERA_ID, "/player/player", {lerp=0.3})
@@ -26,36 +26,46 @@ function final(self)
 end
 
 function update(self, dt)
-	-- prevent player from going out of bounds
-	local pos = go.get_position()
-	local width, height = window.get_size()
-	if pos.x < 0 then
-		pos.x = 0
-	elseif pos.x > width then
-		pos.x = width
-	end
-	if pos.y < 0 then
-		pos.y = 0
-	elseif pos.y > height then
-		pos.y = height
-	end
-	go.set_position(pos)
+	-- -- prevent player from going out of bounds
+	-- local pos = go.get_position()
+	-- local width, height = window.get_size()
+	-- if pos.x < 0 then
+	-- 	pos.x = 0
+	-- elseif pos.x > width then
+	-- 	pos.x = width
+	-- end
+	-- if pos.y < 0 then
+	-- 	pos.y = 0
+	-- elseif pos.y > height then
+	-- 	pos.y = height
+	-- end
+	-- go.set_position(pos)
 end
 
 function fixed_update(self, dt)
 	local pos = go.get_position()
 
-	-- Accelerate if there's input
 	if self.moving then
-		self.speed_x = math.min(self.speed_x + ACCELERATION_X * dt, MAX_SPEED_X)
-		self.last_dir_x = self.input.x -- Remember last movement direction
+		if self.input.x ~= 0 then
+			-- If the player is changing direction, decelerate first
+			if self.last_dir_x ~= 0 and self.input.x ~= self.last_dir_x then
+				self.speed_x = math.max(self.speed_x - DECELERATION_X * dt, 0) -- Smoothly reduce speed
+				if self.speed_x <= 0 then
+					self.last_dir_x = self.input.x -- Change direction only when fully stopped
+				end
+			else
+				-- Accelerate normally if not changing direction
+				self.last_dir_x = self.input.x
+				self.speed_x = math.min(self.speed_x + ACCELERATION_X * dt, MAX_SPEED_X)
+			end
+		end
 	else
-		-- Decelerate in the last movement direction
+		-- Decelerate when not moving
 		self.speed_x = math.max(self.speed_x - DECELERATION_X * dt, 0)
 	end
 
-	-- Apply movement in the correct direction
-	pos.x = pos.x + (self.last_dir_x * self.speed_x * dt) -- Use last_dir_x when no input
+	-- Apply movement
+	pos.x = pos.x + (self.last_dir_x * self.speed_x * dt) -- Moves in the last direction
 	pos.y = pos.y + (self.input.y * self.speed_y * dt)
 
 	go.set_position(pos)
