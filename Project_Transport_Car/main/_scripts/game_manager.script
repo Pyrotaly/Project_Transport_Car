@@ -1,16 +1,7 @@
-local pers_data = require("main._scripts.modules.persistant_data_module")
-local camera = require "orthographic.camera"
-local CAMERA_ID = hash("/camera")
-
 function init(self)
-	-- msg.post("/proxy_loader#level_loader_manager", "loadGUI", { guiNumber = 1 })
-	-- pers_data.adjust_currency(500)
-
 	msg.post("/proxy_loader#level_loader_manager", "loadLevel", { newLevel = 4 })
 	msg.post("/proxy_loader#level_loader_manager", "loadGUI", { guiNumber = 4 })
 	msg.post("/proxy_loader#level_loader_manager", "loadGUI", { guiNumber = 2 })
-
-	-- camera.deadzone(CAMERA_ID, 600.0, 500.0, 600.0, 600.0)
 end
 
 

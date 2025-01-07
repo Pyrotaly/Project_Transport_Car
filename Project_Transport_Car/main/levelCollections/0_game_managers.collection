@@ -3,10 +3,6 @@ instances {
   id: "proxy_loader"
   prototype: "/main/gameObjects/backend/proxy_loader.go"
 }
-instances {
-  id: "TESTING_deadzone"
-  prototype: "/main/gameObjects/backend/TESTING_deadzone.go"
-}
 scale_along_z: 0
 embedded_instances {
   id: "game_manager_go"

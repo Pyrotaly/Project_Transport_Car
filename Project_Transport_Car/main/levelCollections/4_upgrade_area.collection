@@ -43,6 +43,10 @@ instances {
     }
   }
 }
+instances {
+  id: "TESTING_deadzone"
+  prototype: "/main/gameObjects/backend/TESTING_deadzone.go"
+}
 collection_instances {
   id: "car"
   collection: "/main/collections/car.collection"

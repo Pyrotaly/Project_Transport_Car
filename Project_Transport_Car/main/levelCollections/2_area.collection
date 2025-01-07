@@ -23,6 +23,63 @@ instances {
     y: 573.0
   }
 }
+instances {
+  id: "camera"
+  prototype: "/orthographic/camera.go"
+  component_properties {
+    id: "script"
+    properties {
+      id: "near_z"
+      value: "-10.0"
+      type: PROPERTY_TYPE_NUMBER
+    }
+    properties {
+      id: "far_z"
+      value: "10.0"
+      type: PROPERTY_TYPE_NUMBER
+    }
+    properties {
+      id: "zoom"
+      value: "0.5"
+      type: PROPERTY_TYPE_NUMBER
+    }
+    properties {
+      id: "projection"
+      value: "FIXED_AUTO"
+      type: PROPERTY_TYPE_HASH
+    }
+    properties {
+      id: "follow"
+      value: "true"
+      type: PROPERTY_TYPE_BOOLEAN
+    }
+    properties {
+      id: "follow_target"
+      value: "/player"
+      type: PROPERTY_TYPE_HASH
+    }
+    properties {
+      id: "deadzone_left"
+      value: "600.0"
+      type: PROPERTY_TYPE_NUMBER
+    }
+    properties {
+      id: "deadzone_bottom"
+      value: "500.0"
+      type: PROPERTY_TYPE_NUMBER
+    }
+    properties {
+      id: "deadzone_right"
+      value: "600.0"
+      type: PROPERTY_TYPE_NUMBER
+    }
+    properties {
+      id: "deadzone_top"
+      value: "500.0"
+      type: PROPERTY_TYPE_NUMBER
+    }
+  }
+}
 collection_instances {
   id: "background"
   collection: "/main/collections/road_background.collection"

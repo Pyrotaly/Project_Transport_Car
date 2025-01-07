@@ -1,7 +1,12 @@
-
+local camera = require "orthographic.camera"
+local CAMERA_ID = hash("/camera")
 
 function init(self)
+	camera.follow(CAMERA_ID, "/player/player", {lerp=0.3})
+	camera.deadzone(CAMERA_ID, 600.0, 500.0, 600.0, 500.0)
 	msg.post(".", "acquire_input_focus")
+
+	-- get the level managers to get the width and height of the level i guess to uh make player not go out of bounds
 	
 	self.moving = false
 	self.input = vmath.vector3()
@@ -14,20 +19,20 @@ function final(self)
 end
 
 function update(self, dt)
-	-- -- prevent player from going out of bounds
-	-- local pos = go.get_position()
-	-- local width, height = window.get_size()
-	-- if pos.x < 0 then
-	-- 	pos.x = 0
-	-- elseif pos.x > width then
-	-- 	pos.x = width
-	-- end
-	-- if pos.y < 0 then
-	-- 	pos.y = 0
-	-- elseif pos.y > height then
-	-- 	pos.y = height
-	-- end
-	-- go.set_position(pos)
+	-- prevent player from going out of bounds
+	local pos = go.get_position()
+	local width, height = window.get_size()
+	if pos.x < 0 then
+		pos.x = 0
+	elseif pos.x > width then
+		pos.x = width
+	end
+	if pos.y < 0 then
+		pos.y = 0
+	elseif pos.y > height then
+		pos.y = height
+	end
+	go.set_position(pos)
 end
 
 function fixed_update(self, dt)
