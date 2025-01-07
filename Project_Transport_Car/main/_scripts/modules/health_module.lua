@@ -27,6 +27,12 @@ function M.apply_damage(entity, damage)
 		return
 	end
 
+	-- Set the time-step to 1/50 for a micro-pause
+	msg.post("0_game_managers:/proxy_loader#proxy_level_1", "set_time_step", {factor = 1/2, mode = 1})
+
+	-- Use a timer to reset the time-step after a short delay
+
+	
 	entity.health = entity.health - damage
 	print("Entity health updated to:", entity.health)
 
@@ -39,22 +45,46 @@ end
 
 -- Event triggered when the entity takes damage
 function M.on_damage(entity, damage)
-	print(" took " .. damage .. " damage!")
 	-- Add your own damage logic or animations here
+
+	-- Set different time-steps based on the entity type
+	if entity.health_type == hash("player") then
+		timer.delay(0.25, false, function()
+			print("player took damage")
+			msg.post("0_game_managers:/proxy_loader#proxy_level_1", "set_time_step", {factor = 1, mode = 1})
+		end)
+	else
+		timer.delay(0.001, false, function()
+			msg.post("0_game_managers:/proxy_loader#proxy_level_1", "set_time_step", {factor = 1, mode = 1})
+		end)
+	end
 end
 
 -- Event triggered when the entity dies
 function M.on_death(entity)
 	print("has died!")
 	-- Add your own death logic here, like playing an animation or removing the entity
-	-- TODO: add currency
-	-- TODO: explsoion 
-	
-	if entity.health_type == hash("enemy") then
-		pers_data.adjust_currency(40)
+
+	-- Set different time-steps based on the entity type
+	if entity.health_type == hash("player") then
+		timer.delay(0.025, false, function()
+			msg.post("0_game_managers:/proxy_loader#proxy_level_1", "set_time_step", {factor = 1, mode = 1})
+
+			-- TODO: thing
+			go.delete()
+		end)
+	else
+		timer.delay(0.001, false, function()
+			msg.post("0_game_managers:/proxy_loader#proxy_level_1", "set_time_step", {factor = 1, mode = 1})
+
+			if entity.health_type == hash("enemy") then
+				pers_data.adjust_currency(40)
+			end
+
+			go.delete()
+		end)
 	end
-	
-	go.delete()
 end
+
 
 return M

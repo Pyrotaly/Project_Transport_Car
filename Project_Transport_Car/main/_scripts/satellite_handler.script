@@ -38,7 +38,7 @@ local world = vmath.vector3(0, 0, 1)
 local currentGun = "1"
 
 local items = {
-	gun1 = { damage = 50, speed = 5000, name = "Blaster", life = 0.4 },
+	gun1 = { damage = 10, speed = 5000, name = "Blaster", life = 0.4 },
 	gun2 = { damage = 35, speed = 2.0, name = "Pistol", life = 0.4 },
 	gun3 = { damage = 75, speed = 1.0, name = "Rocket Launcher", life = 0.4 }
 }
@@ -93,7 +93,7 @@ function on_message(self, message_id, message, sender)
 		},
 		 0.6)
 		
-		timer.delay(0.5, false, function()
+		timer.delay(0.075, false, function()
 			self.canShoot = true
 		end)
 	end
