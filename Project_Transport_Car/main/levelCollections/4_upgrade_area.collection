@@ -1,10 +1,33 @@
 name: "2_upgrade_area"
 instances {
-  id: "main"
-  prototype: "/main/gameObjects/backend/main.go"
+  id: "camera"
+  prototype: "/orthographic/camera.go"
   position {
     x: 640.0
     y: 360.0
+  }
+  component_properties {
+    id: "script"
+    properties {
+      id: "near_z"
+      value: "-10.0"
+      type: PROPERTY_TYPE_NUMBER
+    }
+    properties {
+      id: "far_z"
+      value: "10.0"
+      type: PROPERTY_TYPE_NUMBER
+    }
+    properties {
+      id: "zoom"
+      value: "0.25"
+      type: PROPERTY_TYPE_NUMBER
+    }
+    properties {
+      id: "projection"
+      value: "FIXED_ZOOM"
+      type: PROPERTY_TYPE_HASH
+    }
   }
 }
 collection_instances {
