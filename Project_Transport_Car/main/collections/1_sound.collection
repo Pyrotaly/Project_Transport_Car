@@ -1,0 +1,28 @@
+name: "1_sound"
+scale_along_z: 0
+embedded_instances {
+  id: "enemy_car_1"
+  data: "embedded_components {\n"
+  "  id: \"driving\"\n"
+  "  type: \"sound\"\n"
+  "  data: \"sound: \\\"/assets/soundFX/1_zone/car_hum_loop.wav\\\"\\n"
+  "\"\n"
+  "}\n"
+  "embedded_components {\n"
+  "  id: \"acceleration\"\n"
+  "  type: \"sound\"\n"
+  "  data: \"sound: \\\"/assets/soundFX/player/car/car_speed_up.wav\\\"\\n"
+  "\"\n"
+  "}\n"
+  ""
+}
+embedded_instances {
+  id: "enemy"
+  data: "embedded_components {\n"
+  "  id: \"die\"\n"
+  "  type: \"sound\"\n"
+  "  data: \"sound: \\\"/assets/soundFX/1_zone/enemy_explosion.wav\\\"\\n"
+  "\"\n"
+  "}\n"
+  ""
+}
