@@ -11,10 +11,10 @@ function M.flash_red(entity)
 		return 
 	end
 
-	go.set(entity.spriteUrl, "tint", vmath.vector4(1, 0, 0, 1))
-
+	go.set(entity.spriteUrl, "blink_effect_trigger", vmath.vector4(1)) --blink
+	
 	timer.delay(0.01, false, function()
-		go.set(entity.spriteUrl, "tint", vmath.vector4(1, 1, 1, 1)) -- Reset to normal
+		go.set(entity.spriteUrl, "blink_effect_trigger", vmath.vector4(0))
 	end)
 end
 

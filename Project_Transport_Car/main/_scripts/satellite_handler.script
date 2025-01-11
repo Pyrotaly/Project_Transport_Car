@@ -1,6 +1,7 @@
 local camera = require "orthographic.camera"
 local upgrades = require("main._scripts.modules.upgrades_module")
 local CAMERA_ID = hash("/camera")
+local SOUND_ID = hash("")
 
 local orbitCenter
 local orbitRadius = 70
@@ -109,6 +110,9 @@ end
 
 function on_message(self, message_id, message, sender)
 	if message_id == hash("shoot") and self.canShoot then
+
+		sound.play("player_sounds/guns#gun1_shoot",{delay = 0, gain = 0.5, pan = 0, speed = 1})
+		
 		self.canShoot = false
 
 		local base_damage = items["gun" .. currentGun].damage

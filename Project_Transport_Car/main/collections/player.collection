@@ -1,4 +1,8 @@
 name: "player"
+collection_instances {
+  id: "player_sounds"
+  collection: "/main/collections/player_sounds.collection"
+}
 scale_along_z: 0
 embedded_instances {
   id: "player"
@@ -23,7 +27,7 @@ embedded_instances {
   "  id: \"sprite\"\n"
   "  type: \"sprite\"\n"
   "  data: \"default_animation: \\\"flower3\\\"\\n"
-  "material: \\\"/builtins/materials/sprite.material\\\"\\n"
+  "material: \\\"/assets/shader/sprite_1.material\\\"\\n"
   "textures {\\n"
   "  sampler: \\\"texture_sampler\\\"\\n"
   "  texture: \\\"/assets/atlases/main.atlas\\\"\\n"

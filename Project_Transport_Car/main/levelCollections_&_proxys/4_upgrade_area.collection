@@ -1,0 +1,119 @@
+name: "4_upgrade_area"
+instances {
+  id: "dummy"
+  prototype: "/main/gameObjects/dummy.go"
+  position {
+    x: 1098.0
+    y: 89.0
+    z: 2.0
+  }
+}
+instances {
+  id: "camera"
+  prototype: "/orthographic/camera.go"
+  position {
+    x: 640.0
+    y: 360.0
+  }
+  component_properties {
+    id: "script"
+    properties {
+      id: "near_z"
+      value: "-10.0"
+      type: PROPERTY_TYPE_NUMBER
+    }
+    properties {
+      id: "far_z"
+      value: "10.0"
+      type: PROPERTY_TYPE_NUMBER
+    }
+    properties {
+      id: "zoom"
+      value: "0.5"
+      type: PROPERTY_TYPE_NUMBER
+    }
+    properties {
+      id: "projection"
+      value: "FIXED_AUTO"
+      type: PROPERTY_TYPE_HASH
+    }
+    properties {
+      id: "follow"
+      value: "false"
+      type: PROPERTY_TYPE_BOOLEAN
+    }
+  }
+}
+instances {
+  id: "TESTING_deadzone"
+  prototype: "/main/gameObjects/backend/TESTING_deadzone.go"
+}
+collection_instances {
+  id: "car"
+  collection: "/main/collections/car.collection"
+  position {
+    x: 1082.0
+    y: 522.0
+  }
+}
+collection_instances {
+  id: "player"
+  collection: "/main/collections/player.collection"
+  position {
+    x: 115.0
+    y: 231.0
+  }
+}
+scale_along_z: 0
+embedded_instances {
+  id: "background"
+  data: "embedded_components {\n"
+  "  id: \"sprite\"\n"
+  "  type: \"sprite\"\n"
+  "  data: \"default_animation: \\\"grass_background\\\"\\n"
+  "material: \\\"/builtins/materials/sprite.material\\\"\\n"
+  "textures {\\n"
+  "  sampler: \\\"texture_sampler\\\"\\n"
+  "  texture: \\\"/assets/atlases/main.atlas\\\"\\n"
+  "}\\n"
+  "\"\n"
+  "  scale {\n"
+  "    x: 4.472231\n"
+  "    y: 4.16\n"
+  "    z: 2.08\n"
+  "  }\n"
+  "}\n"
+  ""
+  position {
+    x: 640.0
+    y: 360.0
+    z: -5.0
+  }
+}
+embedded_instances {
+  id: "store"
+  data: "embedded_components {\n"
+  "  id: \"sprite\"\n"
+  "  type: \"sprite\"\n"
+  "  data: \"default_animation: \\\"background\\\"\\n"
+  "material: \\\"/builtins/materials/sprite.material\\\"\\n"
+  "textures {\\n"
+  "  sampler: \\\"texture_sampler\\\"\\n"
+  "  texture: \\\"/assets/atlases/main.atlas\\\"\\n"
+  "}\\n"
+  "\"\n"
+  "  scale {\n"
+  "    x: 0.2\n"
+  "    y: 0.2\n"
+  "    z: 0.2\n"
+  "  }\n"
+  "}\n"
+  ""
+  position {
+    x: 631.0
+    y: 440.0
+  }
+  scale3 {
+    x: 0.87357
+  }
+}
