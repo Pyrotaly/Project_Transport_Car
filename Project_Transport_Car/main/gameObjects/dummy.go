@@ -41,7 +41,7 @@ embedded_components {
   id: "sprite"
   type: "sprite"
   data: "default_animation: \"circlebot\"\n"
-  "material: \"/builtins/materials/sprite.material\"\n"
+  "material: \"/assets/shader/sprite_1.material\"\n"
   "size {\n"
   "  x: 220.0\n"
   "  y: 206.0\n"
