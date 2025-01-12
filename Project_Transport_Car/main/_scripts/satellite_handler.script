@@ -90,6 +90,9 @@ function init(self)
 	orbitCenter = go.get_position()
 	self.canShoot = true
 	self.shot_counter = 0
+
+	particlefx.play("particleFX#smoke2")
+	particlefx.play("particleFX#tire_marks")
 end
 
 function fixed_update(self, dt)
@@ -133,7 +136,8 @@ function on_message(self, message_id, message, sender)
 		self.shot_counter = self.shot_counter + 1
 
 		handle_upgrades_for_shooting(self, bullet_position, bullet_rotation)
-		
+
+		particlefx.play("particleFX#bullet_casing")
 		camera.shake(CAMERA_ID, items["gun" .. currentGun].shakeIntensity, 0.1, hash("both"))
 		
 		timer.delay(items["gun" .. currentGun].gunCooldown, false, function()

@@ -35,4 +35,22 @@ images {
 images {
   image: "/assets/images/OIP.jpg"
 }
+images {
+  image: "/assets/images/particleFX/Particle2.png"
+}
+images {
+  image: "/assets/images/particleFX/Particle7.png"
+}
+images {
+  image: "/assets/images/gun1_muzzle_flash.png"
+}
+images {
+  image: "/assets/images/particleFX/bulletCasing.png"
+}
+images {
+  image: "/assets/images/particleFX/Particle1.png"
+}
+images {
+  image: "/assets/images/particleFX/tireMarks.png"
+}
 extrude_borders: 2

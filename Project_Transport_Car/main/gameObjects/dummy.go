@@ -12,6 +12,10 @@ components {
     type: PROPERTY_TYPE_HASH
   }
 }
+components {
+  id: "render_order"
+  component: "/main/_scripts/render_order.script"
+}
 embedded_components {
   id: "collisionobject"
   type: "collisionobject"

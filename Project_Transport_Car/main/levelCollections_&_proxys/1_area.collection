@@ -85,7 +85,7 @@ collection_instances {
 }
 collection_instances {
   id: "player"
-  collection: "/main/collections/player.collection"
+  collection: "/main/collections/player/player.collection"
   position {
     x: 1040.0
     y: 231.0
