@@ -92,7 +92,7 @@ function init(self)
 	self.shot_counter = 0
 
 	particlefx.play("particleFX#smoke2")
-	particlefx.play("particleFX#tire_marks")
+	-- particlefx.play("particleFX#tire_marks")
 end
 
 function fixed_update(self, dt)

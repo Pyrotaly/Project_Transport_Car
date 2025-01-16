@@ -7,6 +7,14 @@ instances {
     y: 89.0
     z: 2.0
   }
+  component_properties {
+    id: "health_manager"
+    properties {
+      id: "max_health"
+      value: "500.0"
+      type: PROPERTY_TYPE_NUMBER
+    }
+  }
 }
 instances {
   id: "camera"
