@@ -1,0 +1,50 @@
+go.property("spawn_rate", 2.0) -- Seconds between spawns
+go.property("max_enemies", 5)  -- Limit on active enemies
+
+local spawn_timer = 0
+local active_enemies = 0
+local enemy_factory = nil
+
+function init(self)
+	-- Get the factory component reference
+	enemy_factory = "#enemy_factory"
+
+	-- Start the spawn loop
+	spawn_timer = self.spawn_rate
+end
+
+function update(self, dt)
+	-- Reduce timer
+	if active_enemies < self.max_enemies then
+		spawn_timer = spawn_timer - dt
+	end
+
+	-- Spawn when timer reaches zero
+	if spawn_timer <= 0 then
+		spawn_enemy(self)
+		spawn_timer = self.spawn_rate -- Reset timer
+	end
+end
+
+function spawn_enemy(self)
+	if active_enemies >= self.max_enemies then return end
+
+	-- Random spawn position (left side of screen)
+	local spawn_x = -100
+	local spawn_y = math.random(100, 500) -- Adjust based on screen size
+
+	-- Spawn the enemy from factory
+	local enemy = factory.create(enemy_factory, vmath.vector3(spawn_x, spawn_y, 0))
+
+	-- Track the number of active enemies
+	active_enemies = active_enemies + 1
+
+	-- Notify enemy to track its own destruction
+	msg.post(enemy, "set_manager", { manager = go.get_id() })
+end
+
+function on_message(self, message_id, message, sender)
+	if message_id == hash("enemy_destroyed") then
+		active_enemies = active_enemies - 1
+	end
+end

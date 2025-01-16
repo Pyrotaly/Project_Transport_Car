@@ -55,11 +55,20 @@ components {
     type: PROPERTY_TYPE_HASH
   }
 }
+components {
+  id: "enemyDriveUp"
+  component: "/main/_scripts/enemyDriveUp.script"
+  properties {
+    id: "target_x"
+    value: "600.0"
+    type: PROPERTY_TYPE_NUMBER
+  }
+}
 embedded_components {
   id: "sprite"
   type: "sprite"
   data: "default_animation: \"squarebot\"\n"
-  "material: \"/builtins/materials/sprite.material\"\n"
+  "material: \"/assets/shader/sprite_1.material\"\n"
   "textures {\n"
   "  sampler: \"texture_sampler\"\n"
   "  texture: \"/assets/atlases/main.atlas\"\n"

@@ -1,0 +1,41 @@
+go.property("target_x", 600) -- Final X position for the car
+go.property("sway_distance", 20) -- Sway distance (up/down)
+go.property("sway_speed", 3.0) -- Sway speed
+go.property("sway_side_distance", 3) -- Sideways sway distance
+go.property("back_distance", 20) -- How much the car moves backward after arriving
+
+local arrived = false
+
+local function sway_up(self)
+	if arrived then
+		go.animate(".", "position.y", go.PLAYBACK_ONCE_PINGPONG, go.get_position().y + self.sway_distance, go.EASING_INOUTSINE, self.sway_speed, 0, sway_up)
+	end
+end
+
+local function sway_left_right(self)
+	if arrived then
+		go.animate(".", "position.x", go.PLAYBACK_LOOP_PINGPONG, go.get_position().x + self.sway_side_distance, go.EASING_INOUTSINE, self.sway_speed * 1.2)
+	end
+end
+
+local function move_back(self)
+	go.animate(".", "position.x", go.PLAYBACK_ONCE_FORWARD, self.target_x - self.back_distance, go.EASING_OUTQUAD, 1.2, 0, function()
+		-- Start swaying motion after moving back
+		arrived = true
+		sway_up(self)
+		sway_left_right(self)
+	end)
+end
+
+function init(self)
+	-- Start the car off-screen on the left
+	local start_x = -100
+	local start_y = go.get_position().y
+	go.set_position(vmath.vector3(start_x, start_y, 0))
+
+	-- Animate the car to its target position
+	go.animate(".", "position.x", go.PLAYBACK_ONCE_FORWARD, self.target_x, go.EASING_OUTQUAD, 2, 0, function()
+		-- Move back a bit, then start swaying
+		move_back(self)
+	end)
+end

@@ -11,7 +11,7 @@ instances {
   id: "car_enemy_fast"
   prototype: "/main/gameObjects/carEnemies/car_enemy_fast.go"
   position {
-    x: 348.0
+    x: -338.0
     y: 341.0
   }
 }
@@ -19,7 +19,7 @@ instances {
   id: "player_enemy_shoot"
   prototype: "/main/gameObjects/playerEnemies/player_enemy_shoot.go"
   position {
-    x: 729.0
+    x: 43.0
     y: 573.0
   }
 }
@@ -79,6 +79,10 @@ instances {
       type: PROPERTY_TYPE_NUMBER
     }
   }
+}
+instances {
+  id: "TESTING_deadzone"
+  prototype: "/main/gameObjects/backend/TESTING_deadzone.go"
 }
 collection_instances {
   id: "background"
