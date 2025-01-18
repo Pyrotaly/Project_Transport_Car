@@ -22,4 +22,3 @@ function update(self, dt)
 		move_to_quadrant(self, player_quadrant)
 	end
 end
-

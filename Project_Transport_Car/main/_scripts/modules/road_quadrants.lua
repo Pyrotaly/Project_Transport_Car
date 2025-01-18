@@ -111,7 +111,6 @@ function M.get_random_nearby_quadrant(current_quadrant, range)
 	else
 		return nil -- No valid nearby quadrants
 	end
-end
 
 	-- -- Pick a random quadrant from the list of valid nearby quadrants
 	-- if #nearby_quadrants > 0 then

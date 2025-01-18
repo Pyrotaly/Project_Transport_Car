@@ -61,60 +61,8 @@ instances {
   prototype: "/main/gameObjects/backend/TESTING_deadzone.go"
 }
 instances {
-  id: "car_surroundPlayer"
-  prototype: "/main/gameObjects/carEnemies/car_surroundPlayer.go"
-  position {
-    x: 123.0
-    y: 300.0
-  }
-}
-instances {
-  id: "car_surroundPlayer1"
-  prototype: "/main/gameObjects/carEnemies/car_surroundPlayer.go"
-  position {
-    x: 187.0
-    y: 474.0
-  }
-}
-instances {
-  id: "car_surroundPlayer2"
-  prototype: "/main/gameObjects/carEnemies/car_surroundPlayer.go"
-  position {
-    x: 505.0
-    y: 233.0
-  }
-}
-instances {
-  id: "car_surroundPlayer3"
-  prototype: "/main/gameObjects/carEnemies/car_surroundPlayer.go"
-  position {
-    x: 123.0
-    y: 300.0
-  }
-}
-instances {
-  id: "car_surroundPlayer4"
-  prototype: "/main/gameObjects/carEnemies/car_surroundPlayer.go"
-  position {
-    x: 123.0
-    y: 300.0
-  }
-}
-instances {
-  id: "car_surroundPlayer5"
-  prototype: "/main/gameObjects/carEnemies/car_surroundPlayer.go"
-  position {
-    x: 123.0
-    y: 300.0
-  }
-}
-instances {
-  id: "car_surroundPlayer6"
-  prototype: "/main/gameObjects/carEnemies/car_surroundPlayer.go"
-  position {
-    x: 123.0
-    y: 300.0
-  }
+  id: "car_RandomBehavior"
+  prototype: "/main/gameObjects/carEnemies/car_RandomBehavior.go"
 }
 collection_instances {
   id: "background"
