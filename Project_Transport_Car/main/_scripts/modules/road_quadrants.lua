@@ -12,6 +12,13 @@ M.SCREEN_HEIGHT = 720
 M.CELL_WIDTH = M.SCREEN_WIDTH / M.GRID_COLS
 M.CELL_HEIGHT = M.SCREEN_HEIGHT / M.GRID_ROWS
 
+M.occupied_quadarnts = {}
+
+for i = 1, 25 do
+	M.occupied_quadarnts[i] = false
+	print(i)
+end
+
 function M.get_quadrant(position)
 	local col = math.floor(position.x / M.CELL_WIDTH)
 	local row = math.floor(position.y / M.CELL_HEIGHT)
@@ -63,6 +70,64 @@ function M.get_adjacent_quadrants(quadrant)
 	return adjacent
 end
 
+function M.get_available_quadrants()
+	local available_quadrants = {}
+	for index, value in pairs(M.occupied_quadarnts) do
+		if value == false then
+			table.insert(available_quadrants, index)
+		end
+	end
+
+	-- if #available_quadrants > 0 then
+	-- 	print("Available quadrants:", #available_quadrants)
+	-- 	for i, v in ipairs(available_quadrants) do
+	-- 		print("Index:", i, "Quadrant:", v)
+	-- 	end
+	-- 	return available_quadrants[math.random(#available_quadrants)]
+	-- else
+	-- 	print("No available quadrants!")
+	-- end
+	
+end
+
+function M.is_occupied(quadrant)
+	return M.occupied_quadarnts[quadrant] == true
+end
+
+function M.set_occupied(quadrant, occupied)
+	M.occupied_quadarnts[quadrant] = occupied
+end
+
+-- ------------------------------------
+-- Movement
+-- ------------------------------------
+
+-- TODO 
+function M.move_to_quadrant(self, quadrant)
+	if not M.is_occupied(quadrant) then
+		local target_pos = M.get_quadrant_position(quadrant)
+
+		go.animate(".", "position.x", go.PLAYBACK_ONCE_FORWARD, target_pos.x, go.EASING_LINEAR, 1.5)
+		go.animate(".", "position.y", go.PLAYBACK_ONCE_FORWARD, target_pos.y, go.EASING_LINEAR, 1.5)
+
+		-- Set the current quadrant as unoccupied
+		if self.current_quadrant then
+			M.set_occupied(self.current_quadrant, false)
+		end
+
+		-- Move to the new quadrant and mark it as occupied
+		self.current_quadrant = quadrant
+		M.set_occupied(quadrant, true)
+	else
+		print("Quadrant " .. quadrant .. " is already occupied!")
+	end
+end
+
+
+
+-- ------------------------------------
+-- DEBUGGING
+-- ------------------------------------
 
 -- Function to draw the grid
 function M.draw_grid()
