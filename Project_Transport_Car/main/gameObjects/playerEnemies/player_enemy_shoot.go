@@ -57,7 +57,7 @@ components {
 }
 components {
   id: "enemyDriveUp"
-  component: "/main/_scripts/enemyDriveUp.script"
+  component: "/main/_scripts/car_ai/enemyDriveUp.script"
   properties {
     id: "target_x"
     value: "600.0"
