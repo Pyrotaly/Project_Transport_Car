@@ -92,6 +92,30 @@ instances {
     y: 300.0
   }
 }
+instances {
+  id: "car_surroundPlayer4"
+  prototype: "/main/gameObjects/carEnemies/car_surroundPlayer.go"
+  position {
+    x: 123.0
+    y: 300.0
+  }
+}
+instances {
+  id: "car_surroundPlayer5"
+  prototype: "/main/gameObjects/carEnemies/car_surroundPlayer.go"
+  position {
+    x: 123.0
+    y: 300.0
+  }
+}
+instances {
+  id: "car_surroundPlayer6"
+  prototype: "/main/gameObjects/carEnemies/car_surroundPlayer.go"
+  position {
+    x: 123.0
+    y: 300.0
+  }
+}
 collection_instances {
   id: "background"
   collection: "/main/collections/road_background.collection"

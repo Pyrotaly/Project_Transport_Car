@@ -70,6 +70,88 @@ function M.get_adjacent_quadrants(quadrant)
 	return adjacent
 end
 
+function M.get_random_nearby_quadrant(current_quadrant, range)
+	local nearby_quadrants = {}
+
+	-- Calculate the current row and column
+	local current_row = math.ceil(current_quadrant / M.GRID_COLS)
+	local current_col = (current_quadrant) % M.GRID_COLS
+
+	-- Loop through all possible quadrants within the range
+	for row_offset = -range, range do
+		for col_offset = -range, range do
+			local new_row = current_row + row_offset
+			local new_col = current_col + col_offset
+
+			-- Ensure the move does not cross rows inappropriately
+			if math.abs(row_offset) + math.abs(col_offset) <= range then
+				-- Check if the new position is valid
+				if new_row >= 1 and new_row <= M.GRID_ROWS and new_col >= 1 and new_col <= M.GRID_COLS then
+					-- Calculate the new quadrant number
+					local new_quadrant = (new_row - 1) * M.GRID_COLS + new_col
+
+					-- Ensure the new quadrant is on the correct row for left/right moves
+					local valid_horizontal_move = true
+					if col_offset ~= 0 then
+						local target_row = math.ceil(new_quadrant / M.GRID_COLS)
+						valid_horizontal_move = target_row == new_row
+					end
+
+					if valid_horizontal_move then
+						table.insert(nearby_quadrants, new_quadrant)
+					end
+				end
+			end
+		end
+	end
+
+	-- Pick a random quadrant from the list of valid nearby quadrants
+	if #nearby_quadrants > 0 then
+		return nearby_quadrants[math.random(#nearby_quadrants)]
+	else
+		return nil -- No valid nearby quadrants
+	end
+end
+
+	-- -- Pick a random quadrant from the list of valid nearby quadrants
+	-- if #nearby_quadrants > 0 then
+	-- 	return nearby_quadrants[math.random(#nearby_quadrants)]
+	-- else
+	-- 	return nil -- No valid nearby quadrants
+	-- end
+end
+
+
+-- function M.get_random_nearby_quadrant(current_quadrant, range)
+-- 	local nearby_quadrants = {}
+-- 
+-- 	-- Iterate over the range (-range to +range) for both rows and columns
+-- 	for row_offset = -range, range do
+-- 		for col_offset = -range, range do
+-- 			-- Calculate the potential neighbor quadrant
+-- 			local row = math.floor((current_quadrant - 1) / M.GRID_COLS) + row_offset
+-- 			local col = ((current_quadrant - 1) % M.GRID_COLS) + col_offset
+-- 
+-- 			-- Ensure the row and column are within valid bounds
+-- 			if row >= 0 and row < M.GRID_ROWS and col >= 0 and col < M.GRID_COLS then
+-- 				local neighbor = (row * M.GRID_COLS) + col + 1
+-- 
+-- 				-- Check if the neighbor is not occupied
+-- 				if not M.is_occupied(neighbor) then
+-- 					table.insert(nearby_quadrants, neighbor)
+-- 				end
+-- 			end
+-- 		end
+-- 	end
+-- 
+-- 	-- Select a random quadrant from the valid nearby quadrants
+-- 	if #nearby_quadrants > 0 then
+-- 		return nearby_quadrants[math.random(#nearby_quadrants)]
+-- 	else
+-- 		return nil -- No available quadrants within range
+-- 	end
+-- end
+
 function M.get_available_quadrants()
 	local available_quadrants = {}
 	for index, value in pairs(M.occupied_quadarnts) do
@@ -77,17 +159,7 @@ function M.get_available_quadrants()
 			table.insert(available_quadrants, index)
 		end
 	end
-
-	-- if #available_quadrants > 0 then
-	-- 	print("Available quadrants:", #available_quadrants)
-	-- 	for i, v in ipairs(available_quadrants) do
-	-- 		print("Index:", i, "Quadrant:", v)
-	-- 	end
-	-- 	return available_quadrants[math.random(#available_quadrants)]
-	-- else
-	-- 	print("No available quadrants!")
-	-- end
-	
+	return available_quadrants
 end
 
 function M.is_occupied(quadrant)
@@ -102,7 +174,7 @@ end
 -- Movement
 -- ------------------------------------
 
--- TODO 
+-- TODO implement movement into quadrants instead of enemy ai necessarily
 function M.move_to_quadrant(self, quadrant)
 	if not M.is_occupied(quadrant) then
 		local target_pos = M.get_quadrant_position(quadrant)

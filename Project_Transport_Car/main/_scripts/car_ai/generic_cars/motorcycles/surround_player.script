@@ -25,6 +25,7 @@ math.randomseed(os.time())
 
 local function move_to_quadrant(self, quadrant)
 	print(quadrant)
+	-- TODO : somehow, can get numbers of range outside of 1-25, put check here or sometin idk
 	if not grid.is_occupied(quadrant) then
 		local target_pos = grid.get_quadrant_position(quadrant)
 
@@ -43,8 +44,8 @@ local function move_to_quadrant(self, quadrant)
 		-- If the target quadrant is occupied, retry by picking another quadrant
 		print("Quadrant " .. quadrant .. " is occupied, selecting a new quadrant.")
 		local available_quadrants = grid.get_available_quadrants()  -- Assuming you have a way to get all available quadrants
-
-		move_to_quadrant(self, available_quadrants)
+		local new_quadrant = available_quadrants[math.random(#available_quadrants)]
+		move_to_quadrant(self, new_quadrant)
 	end
 end
 
@@ -58,10 +59,12 @@ end
 
 local function move_to_random_adjacent(self)
 	-- Move to a random adjacent quadrant instead of directly into the player's quadrant
-	if self.current_quadrant ~= self.player_quadrant then
-		local next_quadrant = get_adjacent_quadrant(self, self.player_quadrant)
-		move_to_quadrant(self, next_quadrant)
-	end
+	-- if self.current_quadrant ~= self.player_quadrant then
+	-- 	local next_quadrant = get_adjacent_quadrant(self, self.player_quadrant)
+	-- 	move_to_quadrant(self, next_quadrant)
+	-- end
+	local next_quadrant = get_adjacent_quadrant(self, self.player_quadrant)
+	move_to_quadrant(self, next_quadrant)
 end
 
 function init(self)
