@@ -62,7 +62,7 @@ instances {
 }
 instances {
   id: "car_surroundPlayer"
-  prototype: "/main/gameObjects/carEnemies/car_surroundPlayer.go"
+  prototype: "/main/gameObjects/carEnemies/TEST/car_surroundPlayer.go"
   position {
     x: 123.0
     y: 300.0
@@ -70,7 +70,7 @@ instances {
 }
 instances {
   id: "car_surroundPlayer1"
-  prototype: "/main/gameObjects/carEnemies/car_surroundPlayer.go"
+  prototype: "/main/gameObjects/carEnemies/TEST/car_surroundPlayer.go"
   position {
     x: 187.0
     y: 474.0
@@ -78,7 +78,7 @@ instances {
 }
 instances {
   id: "car_surroundPlayer2"
-  prototype: "/main/gameObjects/carEnemies/car_surroundPlayer.go"
+  prototype: "/main/gameObjects/carEnemies/TEST/car_surroundPlayer.go"
   position {
     x: 505.0
     y: 233.0
@@ -86,7 +86,7 @@ instances {
 }
 instances {
   id: "car_surroundPlayer3"
-  prototype: "/main/gameObjects/carEnemies/car_surroundPlayer.go"
+  prototype: "/main/gameObjects/carEnemies/TEST/car_surroundPlayer.go"
   position {
     x: 123.0
     y: 300.0
