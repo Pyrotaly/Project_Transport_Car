@@ -1,50 +1,27 @@
-function init(self)
-	-- Add initialization code here
-	-- Learn more: https://defold.com/manuals/script/
-	-- Remove this function if not needed
-end
+local grid = require("main._scripts.modules.road_quadrants")
 
-function final(self)
-	-- Add finalization code here
-	-- Learn more: https://defold.com/manuals/script/
-	-- Remove this function if not needed
+function init(self)
+	self.velocity = vmath.vector3(0) -- Initialize the velocity to zero
+	self.speed = 1500 -- Set the movement speed (units per second)
 end
 
 function update(self, dt)
-	-- Add update code here
-	-- Learn more: https://defold.com/manuals/script/
-	-- Remove this function if not needed
-end
+	-- Get current position and player's position
+	local current_pos = go.get_position()
+	local player_pos = go.get_position("/player/player")
 
-function fixed_update(self, dt)
-	-- This function is called if 'Fixed Update Frequency' is enabled in the Engine section of game.project
-	-- Can be coupled with fixed updates of the physics simulation if 'Use Fixed Timestep' is enabled in
-	-- Physics section of game.project
-	-- Add update code here
-	-- Learn more: https://defold.com/manuals/script/
-	-- Remove this function if not needed
-end
+	-- Calculate the direction to the player
+	local direction = vmath.normalize(player_pos - current_pos)
 
-function on_message(self, message_id, message, sender)
-	-- Add message-handling code here
-	-- Learn more: https://defold.com/manuals/message-passing/
-	-- Remove this function if not needed
-end
+	-- Set velocity based on direction and speed
+	self.velocity = direction * self.speed
 
-function on_input(self, action_id, action)
-	-- Add input-handling code here. The game object this script is attached to
-	-- must have acquired input focus:
-	--
-	--    msg.post(".", "acquire_input_focus")
-	--
-	-- All mapped input bindings will be received. Mouse and touch input will
-	-- be received regardless of where on the screen it happened.
-	-- Learn more: https://defold.com/manuals/input/
-	-- Remove this function if not needed
-end
+	-- Update the position based on velocity
+	local new_pos = current_pos + self.velocity * dt
+	go.set_position(new_pos)
 
-function on_reload(self)
-	-- Add reload-handling code here
-	-- Learn more: https://defold.com/manuals/hot-reload/
-	-- Remove this function if not needed
+	-- Stop moving if close enough to the player
+	if vmath.length(player_pos - new_pos) < 5 then -- Adjust tolerance as needed
+		self.velocity = vmath.vector3(0)
+	end
 end

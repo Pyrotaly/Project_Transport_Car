@@ -1,5 +1,25 @@
 name: "2_area"
 instances {
+  id: "TESTING_deadzone"
+  prototype: "/main/gameObjects/backend/TESTING_deadzone.go"
+}
+instances {
+  id: "car_RandomBehavior"
+  prototype: "/main/gameObjects/carEnemies/TEST/car_RandomBehavior.go"
+  position {
+    x: 379.0
+    y: 379.0
+  }
+}
+instances {
+  id: "car_ChargeAttack"
+  prototype: "/main/gameObjects/carEnemies/TEST/car_ChargeAttack.go"
+  position {
+    x: 127.0
+    y: 605.0
+  }
+}
+instances {
   id: "camera"
   prototype: "/orthographic/camera.go"
   component_properties {
@@ -54,18 +74,6 @@ instances {
       value: "400.0"
       type: PROPERTY_TYPE_NUMBER
     }
-  }
-}
-instances {
-  id: "TESTING_deadzone"
-  prototype: "/main/gameObjects/backend/TESTING_deadzone.go"
-}
-instances {
-  id: "car_RandomBehavior"
-  prototype: "/main/gameObjects/carEnemies/TEST/car_RandomBehavior.go"
-  position {
-    x: 379.0
-    y: 379.0
   }
 }
 collection_instances {
