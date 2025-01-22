@@ -1,0 +1,83 @@
+local grid = require("main._scripts.modules.road_quadrants")
+math.randomseed(os.time())
+
+-- local function move_to_quadrant(self, quadrant)
+-- 	if not grid.is_occupied(quadrant) then
+-- 		local target_pos = grid.get_quadrant_position(quadrant)
+-- 
+-- 		go.animate(".", "position.x", go.PLAYBACK_ONCE_FORWARD, target_pos.x, go.EASING_LINEAR, 1.5)
+-- 		go.animate(".", "position.y", go.PLAYBACK_ONCE_FORWARD, target_pos.y, go.EASING_LINEAR, 1.5)
+-- 
+-- 		-- Set the current quadrant as unoccupied
+-- 		if self.current_quadrant then
+-- 			grid.set_occupied(self.current_quadrant, false)
+-- 		end
+-- 
+-- 		-- Move to the new quadrant and mark it as occupied
+-- 		self.current_quadrant = quadrant
+-- 		grid.set_occupied(quadrant, true)
+-- 	else
+-- 		print("Quadrant " .. quadrant .. " is already occupied!")
+-- 		local next_quadrant = grid.get_adjacent_quadrant(self, self.player_quadrant)
+-- 		move_to_quadrant(self, next_quadrant)
+-- 	end
+-- end
+
+local function move_to_quadrant(self, quadrant)
+	print(quadrant)
+	-- TODO : somehow, can get numbers of range outside of 1-25, put check here or sometin idk
+	if not grid.is_occupied(quadrant) then
+		local target_pos = grid.get_quadrant_position(quadrant)
+
+		go.animate(".", "position.x", go.PLAYBACK_ONCE_FORWARD, target_pos.x, go.EASING_LINEAR, 1.5)
+		go.animate(".", "position.y", go.PLAYBACK_ONCE_FORWARD, target_pos.y, go.EASING_LINEAR, 1.5)
+
+		-- Set the current quadrant as unoccupied
+		if self.current_quadrant then
+			grid.set_occupied(self.current_quadrant, false)
+		end
+
+		-- Move to the new quadrant and mark it as occupied
+		self.current_quadrant = quadrant
+		grid.set_occupied(quadrant, true)
+	else
+		-- If the target quadrant is occupied, retry by picking another quadrant
+		print("Quadrant " .. quadrant .. " is occupied, selecting a new quadrant.")
+		local available_quadrants = grid.get_available_quadrants()  -- Assuming you have a way to get all available quadrants
+		local new_quadrant = available_quadrants[math.random(#available_quadrants)]
+		move_to_quadrant(self, new_quadrant)
+	end
+end
+
+local function get_adjacent_quadrant(self, player_quadrant)
+	local adjacent_quadrants = grid.get_adjacent_quadrants(player_quadrant)
+	if #adjacent_quadrants > 0 then
+		return adjacent_quadrants[math.random(1, #adjacent_quadrants)] -- Pick a random adjacent quadrant
+	end
+	return player_quadrant -- Fallback (should not happen)
+end
+
+local function move_to_random_adjacent(self)
+	-- Move to a random adjacent quadrant instead of directly into the player's quadrant
+	-- if self.current_quadrant ~= self.player_quadrant then
+	-- 	local next_quadrant = get_adjacent_quadrant(self, self.player_quadrant)
+	-- 	move_to_quadrant(self, next_quadrant)
+	-- end
+	local next_quadrant = get_adjacent_quadrant(self, self.player_quadrant)
+	move_to_quadrant(self, next_quadrant)
+end
+
+function init(self)
+	self.current_quadrant = grid.get_quadrant(go.get_position())
+	self.target_quadrant = self.current_quadrant
+
+	timer.delay(2, true, function()
+		move_to_random_adjacent(self)
+	end)
+end
+
+function update(self, dt)
+	self.player_pos = go.get_position("/player/player")
+	self.player_quadrant = grid.get_quadrant(self.player_pos)
+end
+

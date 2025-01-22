@@ -1,18 +1,22 @@
 name: "2_area"
 instances {
-  id: "car_enemy_fast"
-  prototype: "/main/gameObjects/carEnemies/car_enemy_fast.go"
+  id: "TESTING_deadzone"
+  prototype: "/main/gameObjects/backend/TESTING_deadzone.go"
+}
+instances {
+  id: "car_RandomBehavior"
+  prototype: "/main/gameObjects/carEnemies/TEST/car_RandomBehavior.go"
   position {
-    x: -338.0
-    y: 341.0
+    x: 379.0
+    y: 379.0
   }
 }
 instances {
-  id: "player_enemy_shoot"
-  prototype: "/main/gameObjects/playerEnemies/player_enemy_shoot.go"
+  id: "car_ChargeAttack"
+  prototype: "/main/gameObjects/carEnemies/TEST/car_ChargeAttack.go"
   position {
-    x: 43.0
-    y: 573.0
+    x: 127.0
+    y: 605.0
   }
 }
 instances {
@@ -52,36 +56,24 @@ instances {
     }
     properties {
       id: "deadzone_left"
-      value: "600.0"
+      value: "500.0"
       type: PROPERTY_TYPE_NUMBER
     }
     properties {
       id: "deadzone_bottom"
-      value: "500.0"
+      value: "400.0"
       type: PROPERTY_TYPE_NUMBER
     }
     properties {
       id: "deadzone_right"
-      value: "600.0"
+      value: "500.0"
       type: PROPERTY_TYPE_NUMBER
     }
     properties {
       id: "deadzone_top"
-      value: "500.0"
+      value: "400.0"
       type: PROPERTY_TYPE_NUMBER
     }
-  }
-}
-instances {
-  id: "TESTING_deadzone"
-  prototype: "/main/gameObjects/backend/TESTING_deadzone.go"
-}
-instances {
-  id: "car_toPlayerQuadrant"
-  prototype: "/main/gameObjects/carEnemies/TEST/car_toPlayerQuadrant.go"
-  position {
-    x: 481.0
-    y: 492.0
   }
 }
 collection_instances {
@@ -103,17 +95,11 @@ collection_instances {
   id: "player"
   collection: "/main/collections/player/player.collection"
   position {
-    x: 1040.0
-    y: 231.0
+    x: 980.0
+    y: 823.0
   }
 }
 scale_along_z: 0
-embedded_instances {
-  id: "enemyFolder"
-  children: "car_enemy_fast"
-  children: "player_enemy_shoot"
-  data: ""
-}
 embedded_instances {
   id: "level_handler"
   data: "components {\n"
@@ -123,6 +109,6 @@ embedded_instances {
   ""
   position {
     x: 640.0
-    y: 360.0
+    y: -260.0
   }
 }

@@ -1,0 +1,24 @@
+local grid = require("main._scripts.modules.road_quadrants")
+
+local function move_to_quadrant(self, quadrant)
+	local target_pos = grid.get_quadrant_position(quadrant)
+
+	go.animate(".", "position.x", go.PLAYBACK_ONCE_FORWARD, target_pos.x, go.EASING_LINEAR, 1.5)
+	go.animate(".", "position.y", go.PLAYBACK_ONCE_FORWARD, target_pos.y, go.EASING_LINEAR, 1.5)
+
+	self.current_quadrant = quadrant
+end
+
+function init(self)
+	self.current_quadrant = grid.get_quadrant(go.get_position())
+	self.target_quadrant = self.current_quadrant
+end
+
+function update(self, dt)
+	local player_pos = go.get_position("/player/player")
+	local player_quadrant = grid.get_quadrant(player_pos)
+
+	if self.current_quadrant ~= player_quadrant then
+		move_to_quadrant(self, player_quadrant)
+	end
+end

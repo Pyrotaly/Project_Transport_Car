@@ -1,0 +1,5 @@
+local grid = require("main._scripts.modules.road_quadrants")
+
+function update(self, dt)
+	grid.draw_grid() -- Draw grid every frame
+end

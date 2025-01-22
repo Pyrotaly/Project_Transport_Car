@@ -51,8 +51,6 @@ function init(self)
 	timer.delay(0.5, true, function()
 		check_and_shoot(self) -- Check radius and raytrace, then spawn object
 	end)
-
-
 end
 
 function final(self)

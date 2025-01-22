@@ -13,18 +13,13 @@ components {
   }
 }
 components {
-  id: "enemyDriveUp"
-  component: "/main/_scripts/car_ai/enemyDriveUp.script"
-  properties {
-    id: "target_x"
-    value: "600.0"
-    type: PROPERTY_TYPE_NUMBER
-  }
+  id: "move_to_random_quadrant"
+  component: "/main/_scripts/car_ai/generic_cars/cars/move_to_playerQuad.script"
 }
 embedded_components {
   id: "sprite"
   type: "sprite"
-  data: "default_animation: \"circlebot\"\n"
+  data: "default_animation: \"hovercraftbot\"\n"
   "material: \"/assets/shader/sprite_1.material\"\n"
   "textures {\n"
   "  sampler: \"texture_sampler\"\n"
