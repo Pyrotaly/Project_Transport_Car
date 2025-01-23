@@ -126,7 +126,7 @@ nodes {
     y: 100.0
   }
   type: TYPE_TEXT
-  text: "car speed"
+  text: "car max speed"
   font: "default"
   id: "text10"
   parent: "car_speed"
@@ -251,7 +251,7 @@ nodes {
     z: 0.102
   }
   type: TYPE_BOX
-  id: "player_heal"
+  id: "player_bigger_mag"
   parent: "player_upgrades"
   inherit_alpha: true
   size_mode: SIZE_MODE_AUTO
@@ -267,10 +267,10 @@ nodes {
     y: 100.0
   }
   type: TYPE_TEXT
-  text: "player heal"
+  text: "player bigger mag"
   font: "default"
   id: "text7"
-  parent: "player_heal"
+  parent: "player_bigger_mag"
   inherit_alpha: true
 }
 nodes {
@@ -293,7 +293,7 @@ nodes {
     z: 0.102
   }
   type: TYPE_BOX
-  id: "player_health"
+  id: "player_reduce_primary_spray"
   parent: "player_upgrades"
   inherit_alpha: true
   size_mode: SIZE_MODE_AUTO
@@ -309,10 +309,10 @@ nodes {
     y: 100.0
   }
   type: TYPE_TEXT
-  text: "player max health"
+  text: "player reduce primary spray"
   font: "default"
   id: "text6"
-  parent: "player_health"
+  parent: "player_reduce_primary_spray"
   inherit_alpha: true
 }
 nodes {

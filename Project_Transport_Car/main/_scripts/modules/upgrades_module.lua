@@ -22,23 +22,30 @@ local M = {
 		max_health = 50,
 		heal = 10
 	},
-	upgrade_costs = {
+	upgrade_costs = { -- a max_purchase of -1 means can be bought infinitley 
 		player = {
-			heal = 50,
-			health = 100,
-			damage = 75,
-			missile = 200,
-			spray = 150,
-			shoot_back = 100
+			heal = {cost = 50, max_purchases = 3},
+			health = {cost = 100, max_purchases = -1},
+			damage = {cost = 75, max_purchases = -1},
+			missile = {cost = 200, max_purchases = 1},
+			spray = {cost = 150, max_purchases = 1},
+			shoot_back = {cost = 100, max_purchases = 1},
 		},
 		car = {
-			max_speed = 200,
-			max_health = 150,
+			max_speed = {cost = 200, max_purchases = 5},
+			max_health = {cost = 150, max_purchases = 5},
 			heal = 100
 		}
 	},
-	player_money = 500  -- Starting currency
+	player_money = 500,  -- Starting currency
+	player_purchase_counts = { player = {}, car = {} }
 }
+
+function M.reset_heal_purchase_count()
+	M.purchase_counts.player["heal"] = 0
+	M.purchase_counts.car["heal"] = 0
+end
+
 
 function M.get_upgrade_value(entity, upgrade)
 	if entity == "player" then
@@ -66,7 +73,6 @@ function M.apply_player_upgrade(upgrade)
 	end
 end
 
-
 function M.apply_car_upgrade(upgrade)
 	if M.car_upgrades_increment[upgrade] then
 		M.car_upgrades_base[upgrade] = M.car_upgrades_increment[upgrade] + M.car_upgrades_base[upgrade]
@@ -77,19 +83,29 @@ function M.apply_car_upgrade(upgrade)
 end
 
 function M.buy_upgrade(entity, upgrade)
-	local cost = M.upgrade_costs[entity] and M.upgrade_costs[entity][upgrade]
+	local upgrade_data = M.upgrade_costs[entity] and M.upgrade_costs[entity][upgrade]
 
-	if not cost then
+	if not upgrade_data then
 		print("Invalid upgrade: " .. upgrade)
 		return false
 	end
 
+	local cost = upgrade_data.cost
+	local max_purchases = upgrade_data.max_purchases
+	local current_purchases = M.player_purchase_counts[entity][upgrade] or 0
+
+	if current_purchases >= max_purchases then
+		print("Max purchases reached for upgrade: " .. upgrade)
+		return false
+	end
+	
 	if M.player_money < cost then
 		print("Not enough money! Need: " .. cost .. ", Have: " .. M.player_money)
 		return false
 	end
 
 	M.player_money = M.player_money - cost
+	M.player_purchase_counts[entity][upgrade] = current_purchases + 1
 	
 	if entity == "player" then
 		M.apply_player_upgrade(upgrade)

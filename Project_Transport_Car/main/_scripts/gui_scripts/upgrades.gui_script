@@ -15,31 +15,14 @@ function init(self)
 		{ node = gui.get_node("car_speed"), upgrade_type = "max_speed", entity = "car" },
 		{ node = gui.get_node("car_health"), upgrade_type = "max_health", entity = "car" },
 		{ node = gui.get_node("car_heal"), upgrade_type = "heal", entity = "car" },
-		{ node = gui.get_node("player_heal"), upgrade_type = "heal", entity = "player" },
-		{ node = gui.get_node("player_health"), upgrade_type = "health", entity = "player" },
+		-- { node = gui.get_node("player_heal"), upgrade_type = "heal", entity = "player" },
+		-- { node = gui.get_node("player_health"), upgrade_type = "health", entity = "player" },
+		-- { node - gui.get_node(("")
 		{ node = gui.get_node("player_damage"), upgrade_type = "damage", entity = "player" },
 		{ node = gui.get_node("player_missile"), upgrade_type = "missile", entity = "player" },
 		{ node = gui.get_node("player_backwards_shot"), upgrade_type = "shoot_back", entity = "player" },
 		{ node = gui.get_node("player_spray"), upgrade_type = "spray", entity = "player" }
 	}
-end
-
-function final(self)
-	-- Add finalization code here
-	-- Learn more: https://defold.com/manuals/script/
-	-- Remove this function if not needed
-end
-
-function update(self, dt)
-	-- Add update code here
-	-- Learn more: https://defold.com/manuals/script/
-	-- Remove this function if not needed
-end
-
-function on_message(self, message_id, message, sender)
-	-- Add message-handling code here
-	-- Learn more: https://defold.com/manuals/message-passing/
-	-- Remove this function if not needed
 end
 
 function on_input(self, action_id, action)
