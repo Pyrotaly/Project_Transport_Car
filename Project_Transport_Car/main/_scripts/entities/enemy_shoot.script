@@ -69,16 +69,20 @@ end
 
 function update(self, dt)
 	local thisPos = go.get_position()
-	local player_position = go.get_position(self.target) 
-	debugdraw.circle(thisPos.x, thisPos.y, 500, "red")
-
-	local from = go.get_position()
-	local to = player_position
-	local result = physics.raycast(from, to, { hash("car") })
-	if result then
-		draw_line(from, result.position)
+	if not self.target or not go.exists(self.target) then
+		self.target = nil -- Clear the invalid reference
+		return false
 	else
-		draw_line(from, to)
+		local player_position = go.get_position(self.target) 
+		debugdraw.circle(thisPos.x, thisPos.y, 500, "red")
+
+		local from = go.get_position()
+		local result = physics.raycast(from, player_position, { hash("car") })
+		if result then
+			draw_line(from, result.position)
+		else
+			draw_line(from, player_position)
+		end
 	end
 end
 

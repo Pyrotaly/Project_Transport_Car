@@ -13,9 +13,9 @@ local visualHandler = require("main._scripts.modules.entity_visual_module")
 function M.init(entity)
 	entity.health_type = hash(entity.health_type) or hash("player")
 
-	if entity.health_type == hash("player") then
-		entity.health = entity.max_health + playerUpgrade.player_upgrades_base.health
-	elseif entity.health_type == hash("car") then
+	-- if entity.health_type == hash("player") then
+	-- 	entity.health = entity.max_health + playerUpgrade.player_upgrades_base.health
+	if entity.health_type == hash("car") then
 		entity.health = entity.max_health + playerUpgrade.car_upgrades_base.max_health
 	else
 		entity.health = entity.max_health + enemyScaling.upgraded_health
@@ -68,7 +68,7 @@ function M.on_death(entity)
 		timer.delay(0.025, false, function()
 			msg.post("0_game_managers:/proxy_loader#proxy_level_1", "set_time_step", {factor = 1, mode = 1})
 
-			-- TODO: thing
+			-- TODO: game over screen
 			go.delete()
 		end)
 	else

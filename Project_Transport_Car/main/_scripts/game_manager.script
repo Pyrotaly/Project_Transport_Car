@@ -4,7 +4,6 @@ function init(self)
 	msg.post("/proxy_loader#level_loader_manager", "loadGUI", { guiNumber = 2 })
 end
 
-
 function fixed_update(self, dt)
 
 end

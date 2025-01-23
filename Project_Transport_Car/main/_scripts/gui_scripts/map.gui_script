@@ -51,7 +51,7 @@ end
 function on_input(self, action_id, action)
 	if action_id == hash("leftTrigger") and action.pressed then
 
-		if gui.pick_node(self.confirmNode, action.x, action.y) then
+		if gui.pick_node(self.confirmNode, action.x, action.y) and gui.is_enabled(self.confirmNode) then
 			-- print("Confirmed destination: " .. self.pending_selection.node_name .. ", Load Level: " .. self.pending_selection.level)
 
 			local lastSelectedNodeCoordiantes = pers_data.get_latest_selected()
@@ -77,7 +77,7 @@ function on_input(self, action_id, action)
 			local node = self["map_" .. x .. "_" .. y]
 
 			-- If the node is clicked and hasn't been selected before
-			if gui.pick_node(node, action.x, action.y) and not pers_data.is_selected(node_name) then
+			if gui.pick_node(node, action.x, action.y) and not pers_data.is_selected(node_name) and gui.is_enabled(node)  then
 				-- print("Node " .. node_name .. " clicked at coordinates: (" .. x .. ", " .. y .. "), Level: " .. level)
 
 				self.pending_selection = {node_name = node_name, x = x, y = y, level = level}

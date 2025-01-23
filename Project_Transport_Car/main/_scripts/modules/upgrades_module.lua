@@ -1,16 +1,23 @@
 local M = {
 	player_upgrades_base = {
-		heal = 5,
-		health = 10,
+		-- heal = 5,
+		-- health = 10,
+		bigger_mag = 0,
+		reduce_spread = 0,
 		damage = 0,
 		missile = 0,  -- Track if missile shooting is unlocked
 		spray = 0,  -- Track extra projectiles unlocked
 		shoot_back = 0,  -- Track backward shooting upgrade
 	},
 	player_upgrades_increment = {
-		heal = 10,
-		health = 10,
-		damage = 50
+		-- heal = 10,
+		-- health = 10,
+		bigger_mag = 5,
+		reduce_spread = 3,
+		damage = 5,
+		missile = 1,
+		spray = 1,  -- Track extra projectiles unlocked
+		shoot_back = 1,  -- Track backward shooting upgrade
 	},
 	car_upgrades_base = {
 		max_speed = 0,
@@ -20,12 +27,14 @@ local M = {
 	car_upgrades_increment = {
 		max_speed = 200,
 		max_health = 50,
-		heal = 10
+		heal = 0
 	},
 	upgrade_costs = { -- a max_purchase of -1 means can be bought infinitley 
 		player = {
-			heal = {cost = 50, max_purchases = 3},
-			health = {cost = 100, max_purchases = -1},
+			-- heal = {cost = 50, max_purchases = 3},
+			-- health = {cost = 100, max_purchases = -1},
+			bigger_mag = {cost = 50, max_purchases = 3},
+			reduce_spread = {cost = 50, max_purchases = 3},
 			damage = {cost = 75, max_purchases = -1},
 			missile = {cost = 200, max_purchases = 1},
 			spray = {cost = 150, max_purchases = 1},
@@ -37,15 +46,15 @@ local M = {
 			heal = 100
 		}
 	},
-	player_money = 500,  -- Starting currency
 	player_purchase_counts = { player = {}, car = {} }
 }
+
+local pers_data = require("main._scripts.modules.persistant_data_module")
 
 function M.reset_heal_purchase_count()
 	M.purchase_counts.player["heal"] = 0
 	M.purchase_counts.car["heal"] = 0
 end
-
 
 function M.get_upgrade_value(entity, upgrade)
 	if entity == "player" then
@@ -59,15 +68,15 @@ function M.apply_player_upgrade(upgrade)
 	if M.player_upgrades_increment[upgrade] then
 		M.player_upgrades_base[upgrade] = M.player_upgrades_increment[upgrade] + M.player_upgrades_base[upgrade]
 		print("Player Upgrade Applied: ", upgrade, " -> ", M.player_upgrades_base[upgrade])
-	elseif upgrade == "missile" then
-		M.player_upgrades_base[upgrade] = 1  -- Unlock missile
-		print("Missile Upgrade Applied!")
-	elseif upgrade == "spray" then
-		M.player_upgrades_base[upgrade] = 1  -- Unlock extra projectiles
-		print("Extra Projectiles Upgrade Applied!")
-	elseif upgrade == "shoot_back" then
-		M.player_upgrades_base[upgrade] = 1  -- Unlock shoot-back functionality
-		print("Shoot Back Upgrade Applied!")
+	-- elseif upgrade == "missile" then
+	-- 	M.player_upgrades_base[upgrade] = 1  -- Unlock missile
+	-- 	print("Missile Upgrade Applied!")
+	-- elseif upgrade == "spray" then
+	-- 	M.player_upgrades_base[upgrade] = 1  -- Unlock extra projectiles
+	-- 	print("Extra Projectiles Upgrade Applied!")
+	-- elseif upgrade == "shoot_back" then
+	-- 	M.player_upgrades_base[upgrade] = 1  -- Unlock shoot-back functionality
+	-- 	print("Shoot Back Upgrade Applied!")
 	else
 		print("Invalid Player Upgrade: ", upgrade)
 	end
@@ -90,7 +99,7 @@ function M.buy_upgrade(entity, upgrade)
 		return false
 	end
 
-	local cost = upgrade_data.cost
+	local cost = pers_data.get
 	local max_purchases = upgrade_data.max_purchases
 	local current_purchases = M.player_purchase_counts[entity][upgrade] or 0
 
@@ -104,7 +113,8 @@ function M.buy_upgrade(entity, upgrade)
 		return false
 	end
 
-	M.player_money = M.player_money - cost
+	-- M.player_money = M.player_money - cost
+	pers_data.adjust_currency(-cost)
 	M.player_purchase_counts[entity][upgrade] = current_purchases + 1
 	
 	if entity == "player" then

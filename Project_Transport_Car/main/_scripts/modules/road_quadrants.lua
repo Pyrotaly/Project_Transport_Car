@@ -16,13 +16,11 @@ M.occupied_quadarnts = {}
 
 for i = 1, 25 do
 	M.occupied_quadarnts[i] = false
-	print(i)
 end
 
 function M.get_quadrant(position)
 	local col = math.floor(position.x / M.CELL_WIDTH)
 	local row = math.floor(position.y / M.CELL_HEIGHT)
-	print(row * M.GRID_COLS + col + 1)
 	return row * M.GRID_COLS + col + 1
 end
 
@@ -30,11 +28,11 @@ function M.get_quadrant_position(quadrant)
 	local row = math.floor((quadrant - 1) / M.GRID_COLS)
 	local col = (quadrant - 1) % M.GRID_COLS
 
-	print(vmath.vector3(
-	(col * M.CELL_WIDTH) + (M.CELL_WIDTH / 2),
-	(row * M.CELL_HEIGHT) + (M.CELL_HEIGHT / 2),
-	0
-))
+	-- print(vmath.vector3(
+	-- (col * M.CELL_WIDTH) + (M.CELL_WIDTH / 2),
+	-- (row * M.CELL_HEIGHT) + (M.CELL_HEIGHT / 2),
+	-- 0
+
 	
 	return vmath.vector3(
 	(col * M.CELL_WIDTH) + (M.CELL_WIDTH / 2),
