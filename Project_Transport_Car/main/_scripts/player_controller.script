@@ -6,6 +6,15 @@ local MAX_SPEED_X = 800
 local ACCELERATION_X = 1500
 local DECELERATION_X = 1500
 
+local function reload(self)
+	-- TODO : Prevent weapon swapping or like do not reload if swap
+	self.reload = true
+	timer.delay(1, false, function()
+		self.canShoot = true
+		self.reload = false
+	end)
+end
+
 function init(self)
 	camera.follow(CAMERA_ID, "/player/player", {lerp=0.3})
 	camera.deadzone(CAMERA_ID, 600.0, 500.0, 600.0, 500.0)
@@ -20,6 +29,9 @@ function init(self)
 	self.speed_y = 600
 	self.speed_x = 0 
 	self.last_dir_x = 0
+
+	particlefx.play("particleFX#smoke2")
+	-- particlefx.play("particleFX#tire_marks")
 end
 
 function final(self)
@@ -86,7 +98,6 @@ function fixed_update(self, dt)
 	if self.firing then
 		msg.post("#satellite", "shoot")
 	end
-
 	self.firing = false  
 end
 
@@ -99,10 +110,8 @@ function on_input(self, action_id, action)
 		self.input.x = -1
 	elseif action_id == hash("right") then
 		self.input.x = 1
-	elseif action_id == hash("leftTrigger") then
-		self.firing = true
 	end
-
+	
 	if vmath.length(self.input) > 0 then		
 		self.moving = true
 		self.dir = vmath.normalize(self.input)

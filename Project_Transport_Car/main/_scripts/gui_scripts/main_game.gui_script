@@ -22,16 +22,28 @@ end
 function on_message(self, message_id, message, sender)
 	if message_id == hash("updateCurrency") then
 		local text = gui.get_node("scrap_amount_text")
-
 		gui.set_text(text, tostring(message.newCurrencyTotal))
 	end	
 
 	if message_id == hash("updateHealth") then
+		-- TODO : I think it is more efficient to have the node as self variable instead of instiating a new variable
 		local health_text = gui.get_node("player_health_text")
 		local cur_health = gui.get_text(health_text)
 		print(cur_health)
 		print(message.healthAdjust)
 		gui.set_text(health_text, tostring(cur_health - message.healthAdjust))
+	end
+
+	if message_id == hash("upgradeMaxHealth") then
+
+	end
+
+	if message_id == hash("updateBullet") then
+		-- TODO : I think it is more efficient to have the node as self variable instead of instiating a new variable
+		local current_bullet_amount = message.curMagSize
+		local max_bullet_amount = message.maxMagSize
+		local text = gui.get_node("bullet_text")
+		gui.set_text(text, tostring(current_bullet_amount .. "/" .. max_bullet_amount))
 	end
 
 	if message_id == hash("startTimer") then

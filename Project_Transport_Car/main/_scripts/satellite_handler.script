@@ -1,5 +1,6 @@
 local camera = require "orthographic.camera"
 local upgrades = require("main._scripts.modules.upgrades_module")
+
 local CAMERA_ID = hash("/camera")
 local SOUND_ID = hash("")
 
@@ -14,7 +15,7 @@ local screenToWorld = vmath.vector3(0, 0, 0)
 local currentGun = "1"
 
 local items = {
-	gun1 = { damage = 10, speed = 5000, name = "Blaster", life = 0.4, shakeIntensity = 0.003, gunCooldown = 0.075, maxMagSize = 50, curMagSize = 50 },
+	gun1 = { damage = 10, speed = 5000, name = "Blaster", life = 0.4, shakeIntensity = 0.003, gunCooldown = 0.075, maxMagSize = 30 + upgrades.get_upgrade_value("player", "bigger_mag"), curMagSize = 30 },
 	gun2 = { damage = 35, speed = 2.0, name = "Pistol", life = 0.4, shakeIntensity = 0.005, gunCooldown = 0.05, maxMagSize = 50, curMagSize = 50 },
 	gun3 = { damage = 75, speed = 1.0, name = "Rocket Launcher", life = 0.4, shakeIntensity = 0.005, gunCooldown = 0.2, maxMagSize = 50, curMagSize = 50}
 }
@@ -85,14 +86,28 @@ end
 -- TODO: Refactor this upgrade system (above)
 -- --------------------------------------
 
+local function reload(self)
+	-- TODO : Prevent weapon swapping or like do not reload if swap
+	self.reload = true
+	self.isReloading = true
+	
+	timer.delay(1, false, function()
+		items["gun" .. currentGun].curMagSize = items["gun" .. currentGun].maxMagSize
+		msg.post("gui_player_menu:/go#main_game", "updateBullet", { maxMagSize = items["gun" .. currentGun].maxMagSize, curMagSize = items["gun" .. currentGun].maxMagSize})
+		self.canShoot = true
+		self.isReloading = false
+		self.reload = false
+	end)
+end
+
 function init(self)
 	self.dir = vmath.vector3()
 	orbitCenter = go.get_position()
 	self.canShoot = true
 	self.shot_counter = 0
 
-	particlefx.play("particleFX#smoke2")
-	-- particlefx.play("particleFX#tire_marks")
+	-- TODO : Update the bullet ui for all guns when swtiching, maybe have switching guns have a swap time
+	msg.post("gui_player_menu:/go#main_game", "updateBullet", { maxMagSize = items["gun" .. currentGun].maxMagSize, curMagSize = items["gun" .. currentGun].curMagSize})
 end
 
 function fixed_update(self, dt)
@@ -112,12 +127,25 @@ function fixed_update(self, dt)
 end
 
 function on_message(self, message_id, message, sender)
-	if message_id == hash("shoot") and self.canShoot then
+	if message_id == hash("plsReload") then
+		self.canShoot = false
+		reload(self)
+	end
+	
+	if message_id == hash("shoot") and self.canShoot and not self.isReloading then
+
+		if items["gun" .. currentGun].curMagSize <= 0 then
+			-- TODO : Make a clicking noise or sometin
+			return
+		end
 
 		sound.play("player_sounds/guns#gun1_shoot",{delay = 0, gain = 0.5, pan = 0, speed = 1})
-		
 		self.canShoot = false
 
+		self.shot_counter = self.shot_counter + 1
+		items["gun" .. currentGun].curMagSize = items["gun" .. currentGun].curMagSize - 1
+		msg.post("gui_player_menu:/go#main_game", "updateBullet", { maxMagSize = items["gun" .. currentGun].maxMagSize, curMagSize = items["gun" .. currentGun].curMagSize})
+		
 		local total_damage = items["gun" .. currentGun].damage + upgrades.get_upgrade_value("player", "damage")
 
 		local bullet_position = go.get_position("satellite")
@@ -130,8 +158,6 @@ function on_message(self, message_id, message, sender)
 			mask = hash("enemy")
 		},
 		0.6)
-
-		self.shot_counter = self.shot_counter + 1
 
 		handle_upgrades_for_shooting(self, bullet_position, bullet_rotation)
 
@@ -149,5 +175,10 @@ function on_input(self, action_id, action)
 	screenToWorld = camera.screen_to_world(self.orthoCameraGO, inputVector)
 
 	world = vmath.vector3(screenToWorld.x, screenToWorld.y, 1)
-end
 
+	if action_id == hash("reload") then -- ok so if i have hash reload and msg post reload it has errors..
+		msg.post("#satellite", "plsReload")
+	elseif action_id == hash("leftTrigger") then
+		self.firing = true
+	end
+end
