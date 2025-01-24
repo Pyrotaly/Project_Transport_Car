@@ -71,7 +71,7 @@ nodes {
   type: TYPE_TEXT
   text: "100"
   font: "default"
-  id: "scrap_amount_text2"
+  id: "player_health_text"
   parent: "player_health"
   inherit_alpha: true
 }
@@ -107,7 +107,7 @@ nodes {
   type: TYPE_TEXT
   text: "50/50"
   font: "default"
-  id: "scrap_amount_text1"
+  id: "bullet_text"
   parent: "bullets"
   inherit_alpha: true
 }

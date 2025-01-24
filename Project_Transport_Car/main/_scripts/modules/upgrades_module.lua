@@ -99,7 +99,8 @@ function M.buy_upgrade(entity, upgrade)
 		return false
 	end
 
-	local cost = pers_data.get
+	local cost = upgrade_data.cost
+	local player_currency = pers_data.get_currency()
 	local max_purchases = upgrade_data.max_purchases
 	local current_purchases = M.player_purchase_counts[entity][upgrade] or 0
 
@@ -108,7 +109,7 @@ function M.buy_upgrade(entity, upgrade)
 		return false
 	end
 	
-	if M.player_money < cost then
+	if player_currency < cost then
 		print("Not enough money! Need: " .. cost .. ", Have: " .. M.player_money)
 		return false
 	end
@@ -123,7 +124,7 @@ function M.buy_upgrade(entity, upgrade)
 		M.apply_car_upgrade(upgrade)
 	end
 
-	print("Bought upgrade:", upgrade, "New Balance:", M.player_money)
+	print("Bought upgrade:", upgrade, "New Balance:", pers_data.get_currency())
 	return true
 end
 

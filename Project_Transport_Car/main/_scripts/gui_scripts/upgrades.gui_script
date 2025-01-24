@@ -27,7 +27,7 @@ end
 function on_input(self, action_id, action)
 	if action_id == hash("leftTrigger") and action.pressed then
 		for _, button in ipairs(self.upgrade_buttons) do
-			if gui.pick_node(button.node, action.x, action.y) and gui.is_enabled(button.node) then
+			if gui.pick_node(button.node, action.x, action.y) and gui.is_enabled(self.storeNodes) then
 				upgrades.buy_upgrade(button.entity, button.upgrade_type)
 			end
 		end
@@ -46,7 +46,6 @@ function on_input(self, action_id, action)
 				msg.post("0_game_managers:/proxy_loader#level_loader_manager", "loadGUI", { guiNumber = 1 })
 				gui.set_enabled(self.toggleStoreButton, false)
 			end
-
 			
 			-- Toggle state
 			self.is_map_gui_loaded = not self.is_map_gui_loaded

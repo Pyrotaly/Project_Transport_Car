@@ -25,6 +25,11 @@ function on_message(self, message_id, message, sender)
 		gui.set_text(text, tostring(message.newCurrencyTotal))
 	end	
 
+	if message_id == hash("updateHealth") then
+		local health_text = gui.get_node("player_health_text")
+		gui.set_text(text, tostring(message.newCurrencyTotal))
+	end
+
 	if message_id == hash("startTimer") then
 		self.winCounter = message.time
 		

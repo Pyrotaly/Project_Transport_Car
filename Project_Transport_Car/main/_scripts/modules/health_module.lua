@@ -49,6 +49,7 @@ function M.on_damage(entity, damage)
 	if entity.health_type == hash("player") then
 		timer.delay(0.25, false, function()
 			print("player took damage")
+			
 			msg.post("0_game_managers:/proxy_loader#proxy_level_4", "set_time_step", {factor = 1, mode = 1})
 		end)
 	else
