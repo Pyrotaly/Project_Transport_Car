@@ -14,9 +14,9 @@ local screenToWorld = vmath.vector3(0, 0, 0)
 local currentGun = "1"
 
 local items = {
-	gun1 = { damage = 10, speed = 5000, name = "Blaster", life = 0.4, shakeIntensity = 0.003, gunCooldown = 0.075 },
-	gun2 = { damage = 35, speed = 2.0, name = "Pistol", life = 0.4, shakeIntensity = 0.005, gunCooldown = 0.05 },
-	gun3 = { damage = 75, speed = 1.0, name = "Rocket Launcher", life = 0.4, shakeIntensity = 0.005, gunCooldown = 0.2 }
+	gun1 = { damage = 10, speed = 5000, name = "Blaster", life = 0.4, shakeIntensity = 0.003, gunCooldown = 0.075, maxMagSize = 50, curMagSize = 50 },
+	gun2 = { damage = 35, speed = 2.0, name = "Pistol", life = 0.4, shakeIntensity = 0.005, gunCooldown = 0.05, maxMagSize = 50, curMagSize = 50 },
+	gun3 = { damage = 75, speed = 1.0, name = "Rocket Launcher", life = 0.4, shakeIntensity = 0.005, gunCooldown = 0.2, maxMagSize = 50, curMagSize = 50}
 }
 
 -- --------------------------------------
@@ -118,12 +118,10 @@ function on_message(self, message_id, message, sender)
 		
 		self.canShoot = false
 
-		local base_damage = items["gun" .. currentGun].damage
-		local damage_bonus = upgrades.get_upgrade_value("player", "damage")
-		local total_damage = base_damage + damage_bonus
+		local total_damage = items["gun" .. currentGun].damage + upgrades.get_upgrade_value("player", "damage")
 
-		local bullet_position = go.get_position("satellite") -- Get the position of the OrbitingTool game object
-		local bullet_rotation = go.get_rotation("satellite") -- Get the rotation of the OrbitingTool game object
+		local bullet_position = go.get_position("satellite")
+		local bullet_rotation = go.get_rotation("satellite")
 		factory.create("factories#bullet_" .. currentGun, bullet_position, bullet_rotation, 
 		{
 			speed = items["gun" .. currentGun].speed,

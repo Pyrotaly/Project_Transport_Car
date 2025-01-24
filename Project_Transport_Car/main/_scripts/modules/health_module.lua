@@ -35,7 +35,7 @@ function M.apply_damage(entity, damage)
 	entity.health = entity.health - damage
 
 	if entity.health <= 0 then
-		M.on_death(entity)
+		M.on_death(entity, damage)
 	else
 		M.on_damage(entity, damage)
 	end
@@ -48,7 +48,7 @@ function M.on_damage(entity, damage)
 	-- Set different time-steps based on the entity type
 	if entity.health_type == hash("player") then
 		timer.delay(0.25, false, function()
-			print("player took damage")
+			msg.post("gui_player_menu:/go#main_game", "updateHealth", { healthAdjust = damage })
 			
 			msg.post("0_game_managers:/proxy_loader#proxy_level_4", "set_time_step", {factor = 1, mode = 1})
 		end)
@@ -60,7 +60,7 @@ function M.on_damage(entity, damage)
 end
 
 -- Event triggered when the entity dies
-function M.on_death(entity)
+function M.on_death(entity, damage)
 	print("has died!")
 	-- Add your own death logic here, like playing an animation or removing the entity
 
@@ -68,7 +68,7 @@ function M.on_death(entity)
 	if entity.health_type == hash("player") then
 		timer.delay(0.025, false, function()
 			msg.post("0_game_managers:/proxy_loader#proxy_level_1", "set_time_step", {factor = 1, mode = 1})
-
+			msg.post("gui_player_menu:/go#main_game", "updateHealth", { healthAdjust = damage })
 			-- TODO: game over screen
 			go.delete()
 		end)

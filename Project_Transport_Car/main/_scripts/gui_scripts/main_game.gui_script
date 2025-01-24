@@ -22,12 +22,16 @@ end
 function on_message(self, message_id, message, sender)
 	if message_id == hash("updateCurrency") then
 		local text = gui.get_node("scrap_amount_text")
+
 		gui.set_text(text, tostring(message.newCurrencyTotal))
 	end	
 
 	if message_id == hash("updateHealth") then
 		local health_text = gui.get_node("player_health_text")
-		gui.set_text(text, tostring(message.newCurrencyTotal))
+		local cur_health = gui.get_text(health_text)
+		print(cur_health)
+		print(message.healthAdjust)
+		gui.set_text(health_text, tostring(cur_health - message.healthAdjust))
 	end
 
 	if message_id == hash("startTimer") then
