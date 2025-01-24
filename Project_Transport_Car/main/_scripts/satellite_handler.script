@@ -87,16 +87,53 @@ end
 -- --------------------------------------
 
 local function reload(self)
-	-- TODO : Prevent weapon swapping or like do not reload if swap
-	self.reload = true
+	-- TODO : prevent weapon swapping or cancel reload if swapping
+	if self.isReloading then return end  -- Prevent multiple reload calls
 	self.isReloading = true
-	
+	self.canShoot = false
+
+	-- Simulate reload delay
 	timer.delay(1, false, function()
 		items["gun" .. currentGun].curMagSize = items["gun" .. currentGun].maxMagSize
-		msg.post("gui_player_menu:/go#main_game", "updateBullet", { maxMagSize = items["gun" .. currentGun].maxMagSize, curMagSize = items["gun" .. currentGun].maxMagSize})
-		self.canShoot = true
+		msg.post("gui_player_menu:/go#main_game", "updateBullet", { maxMagSize = items["gun" .. currentGun].maxMagSize, curMagSize = items["gun" .. currentGun].maxMagSize })
 		self.isReloading = false
-		self.reload = false
+		self.canShoot = true
+	end)
+end
+
+local function shoot(self)
+	if not self.canShoot or self.isReloading then return end
+
+	-- Check if magazine is empty
+	if items["gun" .. currentGun].curMagSize <= 0 then
+		reload(self)
+		return
+	end
+
+	-- Perform shooting actions
+	sound.play("player_sounds/guns#gun1_shoot", { delay = 0, gain = 0.5, pan = 0, speed = 1 })
+	self.canShoot = false
+
+	items["gun" .. currentGun].curMagSize = items["gun" .. currentGun].curMagSize - 1
+	msg.post("gui_player_menu:/go#main_game", "updateBullet", { maxMagSize = items["gun" .. currentGun].maxMagSize, curMagSize = items["gun" .. currentGun].curMagSize })
+
+	local total_damage = items["gun" .. currentGun].damage + upgrades.get_upgrade_value("player", "damage")
+	local bullet_position = go.get_position("satellite")
+	local bullet_rotation = go.get_rotation("satellite")
+
+	factory.create("factories#bullet_" .. currentGun, bullet_position, bullet_rotation, {
+		speed = items["gun" .. currentGun].speed,
+		life = items["gun" .. currentGun].life,
+		bulletDamage = total_damage,
+		mask = hash("enemy")
+	}, 0.6)
+
+	particlefx.play("particleFX#bullet_casing")
+	camera.shake(CAMERA_ID, items["gun" .. currentGun].shakeIntensity, 0.1, hash("both"))
+
+	-- Reset shooting cooldown
+	timer.delay(items["gun" .. currentGun].gunCooldown, false, function()
+		self.canShoot = true
 	end)
 end
 
@@ -123,62 +160,16 @@ function fixed_update(self, dt)
 
 	angle = math.atan2(orbitPosition.y - orbitCenter.y, orbitPosition.x - orbitCenter.x) -- Calculate the rotation angle to point outward from the center
 	go.set_rotation(vmath.quat_rotation_z(angle + 2*additionalRotation), "satellite") -- Set the rotation of the object to point outward from the center
-	self.direction = angle + 2*additionalRotation
-end
-
-function on_message(self, message_id, message, sender)
-	if message_id == hash("plsReload") then
-		self.canShoot = false
-		reload(self)
-	end
-	
-	if message_id == hash("shoot") and self.canShoot and not self.isReloading then
-
-		if items["gun" .. currentGun].curMagSize <= 0 then
-			-- TODO : Make a clicking noise or sometin
-			return
-		end
-
-		sound.play("player_sounds/guns#gun1_shoot",{delay = 0, gain = 0.5, pan = 0, speed = 1})
-		self.canShoot = false
-
-		self.shot_counter = self.shot_counter + 1
-		items["gun" .. currentGun].curMagSize = items["gun" .. currentGun].curMagSize - 1
-		msg.post("gui_player_menu:/go#main_game", "updateBullet", { maxMagSize = items["gun" .. currentGun].maxMagSize, curMagSize = items["gun" .. currentGun].curMagSize})
-		
-		local total_damage = items["gun" .. currentGun].damage + upgrades.get_upgrade_value("player", "damage")
-
-		local bullet_position = go.get_position("satellite")
-		local bullet_rotation = go.get_rotation("satellite")
-		factory.create("factories#bullet_" .. currentGun, bullet_position, bullet_rotation, 
-		{
-			speed = items["gun" .. currentGun].speed,
-			life = items["gun" .. currentGun].life,
-			bulletDamage = total_damage,
-			mask = hash("enemy")
-		},
-		0.6)
-
-		handle_upgrades_for_shooting(self, bullet_position, bullet_rotation)
-
-		particlefx.play("particleFX#bullet_casing")
-		camera.shake(CAMERA_ID, items["gun" .. currentGun].shakeIntensity, 0.1, hash("both"))
-		
-		timer.delay(items["gun" .. currentGun].gunCooldown, false, function()
-			self.canShoot = true
-		end)
-	end
 end
 
 function on_input(self, action_id, action)
 	inputVector = vmath.vector3(action.x, action.y, 0)
 	screenToWorld = camera.screen_to_world(self.orthoCameraGO, inputVector)
-
 	world = vmath.vector3(screenToWorld.x, screenToWorld.y, 1)
 
-	if action_id == hash("reload") then -- ok so if i have hash reload and msg post reload it has errors..
-		msg.post("#satellite", "plsReload")
+	if action_id == hash("reload") then
+		reload(self)
 	elseif action_id == hash("leftTrigger") then
-		self.firing = true
+		shoot(self)
 	end
 end
