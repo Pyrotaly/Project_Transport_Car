@@ -14,15 +14,63 @@ local screenToWorld = vmath.vector3(0, 0, 0)
 
 local currentGun = "1"
 
+-- local items = {
+-- 	gun1 = { damage = 10, speed = 5000, name = "Blaster", life = 0.4, shakeIntensity = 0.003, gunCooldown = 0.075, maxMagSize = 30 + upgrades.get_upgrade_value("player", "bigger_mag"), curMagSize = 30 },
+-- 	gun2 = { damage = 35, speed = 2.0, name = "Pistol", life = 0.4, shakeIntensity = 0.005, gunCooldown = 0.05, maxMagSize = 50 + upgrades.get_upgrade_value("player", "bigger_mag"), curMagSize = 50 },
+-- 	gun3 = { damage = 75, speed = 1.0, name = "Rocket Launcher", life = 0.4, shakeIntensity = 0.005, gunCooldown = 0.2, maxMagSize = 50 + upgrades.get_upgrade_value("player", "bigger_mag"), curMagSize = 50}
+-- }
+
 local items = {
-	gun1 = { damage = 10, speed = 5000, name = "Blaster", life = 0.4, shakeIntensity = 0.003, gunCooldown = 0.075, maxMagSize = 30 + upgrades.get_upgrade_value("player", "bigger_mag"), curMagSize = 30 },
-	gun2 = { damage = 35, speed = 2.0, name = "Pistol", life = 0.4, shakeIntensity = 0.005, gunCooldown = 0.05, maxMagSize = 50, curMagSize = 50 },
-	gun3 = { damage = 75, speed = 1.0, name = "Rocket Launcher", life = 0.4, shakeIntensity = 0.005, gunCooldown = 0.2, maxMagSize = 50, curMagSize = 50}
+	gun1 = { 
+		damage = 10, 
+		speed = 5000, 
+		name = "Blaster", 
+		life = 0.4, 
+		shakeIntensity = 0.003, 
+		gunCooldown = 0.075, 
+		maxMagSize = function() 
+			return 30 + upgrades.get_upgrade_value("player", "bigger_mag") 
+		end,
+		curMagSize = 30 
+	},
+	gun2 = { 
+		damage = 35, 
+		speed = 2.0, 
+		name = "Pistol", 
+		life = 0.4, 
+		shakeIntensity = 0.005, 
+		gunCooldown = 0.05, 
+		maxMagSize = function() 
+			return 50 + upgrades.get_upgrade_value("player", "bigger_mag") 
+		end,
+		curMagSize = 50 
+	},
+	gun3 = { 
+		damage = 75, 
+		speed = 1.0, 
+		name = "Rocket Launcher", 
+		life = 0.4, 
+		shakeIntensity = 0.005, 
+		gunCooldown = 0.2, 
+		maxMagSize = function() 
+			return 50 + upgrades.get_upgrade_value("player", "bigger_mag") 
+		end,
+		curMagSize = 50 
+	}
 }
+
+-- Example usage when accessing `maxMagSize`
+local gun1MaxMag = items.gun1.maxMagSize() -- Dynamically gets the updated maxMagSize
 
 -- --------------------------------------
 -- TODO: Refactor this upgrade system (below)
 -- --------------------------------------
+local function apply_upgrade()
+	-- Recalculate maxMagSize when "bigger_mag" upgrade changes
+	local biggerMagUpgrade = upgrades.get_upgrade_value("player", "bigger_mag")
+	items.gun1.maxMagSize = 30 + biggerMagUpgrade
+end
+
 local function fire_missile(self, position, rotation)
 	if self.shot_counter % 5 ~= 0 then
 		return
@@ -86,16 +134,23 @@ end
 -- TODO: Refactor this upgrade system (above)
 -- --------------------------------------
 
+-- --------------------------------------
+-- Main firing
+-- --------------------------------------
 local function reload(self)
 	-- TODO : prevent weapon swapping or cancel reload if swapping
+	-- TODO : Play reload animation
 	if self.isReloading then return end  -- Prevent multiple reload calls
 	self.isReloading = true
 	self.canShoot = false
 
 	-- Simulate reload delay
 	timer.delay(1, false, function()
-		items["gun" .. currentGun].curMagSize = items["gun" .. currentGun].maxMagSize
-		msg.post("gui_player_menu:/go#main_game", "updateBullet", { maxMagSize = items["gun" .. currentGun].maxMagSize, curMagSize = items["gun" .. currentGun].maxMagSize })
+		items["gun" .. currentGun].curMagSize = items["gun" .. currentGun].maxMagSize()
+		msg.post("gui_player_menu:/go#main_game", "updateBullet", { 
+			maxMagSize = items["gun" .. currentGun].maxMagSize(), -- Call the function here
+			curMagSize = items["gun" .. currentGun].curMagSize
+		})
 		self.isReloading = false
 		self.canShoot = true
 	end)
@@ -106,17 +161,22 @@ local function shoot(self)
 
 	-- Check if magazine is empty
 	if items["gun" .. currentGun].curMagSize <= 0 then
+		-- TOOD : Play click sound
 		reload(self)
 		return
 	end
 
-	-- Perform shooting actions
 	sound.play("player_sounds/guns#gun1_shoot", { delay = 0, gain = 0.5, pan = 0, speed = 1 })
 	self.canShoot = false
 
+	self.shot_counter = self.shot_counter + 1
+	
 	items["gun" .. currentGun].curMagSize = items["gun" .. currentGun].curMagSize - 1
-	msg.post("gui_player_menu:/go#main_game", "updateBullet", { maxMagSize = items["gun" .. currentGun].maxMagSize, curMagSize = items["gun" .. currentGun].curMagSize })
-
+	msg.post("gui_player_menu:/go#main_game", "updateBullet", { 
+		maxMagSize = items["gun" .. currentGun].maxMagSize(), -- Call the function here
+		curMagSize = items["gun" .. currentGun].curMagSize
+	})
+	
 	local total_damage = items["gun" .. currentGun].damage + upgrades.get_upgrade_value("player", "damage")
 	local bullet_position = go.get_position("satellite")
 	local bullet_rotation = go.get_rotation("satellite")
@@ -128,6 +188,8 @@ local function shoot(self)
 		mask = hash("enemy")
 	}, 0.6)
 
+	handle_upgrades_for_shooting(self, bullet_position, bullet_rotation)
+
 	particlefx.play("particleFX#bullet_casing")
 	camera.shake(CAMERA_ID, items["gun" .. currentGun].shakeIntensity, 0.1, hash("both"))
 
@@ -136,6 +198,9 @@ local function shoot(self)
 		self.canShoot = true
 	end)
 end
+-- --------------------------------------
+-- Main firing (above)
+-- --------------------------------------
 
 function init(self)
 	self.dir = vmath.vector3()
@@ -144,7 +209,10 @@ function init(self)
 	self.shot_counter = 0
 
 	-- TODO : Update the bullet ui for all guns when swtiching, maybe have switching guns have a swap time
-	msg.post("gui_player_menu:/go#main_game", "updateBullet", { maxMagSize = items["gun" .. currentGun].maxMagSize, curMagSize = items["gun" .. currentGun].curMagSize})
+	msg.post("gui_player_menu:/go#main_game", "updateBullet", { 
+		maxMagSize = items["gun" .. currentGun].maxMagSize(), -- Call the function here
+		curMagSize = items["gun" .. currentGun].curMagSize
+	})
 end
 
 function fixed_update(self, dt)
@@ -168,8 +236,14 @@ function on_input(self, action_id, action)
 	world = vmath.vector3(screenToWorld.x, screenToWorld.y, 1)
 
 	if action_id == hash("reload") then
-		reload(self)
+		if items["gun" .. currentGun].curMagSize <  items["gun" .. currentGun].maxMagSize then
+			reload(self)
+		end
 	elseif action_id == hash("leftTrigger") then
 		shoot(self)
 	end
+end
+
+function on_message(self, message_id, message, sender)
+
 end

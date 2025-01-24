@@ -6,14 +6,13 @@ local MAX_SPEED_X = 800
 local ACCELERATION_X = 1500
 local DECELERATION_X = 1500
 
-local function reload(self)
-	-- TODO : Prevent weapon swapping or like do not reload if swap
-	self.reload = true
-	timer.delay(1, false, function()
-		self.canShoot = true
-		self.reload = false
-	end)
+local function apply_upgrade()
+	-- todo : other than like speed and stuff, when upgrade healt hcall the health module
+	-- Recalculate maxMagSize when "bigger_mag" upgrade changes
+	local biggerMagUpgrade = upgrades.get_upgrade_value("player", "bigger_mag")
+	items.gun1.maxMagSize = 30 + biggerMagUpgrade
 end
+
 
 function init(self)
 	camera.follow(CAMERA_ID, "/player/player", {lerp=0.3})
@@ -80,7 +79,6 @@ function fixed_update(self, dt)
 			end
 		end
 	else
-		-- Decelerate when not moving
 		self.speed_x = math.max(self.speed_x - DECELERATION_X * dt, 0)
 	end
 
