@@ -101,11 +101,20 @@ instances {
     z: 0.68
   }
 }
+instances {
+  id: "basic_car"
+  prototype: "/main/gameObjects/carEnemies/basic_car.go"
+  position {
+    x: 1922.0
+    y: 509.0
+    z: 1.0
+  }
+}
 collection_instances {
   id: "background"
   collection: "/main/collections/road_background.collection"
   position {
-    z: -1.0
+    z: -10.0
   }
 }
 collection_instances {
@@ -139,8 +148,12 @@ embedded_instances {
 }
 embedded_instances {
   id: "enemyFolder"
+  children: "basic_car"
   children: "car_ChargeAttack"
   children: "car_RandomBehavior"
   children: "player_enemy_shoot"
   data: ""
+  position {
+    z: 1.0
+  }
 }

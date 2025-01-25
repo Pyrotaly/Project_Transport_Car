@@ -9,7 +9,7 @@ instances {
 }
 instances {
   id: "car_enemy_fast"
-  prototype: "/main/gameObjects/carEnemies/car_enemy_fast.go"
+  prototype: "/main/gameObjects/carEnemies/basic_car.go"
   position {
     x: 1172.0
     y: 515.0
@@ -17,7 +17,7 @@ instances {
 }
 instances {
   id: "car_enemy_fast1"
-  prototype: "/main/gameObjects/carEnemies/car_enemy_fast.go"
+  prototype: "/main/gameObjects/carEnemies/basic_car.go"
   position {
     x: 315.0
     y: 499.0

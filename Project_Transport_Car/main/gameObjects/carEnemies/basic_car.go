@@ -13,13 +13,8 @@ components {
   }
 }
 components {
-  id: "enemyDriveUp"
-  component: "/main/_scripts/car_ai/TEST_Car_Behaviors/enemyDriveUp.script"
-  properties {
-    id: "target_x"
-    value: "600.0"
-    type: PROPERTY_TYPE_NUMBER
-  }
+  id: "basic_car"
+  component: "/main/_scripts/car_ai/generic_cars/cars/basic_car.script"
 }
 embedded_components {
   id: "sprite"

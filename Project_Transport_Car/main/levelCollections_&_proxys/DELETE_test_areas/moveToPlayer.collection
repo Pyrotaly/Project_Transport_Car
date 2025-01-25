@@ -1,7 +1,7 @@
 name: "2_area"
 instances {
   id: "car_enemy_fast"
-  prototype: "/main/gameObjects/carEnemies/car_enemy_fast.go"
+  prototype: "/main/gameObjects/carEnemies/basic_car.go"
   position {
     x: -338.0
     y: 341.0
