@@ -94,26 +94,16 @@ local function can_shoot(self, target_position)
 	return false
 end
 
--- function init(self)
--- 	local shooting_mode = SHOOTING_MODES[self.shootingMode]
--- 	local cooldown = shooting_mode and shooting_mode.cooldown or 0.5
--- 
--- timer.delay(cooldown, true, function()
--- 	if self.target and go.exists(self.target) then
--- 		local target_position = go.get_position(self.target)
--- 		if can_shoot(self, target_position) then
--- 			shoot(self)
--- 		end
--- 	end
--- end)
--- end
-
 function init(self)
-	local shooting_mode = SHOOTING_MODES[self.shootingMode]
-	local cooldown = shooting_mode and shooting_mode.cooldown or 0.5
+	self.shooting_mode = SHOOTING_MODES[self.shootingMode]
+	self.cooldown = self.shooting_mode and self.shooting_mode.cooldown or 0.5
 
+	self.state = "pause" -- Initial state
+	-- self.shootingMode = "default" -- Adjust this to match your shooting mode setup
+	self.timer = 0 -- Timer to track the behavior switching
+	self.state_duration = 5 -- Duration for both shooting and pausing (in seconds)
+	
 end
-
 
 -- ---------------------------------------------------------
 -- Debugging
@@ -126,6 +116,30 @@ local function draw_line(from, to)
 end
 
 function update(self, dt)
+	-- Update the timer for state transitions
+	self.timer = self.timer + dt
+
+	if self.timer >= self.state_duration then
+		self.timer = 0 -- Reset timer
+		if self.state == "shoot" then
+			self.state = "pause" -- Switch to pausing
+		else
+			self.state = "shoot" -- Switch to shooting
+		end
+	end
+
+	-- Shooting logic when in the "shoot" state
+	if self.state == "shoot" then
+		self.cooldown = self.cooldown + dt
+		if self.cooldown >= self.shooting_mode.cooldown then
+			self.cooldown = 0
+			shoot(self) -- Call the shoot function
+		end
+	end
+
+	-- ---------------------------------------------------------
+	-- Debugging
+	-- ---------------------------------------------------------
 	local thisPos = go.get_position()
 	if not self.target or not go.exists(self.target) then
 		self.target = nil -- Clear the invalid reference

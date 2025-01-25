@@ -14,7 +14,7 @@ components {
 }
 components {
   id: "move_to_random_quadrant"
-  component: "/main/_scripts/car_ai/generic_cars/cars/move_to_playerQuad.script"
+  component: "/main/_scripts/car_ai/TEST_Car_Behaviors/move_to_playerQuad.script"
 }
 embedded_components {
   id: "sprite"

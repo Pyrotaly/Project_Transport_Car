@@ -14,7 +14,7 @@ components {
 }
 components {
   id: "surround_player"
-  component: "/main/_scripts/car_ai/generic_cars/motorcycles/surround_player.script"
+  component: "/main/_scripts/car_ai/TEST_Car_Behaviors/surround_player.script"
 }
 embedded_components {
   id: "sprite"
