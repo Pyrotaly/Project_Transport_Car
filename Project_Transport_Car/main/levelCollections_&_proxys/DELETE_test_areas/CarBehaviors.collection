@@ -87,6 +87,14 @@ instances {
       type: PROPERTY_TYPE_HASH
     }
   }
+  component_properties {
+    id: "enemyDriveUp"
+    properties {
+      id: "sway_side_distance"
+      value: "20.0"
+      type: PROPERTY_TYPE_NUMBER
+    }
+  }
 }
 instances {
   id: "car_ChargeAttack"

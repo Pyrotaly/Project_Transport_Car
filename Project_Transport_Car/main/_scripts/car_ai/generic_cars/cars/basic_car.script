@@ -48,9 +48,10 @@ end
 
 local function sway_left_right(self)
 	if self.arrived then
-		go.animate(".", "position.x", go.PLAYBACK_ONCE_PINGPONG, go.get_position().x + self.sway_side_distance, go.EASING_INOUTSINE, self.sway_speed * 1.2)
+		go.animate(".", "position.x", go.PLAYBACK_ONCE_PINGPONG, go.get_position().x + self.sway_side_distance, go.EASING_INOUTSINE, self.sway_speed * 1.2, 0, sway_left_right)
 	end
 end
+
 
 local function move_back(self)
 	go.animate(".", "position.x", go.PLAYBACK_ONCE_FORWARD, self.target_x - self.back_distance, go.EASING_OUTQUAD, 1.2, 0, function()
@@ -130,26 +131,25 @@ end
 
 function update(self, dt)
 
-
-	if self.charging then
-		-- Update position during charge
-		local current_pos = go.get_position()
-		local new_pos = current_pos + self.velocity * dt
-		go.set_position(new_pos)
-
-		-- Check if charge duration has ended
-		self.charge_timer = self.charge_timer + dt
-		if self.charge_timer >= self.charge_duration then
-			stop_charge(self)
-		end
-	else
-		-- Cooldown logic
-		self.cooldown_timer = self.cooldown_timer + dt
-		if self.cooldown_timer >= self.charge_cooldown then
-			start_charge(self)
-			self.cooldown_timer = 0 -- Reset cooldown timer
-		end
-	end
+-- 	if self.charging then
+-- 		-- Update position during charge
+-- 		local current_pos = go.get_position()
+-- 		local new_pos = current_pos + self.velocity * dt
+-- 		go.set_position(new_pos)
+-- 
+-- 		-- Check if charge duration has ended
+-- 		self.charge_timer = self.charge_timer + dt
+-- 		if self.charge_timer >= self.charge_duration then
+-- 			stop_charge(self)
+-- 		end
+-- 	else
+-- 		-- Cooldown logic
+-- 		self.cooldown_timer = self.cooldown_timer + dt
+-- 		if self.cooldown_timer >= self.charge_cooldown then
+-- 			start_charge(self)
+-- 			self.cooldown_timer = 0 -- Reset cooldown timer
+-- 		end
+-- 	end
 end
 
 function fixed_update(self, dt)

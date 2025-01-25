@@ -14,7 +14,7 @@ end
 
 local function sway_left_right(self)
 	if arrived then
-		go.animate(".", "position.x", go.PLAYBACK_LOOP_PINGPONG, go.get_position().x + self.sway_side_distance, go.EASING_INOUTSINE, self.sway_speed * 1.2)
+		go.animate(".", "position.x", go.PLAYBACK_ONCE_PINGPONG, go.get_position().x + self.sway_side_distance, go.EASING_INOUTSINE, self.sway_speed * 1.2, 0, sway_left_right)
 	end
 end
 
