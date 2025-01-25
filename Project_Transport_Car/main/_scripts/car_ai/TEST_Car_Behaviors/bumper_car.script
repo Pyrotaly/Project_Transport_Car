@@ -35,16 +35,11 @@ end
 
 function init(self)
 	self.velocity = vmath.vector3(0) -- Initialize the velocity to zero
-	self.speed = 1000 -- Set the charge speed (units per second)
+	self.speed = 2000 -- Set the charge speed (units per second)
 	self.charging = false -- Whether the enemy is currently charging
 	self.charge_timer = 0 -- Timer for the current charge
 	self.cooldown_timer = 0 -- Timer for the cooldown between charges
 	self.charge_cooldown = 2 -- Time between charges (in seconds)
-
-	-- Duration scaling based on distance
-	self.min_charge_duration = 0.5 -- Minimum charge duration (seconds)
-	self.max_charge_duration = 1 -- Maximum charge duration (seconds)
-	self.max_charge_distance = 500 -- Maximum distance for scaling the charge duration (units)
 
 	self.damage = 10 -- Damage dealt to the player on collision
 end

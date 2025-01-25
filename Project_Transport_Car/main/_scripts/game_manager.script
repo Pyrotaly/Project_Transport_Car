@@ -2,6 +2,9 @@ function init(self)
 	msg.post("/proxy_loader#level_loader_manager", "loadLevel", { newLevel = 4 })
 	msg.post("/proxy_loader#level_loader_manager", "loadGUI", { guiNumber = 4 })
 	msg.post("/proxy_loader#level_loader_manager", "loadGUI", { guiNumber = 2 })
+
+	-- TODO : Delete later for testing done
+	msg.post(".", "loadCombatZone", {newLevel = 1, newCoords = { 1, 1}, lastCoords = { 5, 5 }} )
 end
 
 function fixed_update(self, dt)

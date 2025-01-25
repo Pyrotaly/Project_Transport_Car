@@ -1,7 +1,56 @@
+local grid = require("main._scripts.modules.road_quadrants")
+
+go.property("target_x", 600) -- Final X position for the car
+go.property("sway_distance", 20) -- Sway distance (up/down)
+go.property("sway_speed", 3.0) -- Sway speed
+go.property("sway_side_distance", 3) -- Sideways sway distance
+go.property("back_distance", 20) -- How much the car moves backward after arriving
+
+-- ---------------------------------------------------------
+-- Charge Attack
+-- ---------------------------------------------------------
+local function start_charge(self)
+	local current_pos = go.get_position()
+	local player_pos = go.get_position("/player/player")
+
+	local direction = vmath.normalize(player_pos - current_pos)
+	self.velocity = direction * self.speed
+
+	local distance = vmath.length(player_pos - current_pos)
+
+	local min_duration = 0.25  -- Adjust as needed
+	local max_duration = 1.3  -- Adjust as needed
+
+	local raw_duration = distance / self.speed
+	self.charge_duration = math.max(min_duration, math.min(raw_duration, max_duration)) + 0.25
+
+	print("Charge duration:", self.charge_duration)
+
+	-- Start charging
+	self.charging = true
+	self.charge_timer = 0
+end
+
+local function stop_charge(self)
+	self.charging = false
+	self.velocity = vmath.vector3(0) -- Stop moving
+end
+-- ---------------------------------------------------------
+-- Debugging
+-- ---------------------------------------------------------
+
 function init(self)
-	-- Add initialization code here
-	-- Learn more: https://defold.com/manuals/script/
-	-- Remove this function if not needed
+	-- Charging properties
+	self.velocity = vmath.vector3(0) -- Initialize the velocity to zero
+	self.speed = 1000 -- Set the charge speed (units per second)
+	self.charging = false -- Whether the enemy is currently charging
+	self.charge_timer = 0 -- Timer for the current charge
+	self.cooldown_timer = 0 -- Timer for the cooldown between charges
+	self.charge_cooldown = 2 -- Time between charges (in seconds)
+	self.damage = 10 -- Damage dealt to the player on collision
+
+	-- Driving up
+	self.arrived = false
 end
 
 function final(self)
@@ -11,9 +60,27 @@ function final(self)
 end
 
 function update(self, dt)
-	-- Add update code here
-	-- Learn more: https://defold.com/manuals/script/
-	-- Remove this function if not needed
+
+
+	if self.charging then
+		-- Update position during charge
+		local current_pos = go.get_position()
+		local new_pos = current_pos + self.velocity * dt
+		go.set_position(new_pos)
+
+		-- Check if charge duration has ended
+		self.charge_timer = self.charge_timer + dt
+		if self.charge_timer >= self.charge_duration then
+			stop_charge(self)
+		end
+	else
+		-- Cooldown logic
+		self.cooldown_timer = self.cooldown_timer + dt
+		if self.cooldown_timer >= self.charge_cooldown then
+			start_charge(self)
+			self.cooldown_timer = 0 -- Reset cooldown timer
+		end
+	end
 end
 
 function fixed_update(self, dt)

@@ -1,6 +1,6 @@
 components {
   id: "enemy_shoot"
-  component: "/main/_scripts/entities/enemy_shoot.script"
+  component: "/main/_scripts/enemy_ai/enemy_shoot.script"
   properties {
     id: "speed"
     value: "1000.0"
