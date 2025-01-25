@@ -1,61 +1,119 @@
 local enemyScaling = require("main._scripts.modules.enemy_scaling_module")
 
+-- Properties
 go.property("speed", 0)
 go.property("life", 0)
 go.property("bulletDamage", 0)
 go.property("bulletMask", hash("___"))
 go.property("raytraceMask", hash("___"))
 go.property("target", hash("___"))
-go.property("radius", 500)
+go.property("radius", 1000)
+go.property("shootingMode", hash("normal")) -- Options: "normal", "machine_gun", "sniper", "shotgun"
 
-local function spawn_object(self)
-	local player_position = go.get_position(self.target) 
-	local direction = player_position - go.get_position()
-	local angle = math.atan2(direction.y, direction.x)
+-- Weapon configs
+local SHOOTING_MODES = {
+	[hash("normal")] = { cooldown = 0.5, bullets = 1, spread = 0 },
+	[hash("machine_gun")] = { cooldown = 0.1, bullets = 1, spread = 30 },
+	[hash("sniper")] = { cooldown = 1.5, bullets = 1, spread = 0 },
+	[hash("shotgun")] = { cooldown = 0.8, bullets = 8, spread = 15 }, -- 5 bullets with a spread angle
+}
 
+-- Spawn a bullet with a specific angle
+local function spawn_bullet(self, angle)
 	local rotation = vmath.quat_rotation_z(angle)
-
 	local bulletDamage = self.bulletDamage + enemyScaling.upgraded_damage
 
-	factory.create("#enemy_bullet", nil, rotation, 
-	{
-		-- go.property("speed", 0)
-		-- go.property("life", 0)
-		-- go.property("bulletDamage", 0)
-		-- go.property("mask", hash("___"))
+	factory.create("#enemy_bullet", nil, rotation, {
 		speed = self.speed,
 		life = self.life,
 		bulletDamage = bulletDamage,
 		mask = hash("bulletMask")
-	},
-	0.6)
+	}, 0.6)
 end
 
-local function check_and_shoot(self)
+local function shoot(self)
+	local shooting_mode = SHOOTING_MODES[self.shootingMode]
+	if not shooting_mode then
+		print("Invalid shooting mode: " .. tostring(self.shootingMode))
+		return
+	end
+
+	local player_position = go.get_position(self.target)
+	local direction = player_position - go.get_position()
+	local base_angle = math.atan2(direction.y, direction.x)
+
+	-- Fire bullets for shotgun evenly in a cone
+	if self.shootingMode == hash("shotgun") then
+-- 		local spread = shooting_mode.spread
+-- 		local num_bullets = shooting_mode.bullets
+-- 		local half_spread = math.rad(spread / 2)
+-- 
+-- 		for i = 0, num_bullets - 1 do
+-- 			local angle_offset = -half_spread + (i / (num_bullets - 1)) * spread
+-- 			local offset_angle = base_angle + (angle_offset)
+-- 			spawn_bullet(self, offset_angle)
+-- 		end
+
+		local spread = shooting_mode.spread
+		local num_bullets = shooting_mode.bullets
+		local half_spread = math.rad(spread / 2)
+
+		-- Calculate the start and end angles of the cone
+		local start_angle = base_angle - half_spread
+		local end_angle = base_angle + half_spread
+
+		-- Fire bullets within the cone
+		for i = 0, num_bullets - 1 do
+			local angle = start_angle + (i / (num_bullets - 1)) * (end_angle - start_angle)
+			spawn_bullet(self, angle)
+		end
+	else
+		-- Fire single or multiple bullets without even spread
+		for i = 1, shooting_mode.bullets do
+			local spread = shooting_mode.spread
+			local offset_angle = base_angle + math.rad((math.random() * spread) - (spread / 2))
+			spawn_bullet(self, offset_angle)
+		end
+	end
+end
+
+-- Check if the enemy can shoot
+local function can_shoot(self, target_position)
 	local thisPos = go.get_position()
-	local target_position = go.get_position(self.target)
 	local distance = vmath.length(target_position - thisPos)
 
 	if distance <= self.radius then
 		-- Perform raycast
 		local hit = physics.raycast(thisPos, target_position, { self.raytraceMask })
 
-		-- If the ray hits nothing or only hits the target, spawn the bullet
-		if not hit then
-			spawn_object(self)
+		-- Only shoot if ray hits nothing or doesn't hit an enemy
+		if not hit or hit.group ~= hash("enemy") then
+			return true
 		end
 	end
+	return false
 end
+
+-- function init(self)
+-- 	local shooting_mode = SHOOTING_MODES[self.shootingMode]
+-- 	local cooldown = shooting_mode and shooting_mode.cooldown or 0.5
+-- 
+-- timer.delay(cooldown, true, function()
+-- 	if self.target and go.exists(self.target) then
+-- 		local target_position = go.get_position(self.target)
+-- 		if can_shoot(self, target_position) then
+-- 			shoot(self)
+-- 		end
+-- 	end
+-- end)
+-- end
 
 function init(self)
-	timer.delay(0.5, true, function()
-		check_and_shoot(self) -- Check radius and raytrace, then spawn object
-	end)
-end
-
-function final(self)
+	local shooting_mode = SHOOTING_MODES[self.shootingMode]
+	local cooldown = shooting_mode and shooting_mode.cooldown or 0.5
 
 end
+
 
 -- ---------------------------------------------------------
 -- Debugging
@@ -74,7 +132,7 @@ function update(self, dt)
 		return false
 	else
 		local player_position = go.get_position(self.target) 
-		debugdraw.circle(thisPos.x, thisPos.y, 500, "red")
+		debugdraw.circle(thisPos.x, thisPos.y, self.radius, "red")
 
 		local from = go.get_position()
 		local result = physics.raycast(from, player_position, { hash("car") })
@@ -84,19 +142,4 @@ function update(self, dt)
 			draw_line(from, player_position)
 		end
 	end
-end
-
-function fixed_update(self, dt)
-	-- This function is called if 'Fixed Update Frequency' is enabled in the Engine section of game.project
-	-- Can be coupled with fixed updates of the physics simulation if 'Use Fixed Timestep' is enabled in
-	-- Physics section of game.project
-	-- Add update code here
-	-- Learn more: https://defold.com/manuals/script/
-	-- Remove this function if not needed
-end
-
-function on_message(self, message_id, message, sender)
-	-- Add message-handling code here
-	-- Learn more: https://defold.com/manuals/message-passing/
-	-- Remove this function if not needed
 end

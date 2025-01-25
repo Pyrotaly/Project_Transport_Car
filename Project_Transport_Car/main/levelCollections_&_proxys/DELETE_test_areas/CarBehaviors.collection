@@ -72,6 +72,14 @@ instances {
     y: 379.0
   }
 }
+instances {
+  id: "player_enemy_shoot"
+  prototype: "/main/gameObjects/playerEnemies/player_enemy_shoot.go"
+  position {
+    x: 1171.0
+    y: 215.0
+  }
+}
 collection_instances {
   id: "background"
   collection: "/main/collections/road_background.collection"
@@ -107,4 +115,10 @@ embedded_instances {
     x: 640.0
     y: -260.0
   }
+}
+embedded_instances {
+  id: "enemyFolder"
+  children: "car_RandomBehavior"
+  children: "player_enemy_shoot"
+  data: ""
 }

@@ -1,10 +1,15 @@
 local grid = require("main._scripts.modules.road_quadrants")
 
 local function move_to_quadrant(self, quadrant)
+	-- local target_pos = grid.get_quadrant_position(quadrant)
+	local current_pos = go.get_position()
 	local target_pos = grid.get_quadrant_position(quadrant)
 
-	go.animate(".", "position.x", go.PLAYBACK_ONCE_FORWARD, target_pos.x, go.EASING_LINEAR, 1.2)
-	go.animate(".", "position.y", go.PLAYBACK_ONCE_FORWARD, target_pos.y, go.EASING_LINEAR, 1.2)
+	local distance = vmath.length(target_pos - current_pos)
+	local animation_time = distance / 300
+
+	go.animate(".", "position.x", go.PLAYBACK_ONCE_FORWARD, target_pos.x, go.EASING_LINEAR, animation_time)
+	go.animate(".", "position.y", go.PLAYBACK_ONCE_FORWARD, target_pos.y, go.EASING_LINEAR, animation_time)
 
 	self.current_quadrant = quadrant
 end

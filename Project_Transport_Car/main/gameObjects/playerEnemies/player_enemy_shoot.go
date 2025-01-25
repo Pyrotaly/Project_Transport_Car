@@ -13,7 +13,7 @@ components {
   }
   properties {
     id: "bulletDamage"
-    value: "50.0"
+    value: "1.0"
     type: PROPERTY_TYPE_NUMBER
   }
   properties {
@@ -33,13 +33,18 @@ components {
   }
   properties {
     id: "radius"
-    value: "500.0"
+    value: "2000.0"
     type: PROPERTY_TYPE_NUMBER
+  }
+  properties {
+    id: "shootingMode"
+    value: "shotgun"
+    type: PROPERTY_TYPE_HASH
   }
 }
 components {
   id: "enemy_bullet"
-  component: "/main/factories/enemy_bullet.factory"
+  component: "/main/factories/normal_bullet.factory"
 }
 components {
   id: "health_manager"
