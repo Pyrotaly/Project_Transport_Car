@@ -26,7 +26,7 @@ function on_message(self, message_id, message, sender)
 
 		-- have to wait for it to load... this is not ideal but yea
 		timer.delay(3, false, function()
-			msg.post("gui_player_menu:/go#main_game", "startTimer", { time = distance })
+			msg.post("gui_player_menu:/go#main_game", "startTimer", { time = 40 }) -- TODO : set this up
 		end)
 	end
 

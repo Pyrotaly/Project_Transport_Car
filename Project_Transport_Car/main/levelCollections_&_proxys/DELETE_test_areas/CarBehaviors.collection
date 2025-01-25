@@ -2,6 +2,10 @@ name: "2_area"
 instances {
   id: "camera"
   prototype: "/orthographic/camera.go"
+  position {
+    x: 1452.0
+    y: 453.0
+  }
   component_properties {
     id: "script"
     properties {
@@ -36,22 +40,22 @@ instances {
     }
     properties {
       id: "deadzone_left"
-      value: "500.0"
+      value: "100.0"
       type: PROPERTY_TYPE_NUMBER
     }
     properties {
       id: "deadzone_bottom"
-      value: "400.0"
+      value: "200.0"
       type: PROPERTY_TYPE_NUMBER
     }
     properties {
       id: "deadzone_right"
-      value: "500.0"
+      value: "100.0"
       type: PROPERTY_TYPE_NUMBER
     }
     properties {
       id: "deadzone_top"
-      value: "400.0"
+      value: "200.0"
       type: PROPERTY_TYPE_NUMBER
     }
   }
@@ -87,8 +91,8 @@ collection_instances {
   id: "player"
   collection: "/main/collections/player/player.collection"
   position {
-    x: 980.0
-    y: 823.0
+    x: 1474.0
+    y: 398.0
   }
 }
 scale_along_z: 0

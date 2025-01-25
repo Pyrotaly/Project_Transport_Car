@@ -3,14 +3,14 @@ local grid = require("main._scripts.modules.road_quadrants")
 local function move_to_quadrant(self, quadrant)
 	local target_pos = grid.get_quadrant_position(quadrant)
 
-	go.animate(".", "position.x", go.PLAYBACK_ONCE_FORWARD, target_pos.x, go.EASING_LINEAR, 1.5)
-	go.animate(".", "position.y", go.PLAYBACK_ONCE_FORWARD, target_pos.y, go.EASING_LINEAR, 1.5)
+	go.animate(".", "position.x", go.PLAYBACK_ONCE_FORWARD, target_pos.x, go.EASING_LINEAR, 1.2)
+	go.animate(".", "position.y", go.PLAYBACK_ONCE_FORWARD, target_pos.y, go.EASING_LINEAR, 1.2)
 
 	self.current_quadrant = quadrant
 end
 
 local function move_nearby(self)
-	local new_quad = grid.get_random_nearby_quadrant(self.current_quadrant, 2)
+	local new_quad = grid.get_random_nearby_quadrant(self.current_quadrant, 5)
 
 	move_to_quadrant(self, new_quad)
 end
@@ -26,6 +26,3 @@ end
 function update(self, dt)
 
 end
-
-
-
