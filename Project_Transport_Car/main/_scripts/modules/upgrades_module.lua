@@ -68,15 +68,9 @@ function M.apply_player_upgrade(upgrade)
 	if M.player_upgrades_increment[upgrade] then
 		M.player_upgrades_base[upgrade] = M.player_upgrades_increment[upgrade] + M.player_upgrades_base[upgrade]
 		print("Player Upgrade Applied: ", upgrade, " -> ", M.player_upgrades_base[upgrade])
-	-- elseif upgrade == "missile" then
-	-- 	M.player_upgrades_base[upgrade] = 1  -- Unlock missile
-	-- 	print("Missile Upgrade Applied!")
-	-- elseif upgrade == "spray" then
-	-- 	M.player_upgrades_base[upgrade] = 1  -- Unlock extra projectiles
-	-- 	print("Extra Projectiles Upgrade Applied!")
-	-- elseif upgrade == "shoot_back" then
-	-- 	M.player_upgrades_base[upgrade] = 1  -- Unlock shoot-back functionality
-	-- 	print("Shoot Back Upgrade Applied!")
+		
+		-- Upgrades should only be possible in the upgrade level so the player will always be in proxy collection 4
+		msg.post("4_upgrade_area:/player/player#player_controller", "upgradeOccured")
 	else
 		print("Invalid Player Upgrade: ", upgrade)
 	end
@@ -86,6 +80,13 @@ function M.apply_car_upgrade(upgrade)
 	if M.car_upgrades_increment[upgrade] then
 		M.car_upgrades_base[upgrade] = M.car_upgrades_increment[upgrade] + M.car_upgrades_base[upgrade]
 		print("Car Upgrade Applied: ", upgrade, " -> ", M.car_upgrades_base[upgrade])
+
+		-- Upgrades should only be possible in the upgrade level so the player will always be in proxy collection 4
+		msg.post("4_upgrade_area:/player/player#player_controller", "upgradeOccured")
+
+		if upgrade == "max_health" then
+			msg.post("gui_player_menu:/go#main_game", "updateHealth", { healthAdjust = - M.car_upgrades_increment[upgrade] })
+		end
 	else
 		print("Invalid Car Upgrade: ", upgrade)
 	end
@@ -110,7 +111,7 @@ function M.buy_upgrade(entity, upgrade)
 	end
 	
 	if player_currency < cost then
-		print("Not enough money! Need: " .. cost .. ", Have: " .. M.player_money)
+		print("Not enough money! Need: " .. cost .. ", Have: " .. pers_data.get_currency())
 		return false
 	end
 

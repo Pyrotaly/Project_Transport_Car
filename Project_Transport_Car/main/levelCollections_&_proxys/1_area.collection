@@ -14,6 +14,10 @@ instances {
 instances {
   id: "camera"
   prototype: "/orthographic/camera.go"
+  position {
+    x: 675.0
+    y: 259.0
+  }
   component_properties {
     id: "script"
     properties {
@@ -87,8 +91,8 @@ collection_instances {
   id: "player"
   collection: "/main/collections/player/player.collection"
   position {
-    x: 1040.0
-    y: 231.0
+    x: 656.0
+    y: 347.0
   }
 }
 collection_instances {

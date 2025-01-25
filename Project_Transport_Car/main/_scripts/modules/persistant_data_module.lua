@@ -6,9 +6,13 @@ local M = {
 	selected_nodes = {},
 	day_number = 1,
 	latest_selected = nil,
-	player_currency = 500
+	player_currency = 500,
+	player_health = 100
 }
 
+-- --------------------------------------
+-- Map selection
+-- --------------------------------------
 function M.mark_selected(node_name, x, y, level)
 	M.selected_nodes[node_name] = {x = x, y = y, level = level}
 	M.latest_selected = node_name
@@ -26,6 +30,9 @@ function M.is_selected(node_name)
 	return M.selected_nodes[node_name] or false
 end
 
+-- --------------------------------------
+-- Currency
+-- --------------------------------------
 function M.get_currency()
 	return M.player_currency
 end
@@ -35,12 +42,26 @@ function M.adjust_currency(adjust_amount)
 	msg.post("gui_player_menu:/go#main_game", "updateCurrency", { newCurrencyTotal = M.player_currency })
 end
 
+-- --------------------------------------
+-- Day Management
+-- --------------------------------------
 function M.get_day_number()
 	return M.day_number
 end
 
 function M.add_day()
 	M.day_number = M.day_number + 1
+end
+
+-- --------------------------------------
+-- Health
+-- --------------------------------------
+function M.set_health(new_health)
+	M.player_health = new_health
+end
+
+function M.get_health()
+	return M.player_health
 end
 
 return M

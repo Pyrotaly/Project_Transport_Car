@@ -15,8 +15,12 @@ function M.init(entity)
 
 	-- if entity.health_type == hash("player") then
 	-- 	entity.health = entity.max_health + playerUpgrade.player_upgrades_base.health
-	if entity.health_type == hash("car") then
+
+	
+	-- RN car is the player cause player driving their car
+	if entity.health_type == hash("player") then
 		entity.health = entity.max_health + playerUpgrade.car_upgrades_base.max_health
+		print(entity.health)
 	else
 		entity.health = entity.max_health + enemyScaling.upgraded_health
 	end
@@ -27,9 +31,7 @@ function M.apply_damage(entity, damage)
 		print("Entity is already dead")
 		return
 	end
-
-	-- TODO: Set the time-step to 1/50 for a micro-pause
-	-- msg.post("0_game_managers:/proxy_loader#proxy_level_4", "set_time_step", {factor = 1/2, mode = 1})
+	
 	visualHandler.flash_red(entity)
 
 	entity.health = entity.health - damage
@@ -48,12 +50,15 @@ function M.on_damage(entity, damage)
 	-- Set different time-steps based on the entity type
 	if entity.health_type == hash("player") then
 		timer.delay(0.25, false, function()
+			print(damage)
 			msg.post("gui_player_menu:/go#main_game", "updateHealth", { healthAdjust = damage })
-			
-			msg.post("0_game_managers:/proxy_loader#proxy_level_4", "set_time_step", {factor = 1, mode = 1})
+
+			-- TODO : make the set time step update to loaded proxy so
+			msg.post("0_game_managers:/proxy_loader#proxy_level_1", "set_time_step", {factor = 1, mode = 1})
 		end)
 	else
 		timer.delay(0.005, false, function()
+			-- TODO : make the set time step update to loaded proxy so
 			msg.post("0_game_managers:/proxy_loader#proxy_level_4", "set_time_step", {factor = 1, mode = 1})
 		end)
 	end
@@ -67,6 +72,7 @@ function M.on_death(entity, damage)
 	-- Set different time-steps based on the entity type
 	if entity.health_type == hash("player") then
 		timer.delay(0.025, false, function()
+			-- TODO : make the set time step update to loaded proxy so
 			msg.post("0_game_managers:/proxy_loader#proxy_level_1", "set_time_step", {factor = 1, mode = 1})
 			msg.post("gui_player_menu:/go#main_game", "updateHealth", { healthAdjust = damage })
 			-- TODO: game over screen
@@ -74,6 +80,7 @@ function M.on_death(entity, damage)
 		end)
 	else
 		timer.delay(0.005, false, function()
+			-- TODO : make the set time step update to loaded proxy so
 			msg.post("0_game_managers:/proxy_loader#proxy_level_4", "set_time_step", {factor = 1, mode = 1})
 
 			if entity.health_type == hash("enemy") then
@@ -84,6 +91,5 @@ function M.on_death(entity, damage)
 		end)
 	end
 end
-
 
 return M

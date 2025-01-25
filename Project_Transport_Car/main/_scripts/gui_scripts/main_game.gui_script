@@ -29,8 +29,6 @@ function on_message(self, message_id, message, sender)
 		-- TODO : I think it is more efficient to have the node as self variable instead of instiating a new variable
 		local health_text = gui.get_node("player_health_text")
 		local cur_health = gui.get_text(health_text)
-		print(cur_health)
-		print(message.healthAdjust)
 		gui.set_text(health_text, tostring(cur_health - message.healthAdjust))
 	end
 
