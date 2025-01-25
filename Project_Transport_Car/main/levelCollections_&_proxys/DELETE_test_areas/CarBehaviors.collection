@@ -97,24 +97,55 @@ instances {
   }
 }
 instances {
-  id: "car_ChargeAttack"
-  prototype: "/main/gameObjects/carEnemies/TEST/car_ChargeAttack.go"
-  position {
-    x: 2066.0
-    y: 182.0
-  }
-  scale3 {
-    x: 0.68
-    y: 0.68
-    z: 0.68
-  }
-}
-instances {
   id: "basic_car"
   prototype: "/main/gameObjects/carEnemies/basic_car.go"
   position {
     x: 1922.0
     y: 509.0
+    z: 1.0
+  }
+  component_properties {
+    id: "basic_car"
+    properties {
+      id: "sway_side_distance"
+      value: "20.0"
+      type: PROPERTY_TYPE_NUMBER
+    }
+    properties {
+      id: "back_distance"
+      value: "40.0"
+      type: PROPERTY_TYPE_NUMBER
+    }
+  }
+}
+instances {
+  id: "basic_car1"
+  prototype: "/main/gameObjects/carEnemies/basic_car.go"
+  position {
+    x: 2755.0
+    y: 280.0
+    z: 1.0
+  }
+  component_properties {
+    id: "basic_car"
+    properties {
+      id: "sway_side_distance"
+      value: "20.0"
+      type: PROPERTY_TYPE_NUMBER
+    }
+    properties {
+      id: "back_distance"
+      value: "40.0"
+      type: PROPERTY_TYPE_NUMBER
+    }
+  }
+}
+instances {
+  id: "basic_car2"
+  prototype: "/main/gameObjects/carEnemies/basic_car.go"
+  position {
+    x: 762.0
+    y: 153.0
     z: 1.0
   }
   component_properties {
@@ -170,7 +201,8 @@ embedded_instances {
 embedded_instances {
   id: "enemyFolder"
   children: "basic_car"
-  children: "car_ChargeAttack"
+  children: "basic_car1"
+  children: "basic_car2"
   children: "car_RandomBehavior"
   children: "player_enemy_shoot"
   data: ""

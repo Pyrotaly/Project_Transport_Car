@@ -20,7 +20,6 @@ function M.init(entity)
 	-- RN car is the player cause player driving their car
 	if entity.health_type == hash("player") then
 		entity.health = entity.max_health + playerUpgrade.car_upgrades_base.max_health
-		print(entity.health)
 	else
 		entity.health = entity.max_health + enemyScaling.upgraded_health
 	end

@@ -14,7 +14,7 @@ M.CELL_HEIGHT = M.SCREEN_HEIGHT / M.GRID_ROWS
 
 M.occupied_quadarnts = {}
 
-for i = 1, 25 do
+for i = 1, (M.GRID_ROWS * M.GRID_COLS) do
 	M.occupied_quadarnts[i] = false
 end
 

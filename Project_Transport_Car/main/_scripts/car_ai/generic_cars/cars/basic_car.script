@@ -20,15 +20,13 @@ local function start_charge(self)
 
 	local distance = vmath.length(player_pos - current_pos)
 
-	local min_duration = 0.25  -- Adjust as needed
-	local max_duration = 1.3  -- Adjust as needed
-
+	local min_duration = 0.25
+	local max_duration = 0.75
 	local raw_duration = distance / self.speed
-	self.charge_duration = math.max(min_duration, math.min(raw_duration, max_duration)) + 0.25
-
+	
+	self.charge_duration = math.max(min_duration, math.min(raw_duration, max_duration))
 	print("Charge duration:", self.charge_duration)
 
-	-- Start charging
 	self.charging = true
 	self.charge_timer = 0
 end
@@ -36,6 +34,7 @@ end
 local function stop_charge(self)
 	self.charging = false
 	self.velocity = vmath.vector3(0) -- Stop moving
+	self.state_manager.charge_to_idle()
 end
 
 -- ---------------------------------------------------------
@@ -58,11 +57,17 @@ local function swaying(self)
 	sway_left_right(self)
 end
 
+local function stop_swaying()
+	-- Cancel all animations on the current game object
+	go.cancel_animations(".", "position.y")
+	go.cancel_animations(".", "position.x")
+end
+
 local function move_back(self)
 	go.animate(".", "position.x", go.PLAYBACK_ONCE_FORWARD, self.target_x - self.back_distance * 2, go.EASING_INOUTSINE, 1, 0, function()
 		-- Start swaying motion after moving back
 		self.arrived = true
-		swaying(self)
+		self.state_manager.init_to_idle()
 	end)
 end
 
@@ -70,13 +75,10 @@ end
 -- Movement
 -- ---------------------------------------------------------
 local function move_to_quadrant(self, quadrant)
-	print(quadrant)
 	-- TODO : somehow, can get numbers of range outside of 1-25, put check here or sometin idk
 	if not grid.is_occupied(quadrant) then
+		print("goodbye")
 		local target_pos = grid.get_quadrant_position(quadrant)
-
-		go.animate(".", "position.x", go.PLAYBACK_ONCE_FORWARD, target_pos.x, go.EASING_LINEAR, 1.5)
-		go.animate(".", "position.y", go.PLAYBACK_ONCE_FORWARD, target_pos.y, go.EASING_LINEAR, 1.5)
 
 		-- Set the current quadrant as unoccupied
 		if self.current_quadrant then
@@ -86,6 +88,10 @@ local function move_to_quadrant(self, quadrant)
 		-- Move to the new quadrant and mark it as occupied
 		self.current_quadrant = quadrant
 		grid.set_occupied(quadrant, true)
+
+		-- TODO, make it not just 1.5 seconds every time to move but whatever
+		go.animate(".", "position.x", go.PLAYBACK_ONCE_FORWARD, target_pos.x, go.EASING_LINEAR, 1.5)
+		go.animate(".", "position.y", go.PLAYBACK_ONCE_FORWARD, target_pos.y, go.EASING_LINEAR, 1.5, 0, self.state_manager.move_to_idle())
 	else
 		-- If the target quadrant is occupied, retry by picking another quadrant
 		print("Quadrant " .. quadrant .. " is occupied, selecting a new quadrant.")
@@ -96,42 +102,12 @@ local function move_to_quadrant(self, quadrant)
 end
 
 local function move_nearby(self)
+	self.current_quadrant = grid.get_quadrant(go.get_position())
+	
 	local new_quad = grid.get_random_nearby_quadrant(self.current_quadrant, 2)
 
 	move_to_quadrant(self, new_quad)
 end
-
--- --------------------------------------
--- FSM Management
--- --------------------------------------
--- idle is car in same quadrant but swaying
-local state_manager = fsm.create({
-	initial = "init",
-	events = {
-		{name = "init_to_idle", from = "init", to = "idle"},
-		{name = "idle_to_charge", from = "idle", to = "charge"},
-		{name = "charge_to_idle", from = "charge", to = "idle"},
-		{name = "idle_to_move", from = "idle", to = "move"},
-		{name = "move_to_idle", from = "move", to = "idle"}
-	},
-	callbacks = {
-		on_enter_charge = function(self)
-			start_charge(self) -- Start the charge behavior
-		end,
-		on_exit_charge = function(self)
-			stop_charge(self) -- Stop the charge behavior
-		end,
-		on_enter_idle = function(self)
-			print("Entering idle state...")
-			-- Add idle-specific logic here, if needed
-		end,
-		on_enter_init = function(self)
-			print("Entering init state...")
-			
-		end
-	}
-})
-
 
 -- ---------------------------------------------------------
 -- Main
@@ -152,9 +128,55 @@ function init(self)
 	self.start_x = -100
 	self.start_y = go.get_position().y
 	go.set_position(vmath.vector3(self.start_x, self.start_y, 0))
-	go.animate(".", "position.x", go.PLAYBACK_ONCE_FORWARD, self.target_x, go.EASING_OUTQUAD, 2, 0, function()
-		move_back(self)
-	end)
+
+	self.idle_timer = 0 -- Tracks how long the enemy has been idle
+	self.idle_duration = math.random(3, 6) -- Generate a random number between 1 and 4
+	
+
+	-- Instantiate the FSM
+	self.state_manager = fsm.create({
+		initial = "init",
+		events = {
+			{name = "init_to_idle", from = "init", to = "idle"},
+			{name = "idle_to_charge", from = "idle", to = "charge"},
+			{name = "charge_to_idle", from = "charge", to = "idle"},
+			{name = "idle_to_move", from = "idle", to = "move"},
+			{name = "move_to_idle", from = "move", to = "idle"}
+		},
+		callbacks = {
+			on_enter_move = function()
+				print("Entering move state...")
+				move_nearby(self)
+			end,
+			on_leave_move = function()
+				print("Exiting move state...")
+				
+			end,
+			on_enter_charge = function()
+				print("Entering charge state...")
+				start_charge(self) -- Use the script's self directly
+			end,
+			on_leave_charge = function()
+				print("Exiting charge state...")
+			end,
+			on_enter_idle = function()
+				print("Entering idle state...")
+				self.idle_timer = 0 -- Reset the idle timer
+				swaying(self) -- Start swaying
+			end,
+			on_leave_idle = function()
+				print("Exiting idle state...")
+				self.idle_timer = self.idle_duration
+				stop_swaying() -- Stop swaying
+			end,
+			on_enter_init = function()
+				print("Entering init state...")
+				go.animate(".", "position.x", go.PLAYBACK_ONCE_FORWARD, self.target_x, go.EASING_OUTQUAD, 2, 0, function()
+					move_back(self)
+				end)
+			end
+		}
+	})
 end
 
 function final(self)
@@ -164,52 +186,45 @@ function final(self)
 end
 
 function update(self, dt)
-	-- Handle charging movement
+	if self.state_manager.current == "idle" then
+		-- Increment the idle timer
+		self.idle_timer = self.idle_timer + dt
+		if self.idle_timer >= self.idle_duration then
+			if self.previous_state == "charge" then
+				self.state_manager.idle_to_move()
+				self.previous_state = "move"
+			elseif self.previous_state == "move" then
+				self.state_manager.idle_to_charge()
+				self.previous_state = "charge"
+			else
+				self.state_manager.idle_to_charge()
+				self.previous_state = "charge"
+			end
+		end
+	end
 	if self.charging then
-		-- Update position based on velocity
-		local new_pos = go.get_position() + self.velocity * dt
+		-- Update position during charge
+		local current_pos = go.get_position()
+		local new_pos = current_pos + self.velocity * dt
 		go.set_position(new_pos)
 
-		-- Increment the charge timer
+		-- Check if charge duration has ended
 		self.charge_timer = self.charge_timer + dt
-
-		-- Stop charging after the charge duration
 		if self.charge_timer >= self.charge_duration then
-			state_manager:charge_to_idle()
+			self.charging = false
+			stop_charge(self)
+			return
+		end
+
+		-- TODO : could make this on message instead of constantly checking but lazy
+		-- Check for collision with player
+		local player_pos = go.get_position("/player/player")
+		if vmath.length(player_pos - new_pos) < 20 then -- Adjust collision range
+			msg.post("/player/player", "damage", { damage = self.damage })
+			print("crahsed into player")
+			stop_charge(self)
+			return
 		end
 	end
 end
 
-
-function fixed_update(self, dt)
-	-- This function is called if 'Fixed Update Frequency' is enabled in the Engine section of game.project
-	-- Can be coupled with fixed updates of the physics simulation if 'Use Fixed Timestep' is enabled in
-	-- Physics section of game.project
-	-- Add update code here
-	-- Learn more: https://defold.com/manuals/script/
-	-- Remove this function if not needed
-end
-
-function on_message(self, message_id, message, sender)
-	-- Add message-handling code here
-	-- Learn more: https://defold.com/manuals/message-passing/
-	-- Remove this function if not needed
-end
-
-function on_input(self, action_id, action)
-	-- Add input-handling code here. The game object this script is attached to
-	-- must have acquired input focus:
-	--
-	--    msg.post(".", "acquire_input_focus")
-	--
-	-- All mapped input bindings will be received. Mouse and touch input will
-	-- be received regardless of where on the screen it happened.
-	-- Learn more: https://defold.com/manuals/input/
-	-- Remove this function if not needed
-end
-
-function on_reload(self)
-	-- Add reload-handling code here
-	-- Learn more: https://defold.com/manuals/hot-reload/
-	-- Remove this function if not needed
-end
