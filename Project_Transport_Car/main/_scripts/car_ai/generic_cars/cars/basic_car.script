@@ -1,4 +1,5 @@
 local grid = require("main._scripts.modules.road_quadrants")
+local fsm = require ("main._scripts.modules.fsm")
 math.randomseed(os.time())
 
 -- Driving Up and Swaying
@@ -52,18 +53,21 @@ local function sway_left_right(self)
 	end
 end
 
+local function swaying(self)
+	sway_up(self)
+	sway_left_right(self)
+end
 
 local function move_back(self)
-	go.animate(".", "position.x", go.PLAYBACK_ONCE_FORWARD, self.target_x - self.back_distance, go.EASING_OUTQUAD, 1.2, 0, function()
+	go.animate(".", "position.x", go.PLAYBACK_ONCE_FORWARD, self.target_x - self.back_distance * 2, go.EASING_INOUTSINE, 1, 0, function()
 		-- Start swaying motion after moving back
 		self.arrived = true
-		sway_up(self)
-		sway_left_right(self)
+		swaying(self)
 	end)
 end
 
 -- ---------------------------------------------------------
--- Charge Attack
+-- Movement
 -- ---------------------------------------------------------
 local function move_to_quadrant(self, quadrant)
 	print(quadrant)
@@ -97,6 +101,38 @@ local function move_nearby(self)
 	move_to_quadrant(self, new_quad)
 end
 
+-- --------------------------------------
+-- FSM Management
+-- --------------------------------------
+-- idle is car in same quadrant but swaying
+local state_manager = fsm.create({
+	initial = "init",
+	events = {
+		{name = "init_to_idle", from = "init", to = "idle"},
+		{name = "idle_to_charge", from = "idle", to = "charge"},
+		{name = "charge_to_idle", from = "charge", to = "idle"},
+		{name = "idle_to_move", from = "idle", to = "move"},
+		{name = "move_to_idle", from = "move", to = "idle"}
+	},
+	callbacks = {
+		on_enter_charge = function(self)
+			start_charge(self) -- Start the charge behavior
+		end,
+		on_exit_charge = function(self)
+			stop_charge(self) -- Stop the charge behavior
+		end,
+		on_enter_idle = function(self)
+			print("Entering idle state...")
+			-- Add idle-specific logic here, if needed
+		end,
+		on_enter_init = function(self)
+			print("Entering init state...")
+			
+		end
+	}
+})
+
+
 -- ---------------------------------------------------------
 -- Main
 -- ---------------------------------------------------------
@@ -116,8 +152,6 @@ function init(self)
 	self.start_x = -100
 	self.start_y = go.get_position().y
 	go.set_position(vmath.vector3(self.start_x, self.start_y, 0))
-
-	-- Animate the car to its target position
 	go.animate(".", "position.x", go.PLAYBACK_ONCE_FORWARD, self.target_x, go.EASING_OUTQUAD, 2, 0, function()
 		move_back(self)
 	end)
@@ -130,27 +164,22 @@ function final(self)
 end
 
 function update(self, dt)
+	-- Handle charging movement
+	if self.charging then
+		-- Update position based on velocity
+		local new_pos = go.get_position() + self.velocity * dt
+		go.set_position(new_pos)
 
--- 	if self.charging then
--- 		-- Update position during charge
--- 		local current_pos = go.get_position()
--- 		local new_pos = current_pos + self.velocity * dt
--- 		go.set_position(new_pos)
--- 
--- 		-- Check if charge duration has ended
--- 		self.charge_timer = self.charge_timer + dt
--- 		if self.charge_timer >= self.charge_duration then
--- 			stop_charge(self)
--- 		end
--- 	else
--- 		-- Cooldown logic
--- 		self.cooldown_timer = self.cooldown_timer + dt
--- 		if self.cooldown_timer >= self.charge_cooldown then
--- 			start_charge(self)
--- 			self.cooldown_timer = 0 -- Reset cooldown timer
--- 		end
--- 	end
+		-- Increment the charge timer
+		self.charge_timer = self.charge_timer + dt
+
+		-- Stop charging after the charge duration
+		if self.charge_timer >= self.charge_duration then
+			state_manager:charge_to_idle()
+		end
+	end
 end
+
 
 function fixed_update(self, dt)
 	-- This function is called if 'Fixed Update Frequency' is enabled in the Engine section of game.project

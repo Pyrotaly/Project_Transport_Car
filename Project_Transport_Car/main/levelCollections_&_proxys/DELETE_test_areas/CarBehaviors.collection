@@ -83,7 +83,7 @@ instances {
     id: "enemy_shoot"
     properties {
       id: "shootingMode"
-      value: "sniper"
+      value: "machine_gun"
       type: PROPERTY_TYPE_HASH
     }
   }
@@ -116,6 +116,19 @@ instances {
     x: 1922.0
     y: 509.0
     z: 1.0
+  }
+  component_properties {
+    id: "basic_car"
+    properties {
+      id: "sway_side_distance"
+      value: "20.0"
+      type: PROPERTY_TYPE_NUMBER
+    }
+    properties {
+      id: "back_distance"
+      value: "40.0"
+      type: PROPERTY_TYPE_NUMBER
+    }
   }
 }
 collection_instances {
