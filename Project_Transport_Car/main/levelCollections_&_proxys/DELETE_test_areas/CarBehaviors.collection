@@ -79,6 +79,14 @@ instances {
     x: 1171.0
     y: 215.0
   }
+  component_properties {
+    id: "enemy_shoot"
+    properties {
+      id: "shootingMode"
+      value: "sniper"
+      type: PROPERTY_TYPE_HASH
+    }
+  }
 }
 instances {
   id: "car_ChargeAttack"

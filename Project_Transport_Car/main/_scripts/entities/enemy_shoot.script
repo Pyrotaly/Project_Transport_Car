@@ -1,6 +1,5 @@
 local enemyScaling = require("main._scripts.modules.enemy_scaling_module")
 
--- Properties
 go.property("speed", 0)
 go.property("life", 0)
 go.property("bulletDamage", 0)
@@ -44,16 +43,6 @@ local function shoot(self)
 
 	-- Fire bullets for shotgun evenly in a cone
 	if self.shootingMode == hash("shotgun") then
--- 		local spread = shooting_mode.spread
--- 		local num_bullets = shooting_mode.bullets
--- 		local half_spread = math.rad(spread / 2)
--- 
--- 		for i = 0, num_bullets - 1 do
--- 			local angle_offset = -half_spread + (i / (num_bullets - 1)) * spread
--- 			local offset_angle = base_angle + (angle_offset)
--- 			spawn_bullet(self, offset_angle)
--- 		end
-
 		local spread = shooting_mode.spread
 		local num_bullets = shooting_mode.bullets
 		local half_spread = math.rad(spread / 2)
@@ -67,6 +56,10 @@ local function shoot(self)
 			local angle = start_angle + (i / (num_bullets - 1)) * (end_angle - start_angle)
 			spawn_bullet(self, angle)
 		end
+	elseif self.shootingMode == hash("sniper") then
+		-- shooting_mode.spread
+		-- TODO : make sniper bullet
+		spawn_bullet(self, base_angle)
 	else
 		-- Fire single or multiple bullets without even spread
 		for i = 1, shooting_mode.bullets do
@@ -77,23 +70,6 @@ local function shoot(self)
 	end
 end
 
--- Check if the enemy can shoot
-local function can_shoot(self, target_position)
-	local thisPos = go.get_position()
-	local distance = vmath.length(target_position - thisPos)
-
-	if distance <= self.radius then
-		-- Perform raycast
-		local hit = physics.raycast(thisPos, target_position, { self.raytraceMask })
-
-		-- Only shoot if ray hits nothing or doesn't hit an enemy
-		if not hit or hit.group ~= hash("enemy") then
-			return true
-		end
-	end
-	return false
-end
-
 function init(self)
 	self.shooting_mode = SHOOTING_MODES[self.shootingMode]
 	self.cooldown = self.shooting_mode and self.shooting_mode.cooldown or 0.5
@@ -102,7 +78,6 @@ function init(self)
 	-- self.shootingMode = "default" -- Adjust this to match your shooting mode setup
 	self.timer = 0 -- Timer to track the behavior switching
 	self.state_duration = 5 -- Duration for both shooting and pausing (in seconds)
-	
 end
 
 -- ---------------------------------------------------------
