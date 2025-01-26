@@ -75,6 +75,8 @@ function M.on_death(entity, damage)
 			msg.post("0_game_managers:/proxy_loader#proxy_level_1", "set_time_step", {factor = 1, mode = 1})
 			msg.post("gui_player_menu:/go#main_game", "updateHealth", { healthAdjust = damage })
 			-- TODO: game over screen
+			msg.post("0_game_managers:/proxy_loader#proxy_level_1", "set_time_step", {factor = 0, mode = 1})
+			msg.post("0_game_managers:/game_manager_go#game_manager", "gameOver")
 			go.delete()
 		end)
 	else

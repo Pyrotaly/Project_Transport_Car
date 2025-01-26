@@ -1,0 +1,27 @@
+script: "/main/_scripts/gui_scripts/fader.gui_script"
+nodes {
+  position {
+    x: 628.0
+    y: 364.0
+  }
+  scale {
+    x: 8.9344
+    y: 8.9344
+    z: 8.9344
+  }
+  size {
+    x: 200.0
+    y: 100.0
+  }
+  color {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  }
+  type: TYPE_BOX
+  id: "black_fader"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+}
+material: "/builtins/materials/gui.material"
+adjust_reference: ADJUST_REFERENCE_PARENT

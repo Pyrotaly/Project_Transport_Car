@@ -13,6 +13,8 @@ go.property("back_distance", 20) -- How much the car moves backward after arrivi
 -- ---------------------------------------------------------
 local function start_charge(self)
 	local current_pos = go.get_position()
+
+	-- TOOD :
 	local player_pos = go.get_position("/player/player")
 
 	local direction = vmath.normalize(player_pos - current_pos)

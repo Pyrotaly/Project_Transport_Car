@@ -10,5 +10,9 @@ embedded_instances {
   "  id: \"game_manager\"\n"
   "  component: \"/main/_scripts/game_manager.script\"\n"
   "}\n"
+  "components {\n"
+  "  id: \"fader_gui\"\n"
+  "  component: \"/main/gui/fader_gui.gui\"\n"
+  "}\n"
   ""
 }

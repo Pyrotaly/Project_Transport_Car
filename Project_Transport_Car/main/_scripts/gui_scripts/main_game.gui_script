@@ -20,6 +20,7 @@ function update(self, dt)
 end
 
 function on_message(self, message_id, message, sender)
+	-- TODO : Make this all elseif cause that is technically more efficient
 	if message_id == hash("updateCurrency") then
 		local text = gui.get_node("scrap_amount_text")
 		gui.set_text(text, tostring(message.newCurrencyTotal))
@@ -35,7 +36,7 @@ function on_message(self, message_id, message, sender)
 	if message_id == hash("upgradeMaxHealth") then
 
 	end
-
+	
 	if message_id == hash("updateBullet") then
 		-- TODO : I think it is more efficient to have the node as self variable instead of instiating a new variable
 		local current_bullet_amount = message.curMagSize
