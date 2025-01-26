@@ -14,7 +14,7 @@ end
 
 function init(self)
 	camera.follow(CAMERA_ID, "/player/player", {lerp=0.3})
-	camera.deadzone(CAMERA_ID, 600.0, 500.0, 600.0, 500.0)
+	camera.deadzone(CAMERA_ID, 400.0, 300.0, 400.0, 300.0)
 	msg.post(".", "acquire_input_focus")
 
 	self.curQuad = 0
@@ -36,23 +36,24 @@ function final(self)
 end
 
 function update(self, dt)
-	-- -- prevent player from going out of bounds
-	-- local pos = go.get_position()
-	-- local width, height = window.get_size()
-	-- if pos.x < 0 then
-	-- 	pos.x = 0
-	-- elseif pos.x > width then
-	-- 	pos.x = width
-	-- end
-	-- if pos.y < 0 then
-	-- 	pos.y = 0
-	-- elseif pos.y > height then
-	-- 	pos.y = height
-	-- end
-	-- go.set_position(pos)
+	local pos = go.get_position()
+	local width = window.get_size() + 1750
+	local height = window.get_size() - 200
+	if pos.x < 200 then
+		pos.x = 200
+	elseif pos.x > width then
+		pos.x = width
+	end
+	if pos.y < 0 then
+		pos.y = 0
+	elseif pos.y > height then
+		pos.y = height
+	end
+	go.set_position(pos)
 end
 
 function fixed_update(self, dt)
+	-- prevent player from going out of bounds
 	local pos = go.get_position()
 	local updatedQuad = grid.get_quadrant(pos)
 

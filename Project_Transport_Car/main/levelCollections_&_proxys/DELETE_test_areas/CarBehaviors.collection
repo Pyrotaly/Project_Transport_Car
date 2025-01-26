@@ -2,6 +2,10 @@ name: "2_area"
 instances {
   id: "camera"
   prototype: "/orthographic/camera.go"
+  position {
+    x: 1452.0
+    y: 453.0
+  }
   component_properties {
     id: "script"
     properties {
@@ -36,22 +40,22 @@ instances {
     }
     properties {
       id: "deadzone_left"
-      value: "500.0"
+      value: "100.0"
       type: PROPERTY_TYPE_NUMBER
     }
     properties {
       id: "deadzone_bottom"
-      value: "400.0"
+      value: "200.0"
       type: PROPERTY_TYPE_NUMBER
     }
     properties {
       id: "deadzone_right"
-      value: "500.0"
+      value: "100.0"
       type: PROPERTY_TYPE_NUMBER
     }
     properties {
       id: "deadzone_top"
-      value: "400.0"
+      value: "200.0"
       type: PROPERTY_TYPE_NUMBER
     }
   }
@@ -61,18 +65,190 @@ instances {
   prototype: "/main/gameObjects/backend/TESTING_deadzone.go"
 }
 instances {
-  id: "car_RandomBehavior"
-  prototype: "/main/gameObjects/carEnemies/TEST/car_RandomBehavior.go"
+  id: "basic_car"
+  prototype: "/main/gameObjects/carEnemies/basic_car.go"
   position {
-    x: 379.0
-    y: 379.0
+    x: 1922.0
+    y: 509.0
+    z: 1.0
+  }
+  component_properties {
+    id: "basic_car"
+    properties {
+      id: "sway_side_distance"
+      value: "20.0"
+      type: PROPERTY_TYPE_NUMBER
+    }
+    properties {
+      id: "back_distance"
+      value: "40.0"
+      type: PROPERTY_TYPE_NUMBER
+    }
+  }
+}
+instances {
+  id: "basic_car2"
+  prototype: "/main/gameObjects/carEnemies/basic_car.go"
+  children: "player_enemy_shoot"
+  children: "player_enemy_shoot1"
+  position {
+    x: 762.0
+    y: 153.0
+    z: 1.0
+  }
+  component_properties {
+    id: "basic_car"
+    properties {
+      id: "sway_side_distance"
+      value: "20.0"
+      type: PROPERTY_TYPE_NUMBER
+    }
+    properties {
+      id: "back_distance"
+      value: "40.0"
+      type: PROPERTY_TYPE_NUMBER
+    }
+  }
+}
+instances {
+  id: "player_enemy_shoot"
+  prototype: "/main/gameObjects/playerEnemies/player_enemy_shoot.go"
+  position {
+    x: -92.0
+    y: 106.0
+  }
+  component_properties {
+    id: "enemy_shoot"
+    properties {
+      id: "shootingMode"
+      value: "machine_gun"
+      type: PROPERTY_TYPE_HASH
+    }
+  }
+}
+instances {
+  id: "player_enemy_shoot1"
+  prototype: "/main/gameObjects/playerEnemies/player_enemy_shoot.go"
+  position {
+    x: -290.0
+    y: 106.0
+  }
+  component_properties {
+    id: "enemy_shoot"
+    properties {
+      id: "shootingMode"
+      value: "machine_gun"
+      type: PROPERTY_TYPE_HASH
+    }
+  }
+}
+instances {
+  id: "edge_of_map"
+  prototype: "/main/gameObjects/edge_of_map.go"
+  position {
+    x: 1174.0
+    y: -38.0
+  }
+  scale3 {
+    x: 7.834043
+    y: 1.728304
+  }
+}
+instances {
+  id: "edge_of_map1"
+  prototype: "/main/gameObjects/edge_of_map.go"
+  position {
+    x: 1174.0
+    y: 772.0
+  }
+  scale3 {
+    x: 7.834043
+    y: 2.078283
+  }
+}
+instances {
+  id: "basic_car1"
+  prototype: "/main/gameObjects/carEnemies/basic_car.go"
+  children: "player_enemy_shoot2"
+  children: "player_enemy_shoot3"
+  position {
+    x: 3104.0
+    y: 286.0
+    z: 1.0
+  }
+  component_properties {
+    id: "basic_car"
+    properties {
+      id: "sway_side_distance"
+      value: "20.0"
+      type: PROPERTY_TYPE_NUMBER
+    }
+    properties {
+      id: "back_distance"
+      value: "40.0"
+      type: PROPERTY_TYPE_NUMBER
+    }
+  }
+}
+instances {
+  id: "player_enemy_shoot2"
+  prototype: "/main/gameObjects/playerEnemies/player_enemy_shoot.go"
+  position {
+    x: -92.0
+    y: 106.0
+  }
+  component_properties {
+    id: "enemy_shoot"
+    properties {
+      id: "shootingMode"
+      value: "machine_gun"
+      type: PROPERTY_TYPE_HASH
+    }
+  }
+}
+instances {
+  id: "player_enemy_shoot3"
+  prototype: "/main/gameObjects/playerEnemies/player_enemy_shoot.go"
+  position {
+    x: -290.0
+    y: 106.0
+  }
+  component_properties {
+    id: "enemy_shoot"
+    properties {
+      id: "shootingMode"
+      value: "machine_gun"
+      type: PROPERTY_TYPE_HASH
+    }
+  }
+}
+instances {
+  id: "basic_car3"
+  prototype: "/main/gameObjects/carEnemies/basic_car.go"
+  position {
+    x: 2462.0
+    y: 564.0
+    z: 1.0
+  }
+  component_properties {
+    id: "basic_car"
+    properties {
+      id: "sway_side_distance"
+      value: "20.0"
+      type: PROPERTY_TYPE_NUMBER
+    }
+    properties {
+      id: "back_distance"
+      value: "40.0"
+      type: PROPERTY_TYPE_NUMBER
+    }
   }
 }
 collection_instances {
   id: "background"
   collection: "/main/collections/road_background.collection"
   position {
-    z: -1.0
+    z: -10.0
   }
 }
 collection_instances {
@@ -87,8 +263,8 @@ collection_instances {
   id: "player"
   collection: "/main/collections/player/player.collection"
   position {
-    x: 980.0
-    y: 823.0
+    x: 1474.0
+    y: 398.0
   }
 }
 scale_along_z: 0
@@ -102,5 +278,16 @@ embedded_instances {
   position {
     x: 640.0
     y: -260.0
+  }
+}
+embedded_instances {
+  id: "enemyFolder"
+  children: "basic_car"
+  children: "basic_car1"
+  children: "basic_car2"
+  children: "basic_car3"
+  data: ""
+  position {
+    z: 1.0
   }
 }

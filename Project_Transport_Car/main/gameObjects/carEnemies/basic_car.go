@@ -13,24 +13,19 @@ components {
   }
 }
 components {
-  id: "bumper_car"
-  component: "/main/_scripts/car_ai/TEST_Car_Behaviors/bumper_car.script"
+  id: "basic_car"
+  component: "/main/_scripts/car_ai/generic_cars/cars/basic_car.script"
 }
 embedded_components {
   id: "sprite"
   type: "sprite"
-  data: "default_animation: \"Particle2\"\n"
+  data: "default_animation: \"circlebot\"\n"
   "material: \"/assets/shader/sprite_1.material\"\n"
   "textures {\n"
   "  sampler: \"texture_sampler\"\n"
   "  texture: \"/assets/atlases/main.atlas\"\n"
   "}\n"
   ""
-  scale {
-    x: 2.584
-    y: 2.584
-    z: 2.584
-  }
 }
 embedded_components {
   id: "collisionobject"
@@ -41,6 +36,8 @@ embedded_components {
   "restitution: 0.5\n"
   "group: \"enemy\"\n"
   "mask: \"playerBullet\"\n"
+  "mask: \"edge_of_map\"\n"
+  "mask: \"enemy\"\n"
   "embedded_collision_shape {\n"
   "  shapes {\n"
   "    shape_type: TYPE_BOX\n"
@@ -51,9 +48,9 @@ embedded_components {
   "    index: 0\n"
   "    count: 3\n"
   "  }\n"
-  "  data: 94.6\n"
-  "  data: 94.6\n"
-  "  data: 94.6\n"
+  "  data: 132.44\n"
+  "  data: 132.44\n"
+  "  data: 132.44\n"
   "}\n"
   ""
 }

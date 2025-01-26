@@ -1,28 +1,6 @@
 local grid = require("main._scripts.modules.road_quadrants")
 math.randomseed(os.time())
 
--- local function move_to_quadrant(self, quadrant)
--- 	if not grid.is_occupied(quadrant) then
--- 		local target_pos = grid.get_quadrant_position(quadrant)
--- 
--- 		go.animate(".", "position.x", go.PLAYBACK_ONCE_FORWARD, target_pos.x, go.EASING_LINEAR, 1.5)
--- 		go.animate(".", "position.y", go.PLAYBACK_ONCE_FORWARD, target_pos.y, go.EASING_LINEAR, 1.5)
--- 
--- 		-- Set the current quadrant as unoccupied
--- 		if self.current_quadrant then
--- 			grid.set_occupied(self.current_quadrant, false)
--- 		end
--- 
--- 		-- Move to the new quadrant and mark it as occupied
--- 		self.current_quadrant = quadrant
--- 		grid.set_occupied(quadrant, true)
--- 	else
--- 		print("Quadrant " .. quadrant .. " is already occupied!")
--- 		local next_quadrant = grid.get_adjacent_quadrant(self, self.player_quadrant)
--- 		move_to_quadrant(self, next_quadrant)
--- 	end
--- end
-
 local function move_to_quadrant(self, quadrant)
 	print(quadrant)
 	-- TODO : somehow, can get numbers of range outside of 1-25, put check here or sometin idk

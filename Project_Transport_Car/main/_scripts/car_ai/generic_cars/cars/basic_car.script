@@ -1,0 +1,229 @@
+local grid = require("main._scripts.modules.road_quadrants")
+local fsm = require ("main._scripts.modules.fsm")
+math.randomseed(os.time())
+
+-- Driving Up and Swaying
+go.property("sway_distance", 20) -- Sway distance (up/down)
+go.property("sway_speed", 3.0) -- Sway speed
+go.property("sway_side_distance", 3) -- Sideways sway distance
+go.property("back_distance", 20) -- How much the car moves backward after arriving
+
+-- ---------------------------------------------------------
+-- Charge Attack
+-- ---------------------------------------------------------
+local function start_charge(self)
+	local current_pos = go.get_position()
+	local player_pos = go.get_position("/player/player")
+
+	local direction = vmath.normalize(player_pos - current_pos)
+	self.velocity = direction * self.speed
+
+	local distance = vmath.length(player_pos - current_pos)
+
+	local min_duration = 0.5
+	local max_duration = 0.75
+	local raw_duration = distance / self.speed
+	
+	self.charge_duration = math.max(min_duration, math.min(raw_duration, max_duration))
+	print("Charge duration:", self.charge_duration)
+
+	self.charging = true
+	self.charge_timer = 0
+end
+
+local function stop_charge(self)
+	self.charging = false
+	self.velocity = vmath.vector3(0) -- Stop moving
+	self.state_manager.charge_to_idle()
+end
+
+-- ---------------------------------------------------------
+-- Driving Up and Swaying
+-- ---------------------------------------------------------
+local function sway_up(self)
+	if self.arrived then
+		go.animate(".", "position.y", go.PLAYBACK_ONCE_PINGPONG, go.get_position().y + self.sway_distance, go.EASING_INOUTSINE, self.sway_speed, 0, sway_up)
+	end
+end
+
+local function sway_left_right(self)
+	if self.arrived then
+		go.animate(".", "position.x", go.PLAYBACK_ONCE_PINGPONG, go.get_position().x + self.sway_side_distance, go.EASING_INOUTSINE, self.sway_speed * 1.2, 0, sway_left_right)
+	end
+end
+
+local function swaying(self)
+	sway_up(self)
+	sway_left_right(self)
+end
+
+local function stop_swaying()
+	-- Cancel all animations on the current game object
+	go.cancel_animations(".", "position.y")
+	go.cancel_animations(".", "position.x")
+end
+
+local function move_back(self)
+	go.animate(".", "position.x", go.PLAYBACK_ONCE_FORWARD, self.target_x - self.back_distance * 2, go.EASING_INOUTSINE, 1, 0, function()
+		-- Start swaying motion after moving back
+		self.arrived = true
+		self.state_manager.init_to_idle()
+	end)
+end
+
+-- ---------------------------------------------------------
+-- Movement
+-- ---------------------------------------------------------
+local function move_to_quadrant(self, quadrant)
+	-- TODO : somehow, can get numbers of range outside of 1-25, put check here or sometin idk
+	if not grid.is_occupied(quadrant) then
+		print("goodbye")
+		local target_pos = grid.get_quadrant_position(quadrant)
+
+		-- Set the current quadrant as unoccupied
+		if self.current_quadrant then
+			grid.set_occupied(self.current_quadrant, false)
+		end
+
+		-- Move to the new quadrant and mark it as occupied
+		self.current_quadrant = quadrant
+		grid.set_occupied(quadrant, true)
+
+		-- TODO, make it not just 1.5 seconds every time to move but whatever
+		go.animate(".", "position.x", go.PLAYBACK_ONCE_FORWARD, target_pos.x, go.EASING_LINEAR, 1.5)
+		go.animate(".", "position.y", go.PLAYBACK_ONCE_FORWARD, target_pos.y, go.EASING_LINEAR, 1.5, 0, self.state_manager.move_to_idle())
+	else
+		-- If the target quadrant is occupied, retry by picking another quadrant
+		print("Quadrant " .. quadrant .. " is occupied, selecting a new quadrant.")
+		local available_quadrants = grid.get_available_quadrants()  -- Assuming you have a way to get all available quadrants
+		local new_quadrant = available_quadrants[math.random(#available_quadrants)]
+		move_to_quadrant(self, new_quadrant)
+	end
+end
+
+local function move_nearby(self)
+	self.current_quadrant = grid.get_quadrant(go.get_position())
+	
+	local new_quad = grid.get_random_nearby_quadrant(self.current_quadrant, 2)
+
+	move_to_quadrant(self, new_quad)
+end
+
+-- ---------------------------------------------------------
+-- Main
+-- ---------------------------------------------------------
+function init(self)
+	-- Charging properties
+	self.velocity = vmath.vector3(0) -- Initialize the velocity to zero
+	self.speed = 1000 -- Set the charge speed (units per second)
+	self.charging = false -- Whether the enemy is currently charging
+	self.charge_timer = 0 -- Timer for the current charge
+	self.cooldown_timer = 0 -- Timer for the cooldown between charges
+	self.charge_cooldown = 2 -- Time between charges (in seconds)
+	self.damage = 10 -- Damage dealt to the player on collision
+
+	-- Driving up
+	self.target_x = go.get_position().x
+	self.arrived = false
+	self.start_x = -100
+	self.start_y = go.get_position().y
+	go.set_position(vmath.vector3(self.start_x, self.start_y, 0))
+
+	self.idle_timer = 0 -- Tracks how long the enemy has been idle
+	self.idle_duration = math.random(3, 6) -- Generate a random number between 1 and 4
+
+	-- Instantiate FSM
+	self.state_manager = fsm.create({
+		initial = "init",
+		events = {
+			{name = "init_to_idle", from = "init", to = "idle"},
+			{name = "idle_to_charge", from = "idle", to = "charge"},
+			{name = "charge_to_idle", from = "charge", to = "idle"},
+			{name = "idle_to_move", from = "idle", to = "move"},
+			{name = "move_to_idle", from = "move", to = "idle"}
+		},
+		callbacks = {
+			on_enter_move = function()
+				-- print("Entering move state...")
+				move_nearby(self)
+			end,
+			on_leave_move = function()
+				-- print("Exiting move state...")
+				
+			end,
+			on_enter_charge = function()
+				-- print("Entering charge state...")
+				start_charge(self) -- Use the script's self directly
+			end,
+			on_leave_charge = function()
+				-- print("Exiting charge state...")
+			end,
+			on_enter_idle = function()
+				-- print("Entering idle state...")
+				self.idle_timer = 0 -- Reset the idle timer
+				swaying(self) -- Start swaying
+			end,
+			on_leave_idle = function()
+				-- print("Exiting idle state...")
+				self.idle_timer = self.idle_duration
+				stop_swaying() -- Stop swaying
+			end,
+			on_enter_init = function()
+				-- print("Entering init state...")
+				go.animate(".", "position.x", go.PLAYBACK_ONCE_FORWARD, self.target_x, go.EASING_OUTQUAD, 2, 0, function()
+					move_back(self)
+				end)
+			end
+		}
+	})
+end
+
+function final(self)
+	-- Add finalization code here
+	-- Learn more: https://defold.com/manuals/script/
+	-- Remove this function if not needed
+end
+
+function update(self, dt)
+	if self.state_manager.current == "idle" then
+		-- Increment the idle timer
+		self.idle_timer = self.idle_timer + dt
+		if self.idle_timer >= self.idle_duration then
+			if self.previous_state == "charge" then
+				self.state_manager.idle_to_move()
+				self.previous_state = "move"
+			elseif self.previous_state == "move" then
+				self.state_manager.idle_to_charge()
+				self.previous_state = "charge"
+			else
+				self.state_manager.idle_to_charge()
+				self.previous_state = "charge"
+			end
+		end
+	end
+	if self.charging then
+		-- Update position during charge
+		local current_pos = go.get_position()
+		local new_pos = current_pos + self.velocity * dt
+		go.set_position(new_pos)
+
+		-- Check if charge duration has ended
+		self.charge_timer = self.charge_timer + dt
+		if self.charge_timer >= self.charge_duration then
+			self.charging = false
+			stop_charge(self)
+			return
+		end
+
+		-- TODO : could make this on message instead of constantly checking but lazy
+		-- Check for collision with player
+		local player_pos = go.get_position("/player/player")
+		if vmath.length(player_pos - new_pos) < 20 then -- Adjust collision range
+			msg.post("/player/player", "damage", { damage = self.damage })
+			print("crahsed into player")
+			stop_charge(self)
+			return
+		end
+	end
+end
+

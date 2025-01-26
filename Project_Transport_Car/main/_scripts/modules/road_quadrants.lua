@@ -5,8 +5,8 @@
 local M = {}
 
 M.GRID_ROWS = 6
-M.GRID_COLS = 15
-M.SCREEN_WIDTH = 1280 * 2
+M.GRID_COLS = 20
+M.SCREEN_WIDTH = 1280 * 2.5
 M.SCREEN_HEIGHT = 720 * 1.5
 
 M.CELL_WIDTH = M.SCREEN_WIDTH / M.GRID_COLS
@@ -14,7 +14,7 @@ M.CELL_HEIGHT = M.SCREEN_HEIGHT / M.GRID_ROWS
 
 M.occupied_quadarnts = {}
 
-for i = 1, 25 do
+for i = 1, (M.GRID_ROWS * M.GRID_COLS) do
 	M.occupied_quadarnts[i] = false
 end
 

@@ -14,7 +14,7 @@ function init(self)
 	self.upgrade_buttons = {
 		{ node = gui.get_node("car_speed"), upgrade_type = "max_speed", entity = "car" },
 		{ node = gui.get_node("car_health"), upgrade_type = "max_health", entity = "car" },
-		{ node = gui.get_node("car_heal"), upgrade_type = "heal", entity = "car" },
+		-- { node = gui.get_node("car_heal"), upgrade_type = "heal", entity = "car" },
 		{ node = gui.get_node("player_bigger_mag"), upgrade_type = "bigger_mag", entity = "player"},
 		{ node = gui.get_node("player_reduce_primary_spray"), upgrade_type = "reduce_spread", entity = "player"},
 		{ node = gui.get_node("player_damage"), upgrade_type = "damage", entity = "player" },

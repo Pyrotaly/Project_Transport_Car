@@ -1,6 +1,6 @@
 components {
   id: "enemy_shoot"
-  component: "/main/_scripts/entities/enemy_shoot.script"
+  component: "/main/_scripts/enemy_ai/enemy_shoot.script"
   properties {
     id: "speed"
     value: "1000.0"
@@ -13,7 +13,7 @@ components {
   }
   properties {
     id: "bulletDamage"
-    value: "50.0"
+    value: "1.0"
     type: PROPERTY_TYPE_NUMBER
   }
   properties {
@@ -33,13 +33,18 @@ components {
   }
   properties {
     id: "radius"
-    value: "500.0"
+    value: "2000.0"
     type: PROPERTY_TYPE_NUMBER
+  }
+  properties {
+    id: "shootingMode"
+    value: "shotgun"
+    type: PROPERTY_TYPE_HASH
   }
 }
 components {
   id: "enemy_bullet"
-  component: "/main/factories/enemy_bullet.factory"
+  component: "/main/factories/normal_bullet.factory"
 }
 components {
   id: "health_manager"
@@ -53,15 +58,6 @@ components {
     id: "health_type"
     value: "enemy"
     type: PROPERTY_TYPE_HASH
-  }
-}
-components {
-  id: "enemyDriveUp"
-  component: "/main/_scripts/car_ai/enemyDriveUp.script"
-  properties {
-    id: "target_x"
-    value: "600.0"
-    type: PROPERTY_TYPE_NUMBER
   }
 }
 embedded_components {

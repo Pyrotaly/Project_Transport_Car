@@ -1,0 +1,137 @@
+local enemyScaling = require("main._scripts.modules.enemy_scaling_module")
+
+go.property("speed", 0)
+go.property("life", 0)
+go.property("bulletDamage", 0)
+go.property("bulletMask", hash("___"))
+go.property("raytraceMask", hash("___"))
+go.property("target", hash("___"))
+go.property("radius", 1000)
+go.property("shootingMode", hash("normal")) -- Options: "normal", "machine_gun", "sniper", "shotgun"
+
+-- Weapon configs
+local SHOOTING_MODES = {
+	[hash("normal")] = { cooldown = 0.5, bullets = 1, spread = 0 },
+	[hash("machine_gun")] = { cooldown = 0.1, bullets = 1, spread = 30 },
+	[hash("sniper")] = { cooldown = 1.5, bullets = 1, spread = 0 },
+	[hash("shotgun")] = { cooldown = 0.8, bullets = 8, spread = 15 }, -- 5 bullets with a spread angle
+}
+
+-- Spawn a bullet with a specific angle
+local function spawn_bullet(self, angle)
+	local rotation = vmath.quat_rotation_z(angle)
+	local bulletDamage = self.bulletDamage + enemyScaling.upgraded_damage
+
+	factory.create("#enemy_bullet", nil, rotation, {
+		speed = self.speed,
+		life = self.life,
+		bulletDamage = bulletDamage,
+		mask = hash("bulletMask")
+	}, 0.6)
+end
+
+local function shoot(self)
+	local shooting_mode = SHOOTING_MODES[self.shootingMode]
+	if not shooting_mode then
+		print("Invalid shooting mode: " .. tostring(self.shootingMode))
+		return
+	end
+	local parent_id = go.get_parent()
+	local thisPos = go.get_position() + go.get_position(parent_id)
+	
+	local player_position = go.get_position(self.target)
+	local direction = player_position - thisPos
+	local base_angle = math.atan2(direction.y, direction.x)
+
+	-- Fire bullets for shotgun evenly in a cone
+	if self.shootingMode == hash("shotgun") then
+		local spread = shooting_mode.spread
+		local num_bullets = shooting_mode.bullets
+		local half_spread = math.rad(spread / 2)
+
+		-- Calculate the start and end angles of the cone
+		local start_angle = base_angle - half_spread
+		local end_angle = base_angle + half_spread
+
+		-- Fire bullets within the cone
+		for i = 0, num_bullets - 1 do
+			local angle = start_angle + (i / (num_bullets - 1)) * (end_angle - start_angle)
+			spawn_bullet(self, angle)
+		end
+	elseif self.shootingMode == hash("sniper") then
+		-- shooting_mode.spread
+		-- TODO : make sniper bullet
+		spawn_bullet(self, base_angle)
+	else
+		-- Fire single or multiple bullets without even spread
+		for i = 1, shooting_mode.bullets do
+			local spread = shooting_mode.spread
+			local offset_angle = base_angle + math.rad((math.random() * spread) - (spread / 2))
+			spawn_bullet(self, offset_angle)
+		end
+	end
+end
+
+function init(self)
+	self.shooting_mode = SHOOTING_MODES[self.shootingMode]
+	self.cooldown = self.shooting_mode and self.shooting_mode.cooldown or 0.5
+
+	self.state = "pause" -- Initial state
+	-- self.shootingMode = "default" -- Adjust this to match your shooting mode setup
+	self.timer = 0 -- Timer to track the behavior switching
+	self.state_duration = 5 -- Duration for both shooting and pausing (in seconds)
+end
+
+-- ---------------------------------------------------------
+-- Debugging
+-- ---------------------------------------------------------
+
+local debugdraw = require ("debug-draw.debug-draw")
+
+local function draw_line(from, to)
+	msg.post("@render:", "draw_line", { start_point = from, end_point = to, color = vmath.vector4(1,0,0,1) })
+end
+
+function update(self, dt)
+	-- Update the timer for state transitions
+	self.timer = self.timer + dt
+
+	if self.timer >= self.state_duration then
+		self.timer = 0 -- Reset timer
+		if self.state == "shoot" then
+			self.state = "pause" -- Switch to pausing
+		else
+			self.state = "shoot" -- Switch to shooting
+		end
+	end
+
+	-- Shooting logic when in the "shoot" state
+	if self.state == "shoot" then
+		self.cooldown = self.cooldown + dt
+		if self.cooldown >= self.shooting_mode.cooldown then
+			self.cooldown = 0
+			shoot(self) -- Call the shoot function
+		end
+	end
+
+	-- ---------------------------------------------------------
+	-- Debugging
+	-- ---------------------------------------------------------
+	local parent_id = go.get_parent()
+	local thisPos = go.get_position() + go.get_position(parent_id)
+
+	if not self.target or not go.exists(self.target) then
+		self.target = nil -- Clear the invalid reference
+		return false
+	else
+		local player_position = go.get_position(self.target) 
+		debugdraw.circle(thisPos.x, thisPos.y, self.radius, "red")
+
+		local result = physics.raycast(thisPos, player_position, { hash("car") })
+		if result then
+			draw_line(thisPos, result.position)
+		else
+			draw_line(thisPos, player_position)
+		end
+	end
+end
