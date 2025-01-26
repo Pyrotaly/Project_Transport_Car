@@ -36,6 +36,7 @@ embedded_components {
   "restitution: 0.5\n"
   "group: \"enemy\"\n"
   "mask: \"playerBullet\"\n"
+  "mask: \"edge_of_map\"\n"
   "embedded_collision_shape {\n"
   "  shapes {\n"
   "    shape_type: TYPE_BOX\n"

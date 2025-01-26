@@ -20,7 +20,7 @@ local function start_charge(self)
 
 	local distance = vmath.length(player_pos - current_pos)
 
-	local min_duration = 0.25
+	local min_duration = 0.5
 	local max_duration = 0.75
 	local raw_duration = distance / self.speed
 	
@@ -177,6 +177,15 @@ function init(self)
 			end
 		}
 	})
+end
+
+function on_message(self, message_id, message, sender)
+	if message_id == hash("trigger_response") then
+		if message.group == hash("edge_of_map") then
+			print("edge of map")
+			go.delete()
+		end
+	end
 end
 
 function final(self)

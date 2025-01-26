@@ -60,15 +60,6 @@ components {
     type: PROPERTY_TYPE_HASH
   }
 }
-components {
-  id: "enemyDriveUp"
-  component: "/main/_scripts/car_ai/TEST_Car_Behaviors/enemyDriveUp.script"
-  properties {
-    id: "target_x"
-    value: "600.0"
-    type: PROPERTY_TYPE_NUMBER
-  }
-}
 embedded_components {
   id: "sprite"
   type: "sprite"

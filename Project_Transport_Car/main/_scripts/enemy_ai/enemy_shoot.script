@@ -36,9 +36,11 @@ local function shoot(self)
 		print("Invalid shooting mode: " .. tostring(self.shootingMode))
 		return
 	end
-
+	local parent_id = go.get_parent()
+	local thisPos = go.get_position() + go.get_position(parent_id)
+	
 	local player_position = go.get_position(self.target)
-	local direction = player_position - go.get_position()
+	local direction = player_position - thisPos
 	local base_angle = math.atan2(direction.y, direction.x)
 
 	-- Fire bullets for shotgun evenly in a cone
@@ -115,7 +117,9 @@ function update(self, dt)
 	-- ---------------------------------------------------------
 	-- Debugging
 	-- ---------------------------------------------------------
-	local thisPos = go.get_position()
+	local parent_id = go.get_parent()
+	local thisPos = go.get_position() + go.get_position(parent_id)
+
 	if not self.target or not go.exists(self.target) then
 		self.target = nil -- Clear the invalid reference
 		return false
@@ -123,12 +127,11 @@ function update(self, dt)
 		local player_position = go.get_position(self.target) 
 		debugdraw.circle(thisPos.x, thisPos.y, self.radius, "red")
 
-		local from = go.get_position()
-		local result = physics.raycast(from, player_position, { hash("car") })
+		local result = physics.raycast(thisPos, player_position, { hash("car") })
 		if result then
-			draw_line(from, result.position)
+			draw_line(thisPos, result.position)
 		else
-			draw_line(from, player_position)
+			draw_line(thisPos, player_position)
 		end
 	end
 end
