@@ -87,28 +87,6 @@ instances {
   }
 }
 instances {
-  id: "basic_car1"
-  prototype: "/main/gameObjects/carEnemies/basic_car.go"
-  position {
-    x: 2755.0
-    y: 280.0
-    z: 1.0
-  }
-  component_properties {
-    id: "basic_car"
-    properties {
-      id: "sway_side_distance"
-      value: "20.0"
-      type: PROPERTY_TYPE_NUMBER
-    }
-    properties {
-      id: "back_distance"
-      value: "40.0"
-      type: PROPERTY_TYPE_NUMBER
-    }
-  }
-}
-instances {
   id: "basic_car2"
   prototype: "/main/gameObjects/carEnemies/basic_car.go"
   children: "player_enemy_shoot"
@@ -173,6 +151,7 @@ instances {
   }
   scale3 {
     x: 7.834043
+    y: 1.728304
   }
 }
 instances {
@@ -184,6 +163,85 @@ instances {
   }
   scale3 {
     x: 7.834043
+    y: 2.078283
+  }
+}
+instances {
+  id: "basic_car1"
+  prototype: "/main/gameObjects/carEnemies/basic_car.go"
+  children: "player_enemy_shoot2"
+  children: "player_enemy_shoot3"
+  position {
+    x: 3104.0
+    y: 286.0
+    z: 1.0
+  }
+  component_properties {
+    id: "basic_car"
+    properties {
+      id: "sway_side_distance"
+      value: "20.0"
+      type: PROPERTY_TYPE_NUMBER
+    }
+    properties {
+      id: "back_distance"
+      value: "40.0"
+      type: PROPERTY_TYPE_NUMBER
+    }
+  }
+}
+instances {
+  id: "player_enemy_shoot2"
+  prototype: "/main/gameObjects/playerEnemies/player_enemy_shoot.go"
+  position {
+    x: -92.0
+    y: 106.0
+  }
+  component_properties {
+    id: "enemy_shoot"
+    properties {
+      id: "shootingMode"
+      value: "machine_gun"
+      type: PROPERTY_TYPE_HASH
+    }
+  }
+}
+instances {
+  id: "player_enemy_shoot3"
+  prototype: "/main/gameObjects/playerEnemies/player_enemy_shoot.go"
+  position {
+    x: -290.0
+    y: 106.0
+  }
+  component_properties {
+    id: "enemy_shoot"
+    properties {
+      id: "shootingMode"
+      value: "machine_gun"
+      type: PROPERTY_TYPE_HASH
+    }
+  }
+}
+instances {
+  id: "basic_car3"
+  prototype: "/main/gameObjects/carEnemies/basic_car.go"
+  position {
+    x: 2462.0
+    y: 564.0
+    z: 1.0
+  }
+  component_properties {
+    id: "basic_car"
+    properties {
+      id: "sway_side_distance"
+      value: "20.0"
+      type: PROPERTY_TYPE_NUMBER
+    }
+    properties {
+      id: "back_distance"
+      value: "40.0"
+      type: PROPERTY_TYPE_NUMBER
+    }
   }
 }
 collection_instances {
@@ -227,6 +285,7 @@ embedded_instances {
   children: "basic_car"
   children: "basic_car1"
   children: "basic_car2"
+  children: "basic_car3"
   data: ""
   position {
     z: 1.0

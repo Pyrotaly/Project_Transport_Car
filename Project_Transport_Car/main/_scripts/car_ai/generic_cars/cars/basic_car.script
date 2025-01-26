@@ -131,9 +131,8 @@ function init(self)
 
 	self.idle_timer = 0 -- Tracks how long the enemy has been idle
 	self.idle_duration = math.random(3, 6) -- Generate a random number between 1 and 4
-	
 
-	-- Instantiate the FSM
+	-- Instantiate FSM
 	self.state_manager = fsm.create({
 		initial = "init",
 		events = {
@@ -145,47 +144,38 @@ function init(self)
 		},
 		callbacks = {
 			on_enter_move = function()
-				print("Entering move state...")
+				-- print("Entering move state...")
 				move_nearby(self)
 			end,
 			on_leave_move = function()
-				print("Exiting move state...")
+				-- print("Exiting move state...")
 				
 			end,
 			on_enter_charge = function()
-				print("Entering charge state...")
+				-- print("Entering charge state...")
 				start_charge(self) -- Use the script's self directly
 			end,
 			on_leave_charge = function()
-				print("Exiting charge state...")
+				-- print("Exiting charge state...")
 			end,
 			on_enter_idle = function()
-				print("Entering idle state...")
+				-- print("Entering idle state...")
 				self.idle_timer = 0 -- Reset the idle timer
 				swaying(self) -- Start swaying
 			end,
 			on_leave_idle = function()
-				print("Exiting idle state...")
+				-- print("Exiting idle state...")
 				self.idle_timer = self.idle_duration
 				stop_swaying() -- Stop swaying
 			end,
 			on_enter_init = function()
-				print("Entering init state...")
+				-- print("Entering init state...")
 				go.animate(".", "position.x", go.PLAYBACK_ONCE_FORWARD, self.target_x, go.EASING_OUTQUAD, 2, 0, function()
 					move_back(self)
 				end)
 			end
 		}
 	})
-end
-
-function on_message(self, message_id, message, sender)
-	if message_id == hash("trigger_response") then
-		if message.group == hash("edge_of_map") then
-			print("edge of map")
-			go.delete()
-		end
-	end
 end
 
 function final(self)
