@@ -29,6 +29,7 @@ function init(self)
 
 	particlefx.play("particleFX#smoke2")
 	-- particlefx.play("particleFX#tire_marks")
+	msg.post("0_game_managers:/game_manager_go#fader_gui", "blackFadeIn")
 end
 
 function final(self)
