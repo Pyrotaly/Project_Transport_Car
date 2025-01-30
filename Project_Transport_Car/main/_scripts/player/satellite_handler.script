@@ -1,0 +1,214 @@
+local camera = require "orthographic.camera"
+local upgrades = require("main._scripts.modules.upgrades_module")
+
+local CAMERA_ID = hash("/camera")
+local SOUND_ID = hash("")
+
+local orbitCenter
+local orbitRadius = 70
+local additionalRotation = math.pi  -- 90 degrees in radians
+local world = vmath.vector3(0, 0, 1)
+
+local inputVector = vmath.vector3(0, 0, 0)
+local screenToWorld = vmath.vector3(0, 0, 0)
+
+local currentGun = "1"
+
+local items = {
+	gun1 = { damage = 10, speed = 5000, name = "Blaster", life = 0.4, shakeIntensity = 0.003, gunCooldown = 0.075, maxMagSize = 30 + upgrades.get_upgrade_value("player", "bigger_mag"), curMagSize = 30 },
+	gun2 = { damage = 35, speed = 2.0, name = "Pistol", life = 0.4, shakeIntensity = 0.005, gunCooldown = 0.05, maxMagSize = 50 + upgrades.get_upgrade_value("player", "bigger_mag"), curMagSize = 50 },
+	gun3 = { damage = 75, speed = 1.0, name = "Rocket Launcher", life = 0.4, shakeIntensity = 0.005, gunCooldown = 0.2, maxMagSize = 50 + upgrades.get_upgrade_value("player", "bigger_mag"), curMagSize = 50}
+}
+
+-- --------------------------------------
+-- TODO: Refactor this upgrade system (below)
+-- --------------------------------------
+local function apply_upgrade()
+	-- TODO : do this for all guns
+	local biggerMagUpgrade = upgrades.get_upgrade_value("player", "bigger_mag")
+	items.gun1.maxMagSize = 30 + biggerMagUpgrade
+	msg.post("gui_player_menu:/go#main_game", "updateBullet", { 
+		maxMagSize = items["gun" .. currentGun].maxMagSize,
+		curMagSize = items["gun" .. currentGun].curMagSize
+	})
+end
+
+local function fire_missile(self, position, rotation)
+	if self.shot_counter % 5 ~= 0 then
+		return
+	end
+	-- Create a missile with different properties
+	local damage_bonus = upgrades.get_upgrade_value("player", "damage")
+	local totalDamage = 100 + damage_bonus * 0.75
+	local missile_position = position
+	local missile_rotation = rotation
+	factory.create("factories#missile", missile_position, missile_rotation, {
+		speed = 2000,
+		life = 5,
+		damage = totalDamage,
+		mask = hash("enemy")
+	}, 2)
+end
+
+local function spawn_extra_projectile(position, rotation)
+	local spread_angle = math.random(-30, 30)
+	local spread_quat = vmath.quat_rotation_z(math.rad(spread_angle))
+	local new_rotation = rotation * spread_quat
+	for i = 1, 3 do
+		factory.create("factories#bullet_" .. currentGun, position, new_rotation, {
+			speed = items["gun" .. currentGun].speed,
+			life = items["gun" .. currentGun].life,
+			bulletDamage = 50,
+			mask = hash("enemy")
+		}, 1)
+	end
+end
+
+local function shoot_backward(position, rotation)
+	local backward_rotation = vmath.quat_rotation_z(math.pi)
+	factory.create("factories#bullet_" .. currentGun, position, rotation * backward_rotation, {
+		speed = items["gun" .. currentGun].speed,
+		life = items["gun" .. currentGun].life,
+		bulletDamage = 100,
+		mask = hash("enemy")
+	}, 0.6)
+end
+
+local function handle_upgrades_for_shooting(self, bullet_position, bullet_rotation)
+	local missileUpgrade = upgrades.get_upgrade_value("player", "missile")
+	if missileUpgrade > 0 then
+		fire_missile(self, bullet_position, bullet_rotation)
+	end
+
+	local extraProjectiles = upgrades.get_upgrade_value("player", "spray")
+	if extraProjectiles > 0 then
+		for i = 1, extraProjectiles do
+			spawn_extra_projectile(bullet_position, bullet_rotation)
+		end
+	end
+
+	local shootBack = upgrades.get_upgrade_value("player", "shoot_back")
+	if shootBack > 0 then
+		shoot_backward(bullet_position, bullet_rotation)
+	end
+end
+-- --------------------------------------
+-- TODO: Refactor this upgrade system (above)
+-- --------------------------------------
+
+-- --------------------------------------
+-- Main firing
+-- --------------------------------------
+local function reload(self)
+	-- TODO : prevent weapon swapping or cancel reload if swapping
+	-- TODO : Play reload animation
+	if self.isReloading then return end  -- Prevent multiple reload calls
+	self.isReloading = true
+	self.canShoot = false
+
+	sound.play("player_sounds/guns#gun1_reload", { delay = 0, gain = 0.5, pan = 0, speed = 1 })
+	-- Simulate reload delay
+	timer.delay(1, false, function()
+		items["gun" .. currentGun].curMagSize = items["gun" .. currentGun].maxMagSize
+		msg.post("gui_player_menu:/go#main_game", "updateBullet", { 
+			maxMagSize = items["gun" .. currentGun].maxMagSize, -- Call the function here
+			curMagSize = items["gun" .. currentGun].curMagSize
+		})
+		self.isReloading = false
+		self.canShoot = true
+	end)
+end
+
+local function shoot(self)
+	if not self.canShoot or self.isReloading then return end
+
+	-- Check if magazine is empty
+	if items["gun" .. currentGun].curMagSize <= 0 then
+		-- TOOD : Play click sound
+		reload(self)
+		return
+	end
+
+	sound.play("player_sounds/guns#gun1_shoot", { delay = 0, gain = 0.5, pan = 0, speed = 1 })
+	self.canShoot = false
+
+	self.shot_counter = self.shot_counter + 1
+	
+	items["gun" .. currentGun].curMagSize = items["gun" .. currentGun].curMagSize - 1
+	msg.post("gui_player_menu:/go#main_game", "updateBullet", { 
+		maxMagSize = items["gun" .. currentGun].maxMagSize, -- Call the function here
+		curMagSize = items["gun" .. currentGun].curMagSize
+	})
+	
+	local total_damage = items["gun" .. currentGun].damage + upgrades.get_upgrade_value("player", "damage")
+	local bullet_position = go.get_position("satellite")
+	local bullet_rotation = go.get_rotation("satellite")
+
+	factory.create("factories#bullet_" .. currentGun, bullet_position, bullet_rotation, {
+		speed = items["gun" .. currentGun].speed,
+		life = items["gun" .. currentGun].life,
+		bulletDamage = total_damage,
+		mask = hash("enemy")
+	}, 0.6)
+
+	handle_upgrades_for_shooting(self, bullet_position, bullet_rotation)
+
+	particlefx.play("particleFX#bullet_casing")
+	camera.shake(CAMERA_ID, items["gun" .. currentGun].shakeIntensity, 0.1, hash("both"))
+
+	-- Reset shooting cooldown
+	timer.delay(items["gun" .. currentGun].gunCooldown, false, function()
+		self.canShoot = true
+	end)
+end
+-- --------------------------------------
+-- Main firing (above)
+-- --------------------------------------
+
+function init(self)
+	self.dir = vmath.vector3()
+	orbitCenter = go.get_position()
+	self.canShoot = true
+	self.shot_counter = 0
+
+	-- TODO : Update the bullet ui for all guns when swtiching, maybe have switching guns have a swap time
+	msg.post("gui_player_menu:/go#main_game", "updateBullet", { 
+		maxMagSize = items["gun" .. currentGun].maxMagSize, -- Call the function here
+		curMagSize = items["gun" .. currentGun].curMagSize
+	})
+end
+
+function fixed_update(self, dt)
+	orbitCenter = go.get_position()
+
+	local diff = world - orbitCenter -- Calculate the difference between mouse position and orbit center
+	local angle = math.atan2(diff.y, diff.x) -- Calculate the angle from the difference
+
+	-- Calculate the new position on the orbit path
+	local orbitPosition = orbitCenter + vmath.vector3(math.cos(angle) * orbitRadius, 
+	math.sin(angle) * orbitRadius, 0) 
+	go.set_position(orbitPosition, "satellite")
+
+	angle = math.atan2(orbitPosition.y - orbitCenter.y, orbitPosition.x - orbitCenter.x) -- Calculate the rotation angle to point outward from the center
+	go.set_rotation(vmath.quat_rotation_z(angle + 2*additionalRotation), "satellite") -- Set the rotation of the object to point outward from the center
+end
+
+function on_input(self, action_id, action)
+	inputVector = vmath.vector3(action.x, action.y, 0)
+	screenToWorld = camera.screen_to_world(self.orthoCameraGO, inputVector)
+	world = vmath.vector3(screenToWorld.x, screenToWorld.y, 1)
+
+	if action_id == hash("reload") then
+		if items["gun" .. currentGun].curMagSize <  items["gun" .. currentGun].maxMagSize then
+			reload(self)
+		end
+	elseif action_id == hash("leftTrigger") then
+		shoot(self)
+	end
+end
+
+function on_message(self, message_id, message, sender)
+	if message_id == hash("upgradeOccured2") then
+		apply_upgrade()
+	end
+end
