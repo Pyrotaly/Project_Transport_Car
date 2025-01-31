@@ -5,6 +5,7 @@ function init(self)
 
 	-- TODO : Delete later for testing done
 	msg.post(".", "loadCombatZone", {newLevel = 1, newCoords = { 1, 1}, lastCoords = { 5, 5 }} )
+	msg.post("proxy_loader#proxy_level_1", "set_time_step", {factor = 1, mode = 1})
 end
 
 function fixed_update(self, dt)
@@ -30,7 +31,7 @@ function on_message(self, message_id, message, sender)
 
 		-- have to wait for it to load... this is not ideal but yea
 		timer.delay(3, false, function()
-			msg.post("gui_player_menu:/go#main_game", "startTimer", { time = 2 }) -- TODO : set this up
+			msg.post("gui_player_menu:/go#main_game", "startTimer", { time = 300 }) -- TODO : set this up
 		end)
 	end
 

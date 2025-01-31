@@ -266,6 +266,10 @@ collection_instances {
     x: 1474.0
     y: 398.0
   }
+  scale3 {
+    x: 0.8
+    y: 0.8
+  }
 }
 scale_along_z: 0
 embedded_instances {
