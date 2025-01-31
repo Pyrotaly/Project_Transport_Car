@@ -52,10 +52,6 @@ instances {
     }
   }
 }
-instances {
-  id: "TESTING_deadzone"
-  prototype: "/main/gameObjects/backend/TESTING_deadzone.go"
-}
 collection_instances {
   id: "car"
   collection: "/main/collections/car.collection"
@@ -72,8 +68,8 @@ collection_instances {
     y: 231.0
   }
   scale3 {
-    x: 0.5
-    y: 0.5
+    x: 0.75
+    y: 0.75
   }
 }
 scale_along_z: 0

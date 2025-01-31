@@ -3,6 +3,10 @@ fonts {
   name: "default"
   font: "/builtins/fonts/default.font"
 }
+textures {
+  name: "main"
+  texture: "/assets/atlases/main.atlas"
+}
 nodes {
   position {
     x: 666.0
@@ -41,12 +45,13 @@ nodes {
 }
 nodes {
   position {
-    x: 118.0
-    y: 177.0
+    x: 115.0
+    y: 160.0
   }
-  size {
-    x: 200.0
-    y: 100.0
+  scale {
+    x: 0.76
+    y: 0.76
+    z: 0.76
   }
   color {
     x: 0.8
@@ -54,6 +59,7 @@ nodes {
     z: 0.8
   }
   type: TYPE_BOX
+  texture: "main/gui_test"
   id: "player_health"
   inherit_alpha: true
   size_mode: SIZE_MODE_AUTO

@@ -53,4 +53,13 @@ images {
 images {
   image: "/assets/images/particleFX/tireMarks.png"
 }
+images {
+  image: "/assets/images/Flower_2.0.png"
+}
+images {
+  image: "/assets/images/gui_test.png"
+}
+images {
+  image: "/assets/images/mood_sheet_correct_resolution.png"
+}
 extrude_borders: 2
