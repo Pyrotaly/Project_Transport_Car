@@ -118,4 +118,13 @@ images {
 images {
   image: "/assets/images/finale/goButton.png"
 }
+images {
+  image: "/assets/images/finale/tutorial.png"
+}
+images {
+  image: "/assets/images/finale/gunflash.png"
+}
+images {
+  image: "/assets/images/finale/gunflash2.png"
+}
 extrude_borders: 2

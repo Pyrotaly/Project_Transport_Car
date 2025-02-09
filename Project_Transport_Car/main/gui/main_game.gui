@@ -17,11 +17,6 @@ nodes {
     y: 0.76
     z: 0.76
   }
-  color {
-    x: 0.8
-    y: 0.6
-    z: 0.8
-  }
   type: TYPE_BOX
   texture: "final_atlas/healthIcon"
   id: "player_health"
@@ -52,11 +47,6 @@ nodes {
   position {
     x: 80.0
     y: 62.0
-  }
-  color {
-    x: 0.8
-    y: 0.6
-    z: 0.8
   }
   type: TYPE_BOX
   texture: "final_atlas/ammoIcon"
@@ -89,11 +79,6 @@ nodes {
     x: 115.0
     y: 62.0
   }
-  color {
-    x: 0.8
-    y: 0.6
-    z: 0.8
-  }
   type: TYPE_BOX
   texture: "final_atlas/shotgun"
   id: "bullets1"
@@ -125,11 +110,6 @@ nodes {
     x: 1105.0
     y: 72.0
   }
-  color {
-    x: 0.8
-    y: 0.6
-    z: 0.8
-  }
   type: TYPE_BOX
   texture: "final_atlas/gear"
   id: "scrap_amount"
@@ -150,7 +130,7 @@ nodes {
     y: 100.0
   }
   type: TYPE_TEXT
-  text: "154"
+  text: "99"
   font: "default"
   id: "scrap_amount_text"
   parent: "scrap_amount"

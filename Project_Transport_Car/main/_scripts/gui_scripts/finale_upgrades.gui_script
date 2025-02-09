@@ -1,41 +1,59 @@
+local upgrades = require("main._scripts.modules.upgrades_module")
+
 function init(self)
-	-- Add initialization code here
-	-- Learn more: https://defold.com/manuals/script/
-	-- Remove this function if not needed
-end
+	msg.post(".", "acquire_input_focus")
 
-function final(self)
-	-- Add finalization code here
-	-- Learn more: https://defold.com/manuals/script/
-	-- Remove this function if not needed
-end
+	gui.set_render_order(0)
+	
+	self.upgrade_buttons = {
+		{ node = gui.get_node("player_missile"), upgrade_type = "missile", entity = "player" , bought = false},
+		{ node = gui.get_node("player_shotgun"), upgrade_type = "shotgun", entity = "player" },
+		{ node = gui.get_node("player_spray"), upgrade_type = "spray", entity = "player" }
+	}
 
-function update(self, dt)
-	-- Add update code here
-	-- Learn more: https://defold.com/manuals/script/
-	-- Remove this function if not needed
-end
-
-function on_message(self, message_id, message, sender)
-	-- Add message-handling code here
-	-- Learn more: https://defold.com/manuals/message-passing/
-	-- Remove this function if not needed
+	-- Set initial blend mode for already purchased upgrades
+	for _, button in ipairs(self.upgrade_buttons) do
+		if upgrades.is_upgrade_maxed(button.entity, button.upgrade_type) then
+			gui.set_blend_mode(button.node, gui.BLEND_ADD) -- Keep it glowing
+		end
+	end
+	
+	self.player_currency_node = gui.get_node("scrap_amount_text")
+	self.continue_button = gui.get_node("confirm")
+	gui.set_enabled(self.continue_button, false)
 end
 
 function on_input(self, action_id, action)
-	-- Add input-handling code here. The game object this script is attached to
-	-- must have acquired input focus:
-	--
-	--    msg.post(".", "acquire_input_focus")
-	--
-	-- All mapped input bindings will be received. Mouse and touch input will
-	-- be received regardless of where on the screen it happened.
-	-- Learn more: https://defold.com/manuals/input/
-	-- Remove this function if not needed
-end
+	for _, button in ipairs(self.upgrade_buttons) do
+		local is_hovering = gui.pick_node(button.node, action.x, action.y)
 
-function on_reload(self)
-	-- Add reload-handling code here
-	-- Learn more: https://defold.com/manuals/hot-reload/
-	-- Remove this function if not needed
+		-- If already purchased, force "ADD" blend mode
+		if upgrades.is_upgrade_maxed(button.entity, button.upgrade_type) then
+			gui.set_blend_mode(button.node, gui.BLEND_ADD)
+		else
+			-- Otherwise, use hover effect
+			if is_hovering then
+				gui.set_blend_mode(button.node, gui.BLEND_ADD)
+			else
+				gui.set_blend_mode(button.node, gui.BLEND_ALPHA)
+			end
+		end
+
+		-- Handle clicking to purchase
+		if is_hovering and action.pressed then
+			local success = upgrades.buy_upgrade(button.entity, button.upgrade_type)
+			if success then
+				gui.set_blend_mode(button.node, gui.BLEND_ADD) -- Keep glowing
+				gui.set_enabled(self.continue_button, true)
+				local text = gui.get_node("scrap_amount_text")
+				gui.set_text(text, tostring(99)) -- Update text as needed
+			end
+		end
+	end
+
+	if action_id == hash("leftTrigger") and action.pressed then
+		if gui.pick_node(self.continue_button, action.x, action.y) and gui.is_enabled(self.continue_button) then
+			msg.post("0_game_managers:/game_manager_go#fader_gui", "blackFadeOut", { next_scene = "loadCombatZone" })
+		end
+	end
 end

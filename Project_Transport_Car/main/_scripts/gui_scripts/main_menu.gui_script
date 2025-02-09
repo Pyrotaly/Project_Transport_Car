@@ -6,7 +6,8 @@ end
 function on_input(self, action_id, action)
 	if action_id == hash("leftTrigger") and action.pressed then
 		if gui.pick_node(self.confirm_node, action.x, action.y) then
-			msg.post("0_game_managers:/game_manager_go#game_manager", "loadCombatZone")
+			-- Step 1: Fade to black before loading
+			msg.post("0_game_managers:/game_manager_go#fader_gui", "blackFadeOut", { next_scene = "loadUpgradeZone" })
 		end
 	end
 end

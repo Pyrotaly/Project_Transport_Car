@@ -36,8 +36,7 @@ local function shoot(self)
 		print("Invalid shooting mode: " .. tostring(self.shootingMode))
 		return
 	end
-	local parent_id = go.get_parent()
-	local thisPos = go.get_position() + go.get_position(parent_id)
+	local thisPos = go.get_position()
 	
 	local player_position = go.get_position(self.target)
 	local direction = player_position - thisPos
@@ -117,8 +116,7 @@ function update(self, dt)
 	-- ---------------------------------------------------------
 	-- Debugging
 	-- ---------------------------------------------------------
-	local parent_id = go.get_parent()
-	local thisPos = go.get_position() + go.get_position(parent_id)
+	local thisPos = go.get_position()
 
 	if not self.target or not go.exists(self.target) then
 		self.target = nil -- Clear the invalid reference

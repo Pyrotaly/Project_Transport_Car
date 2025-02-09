@@ -53,12 +53,12 @@ function M.on_damage(entity, damage)
 			msg.post("gui_player_menu:/go#main_game", "updateHealth", { healthAdjust = damage })
 
 			-- TODO : make the set time step update to loaded proxy so
-			msg.post("0_game_managers:/proxy_loader#proxy_level_1", "set_time_step", {factor = 1, mode = 1})
+			msg.post("0_game_managers:/proxy_loader#proxy_level_2", "set_time_step", {factor = 1, mode = 1})
 		end)
 	else
 		timer.delay(0.005, false, function()
 			-- TODO : make the set time step update to loaded proxy so
-			msg.post("0_game_managers:/proxy_loader#proxy_level_4", "set_time_step", {factor = 1, mode = 1})
+			msg.post("0_game_managers:/proxy_loader#proxy_level_2", "set_time_step", {factor = 1, mode = 1})
 		end)
 	end
 end
@@ -72,17 +72,17 @@ function M.on_death(entity, damage)
 	if entity.health_type == hash("player") then
 		timer.delay(0.025, false, function()
 			-- TODO : make the set time step update to loaded proxy so
-			msg.post("0_game_managers:/proxy_loader#proxy_level_1", "set_time_step", {factor = 1, mode = 1})
+			msg.post("0_game_managers:/proxy_loader#proxy_level_2", "set_time_step", {factor = 1, mode = 1})
 			msg.post("gui_player_menu:/go#main_game", "updateHealth", { healthAdjust = damage })
 			-- TODO: game over screen
-			msg.post("0_game_managers:/proxy_loader#proxy_level_1", "set_time_step", {factor = 0, mode = 1})
+			msg.post("0_game_managers:/proxy_loader#proxy_level_2", "set_time_step", {factor = 0, mode = 1})
 			msg.post("0_game_managers:/game_manager_go#game_manager", "gameOver")
 			go.delete()
 		end)
 	else
 		timer.delay(0.005, false, function()
 			-- TODO : make the set time step update to loaded proxy so
-			msg.post("0_game_managers:/proxy_loader#proxy_level_4", "set_time_step", {factor = 1, mode = 1})
+			msg.post("0_game_managers:/proxy_loader#proxy_level_2", "set_time_step", {factor = 1, mode = 1})
 
 			if entity.health_type == hash("enemy") then
 				pers_data.adjust_currency(40)

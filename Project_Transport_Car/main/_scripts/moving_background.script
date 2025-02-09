@@ -1,49 +1,61 @@
 function init(self)
-	self.speed = 1000  -- Background scroll speed
-	self.bg_width = 1920  -- Width of a single sprite
+	self.speed = 1000 -- Adjust speed as needed
+	self.bg_width = 2560 -- Width of one background sprite
+	self.wrap_x = -2560 -- The threshold to wrap around
 
-	-- List of sprite IDs
-	self.sprites = {
-		"#sprite1",
-		"#sprite2",
-		"#sprite3",
-		"#sprite4"
+	-- List of background game objects
+	self.bg_entities = {
+		"/road_background/go1",
+		"/road_background/go2",
+		"/road_background/go3"
 	}
-
-	-- Get initial positions of the sprites
-	self.positions = {}
-	for i, sprite in ipairs(self.sprites) do
-		self.positions[i] = go.get_position(sprite)
-	end
 end
 
-local function get_rightmost_sprite(self)
-	local rightmost_index = 1
-	local max_x = self.positions[1].x
+local function get_leftmost_bg(self)
+	local leftmost = self.bg_entities[1]
+	local min_x = go.get_position(leftmost).x
 
-	for i, pos in ipairs(self.positions) do
-		if pos.x > max_x then
-			rightmost_index = i
-			max_x = pos.x
+	for _, bg in ipairs(self.bg_entities) do
+		local pos_x = go.get_position(bg).x
+		if pos_x < min_x then
+			leftmost = bg
+			min_x = pos_x
 		end
 	end
 
-	return rightmost_index
+	return leftmost, min_x
+end
+
+local function get_rightmost_bg(self)
+	local rightmost = self.bg_entities[1]
+	local max_x = go.get_position(rightmost).x
+
+	for _, bg in ipairs(self.bg_entities) do
+		local pos_x = go.get_position(bg).x
+		if pos_x > max_x then
+			rightmost = bg
+			max_x = pos_x
+		end
+	end
+
+	return rightmost, max_x
 end
 
 function update(self, dt)
-	for i, sprite in ipairs(self.sprites) do
-		local pos = self.positions[i]
-		pos.x = pos.x - self.speed * dt  -- Move left
+	-- Move both backgrounds left
+	for _, bg in ipairs(self.bg_entities) do
+		local pos = go.get_position(bg)
+		pos.x = pos.x - self.speed * dt
+		go.set_position(pos, bg)
+	end
 
-		-- If the sprite moves completely off-screen, reposition it to the rightmost side
-		if pos.x < -self.bg_width then
-			local rightmost_index = get_rightmost_sprite(self)
-			pos.x = self.positions[rightmost_index].x + self.bg_width
-		end
+	-- Get leftmost background
+	local leftmost_bg, leftmost_x = get_leftmost_bg(self)
 
-		-- Apply the new position
-		go.set_position(pos, sprite)
-		self.positions[i] = pos
+	-- If it's fully off-screen, move it to the right of the rightmost one
+	if leftmost_x < self.wrap_x then
+		local _, rightmost_x = get_rightmost_bg(self) -- Get rightmost x position
+		local new_x = rightmost_x + self.bg_width -- Place it exactly to the right
+		go.set_position(vmath.vector3(new_x, go.get_position(leftmost_bg).y, 0), leftmost_bg)
 	end
 end

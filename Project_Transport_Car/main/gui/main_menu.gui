@@ -1,3 +1,4 @@
+script: "/main/_scripts/gui_scripts/main_menu.gui_script"
 fonts {
   name: "default"
   font: "/builtins/fonts/default.font"
@@ -20,13 +21,29 @@ nodes {
 nodes {
   position {
     x: 532.0
-    y: 209.0
+    y: 188.0
   }
   rotation {
-    z: 5.407
+    z: 8.979
   }
   type: TYPE_BOX
   texture: "final_atlas/goButton"
+  id: "confirm"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+}
+nodes {
+  position {
+    x: 1006.0
+    y: 285.0
+  }
+  scale {
+    x: 0.613706
+    y: 0.613706
+    z: 0.613706
+  }
+  type: TYPE_BOX
+  texture: "final_atlas/tutorial"
   id: "box1"
   inherit_alpha: true
   size_mode: SIZE_MODE_AUTO
