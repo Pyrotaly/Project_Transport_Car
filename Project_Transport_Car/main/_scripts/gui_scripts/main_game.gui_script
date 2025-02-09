@@ -1,5 +1,9 @@
 function init(self)
 	gui.set_render_order(0)
+
+	self.pistol_nodes = gui.get_node("bullets")
+	self.shotgun_nodes = gui.get_node("bullets1")
+	gui.set_enabled(self.shotgun_nodes, false)
 end
 
 function on_message(self, message_id, message, sender)
@@ -17,4 +21,3 @@ function on_message(self, message_id, message, sender)
 		gui.set_text(text, tostring(current_bullet_amount .. "/" .. max_bullet_amount))
 	end
 end
-

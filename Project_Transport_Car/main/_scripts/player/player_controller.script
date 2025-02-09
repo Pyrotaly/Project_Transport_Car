@@ -34,20 +34,19 @@ function final(self)
 end
 
 function update(self, dt)
-	-- local pos = go.get_position()
-	-- local width = window.get_size()
-	-- local height = window.get_size()
-	-- if pos.x < 200 then
-	-- 	pos.x = 200
-	-- elseif pos.x > width then
-	-- 	pos.x = width
-	-- end
-	-- if pos.y < 0 then
-	-- 	pos.y = 0
-	-- elseif pos.y > height then
-	-- 	pos.y = height
-	-- end
-	-- go.set_position(pos)
+	local pos = go.get_position()
+
+	if pos.x < 1500 then
+		pos.x = 1500
+	elseif pos.x > 2518.0 + 1000 then
+		pos.x = 2518.0 + 1000
+	end
+	if pos.y < 200 then
+		pos.y = 200
+	elseif pos.y > 850 then
+		pos.y = 850
+	end
+	go.set_position(pos)
 end
 
 function fixed_update(self, dt)
