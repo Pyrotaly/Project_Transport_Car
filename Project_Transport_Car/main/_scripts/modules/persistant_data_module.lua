@@ -39,7 +39,16 @@ end
 
 function M.adjust_currency(adjust_amount)
 	M.player_currency = M.player_currency + adjust_amount
-	msg.post("4_upgrade_area/go#finale_upgrades", "updateCurrency", { newCurrencyTotal = M.player_currency })
+
+	-- Check if the GUI exists before sending the message
+	local success, err = pcall(function()
+		msg.post("gui_player_menu:/go#main_game", "updateCurrency", { newCurrencyTotal = M.player_currency })
+	end)
+
+	-- Optional: Print an error message if the GUI is missing
+	if not success then
+		print("Warning: gui_player_menu:/go#main_game is not available. Currency update skipped.")
+	end
 end
 
 -- --------------------------------------

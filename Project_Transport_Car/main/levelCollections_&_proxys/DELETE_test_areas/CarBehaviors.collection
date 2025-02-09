@@ -64,14 +64,6 @@ instances {
     x: -92.0
     y: 106.0
   }
-  component_properties {
-    id: "enemy_shoot"
-    properties {
-      id: "shootingMode"
-      value: "machine_gun"
-      type: PROPERTY_TYPE_HASH
-    }
-  }
 }
 instances {
   id: "player_enemy_shoot1"
@@ -79,14 +71,6 @@ instances {
   position {
     x: -290.0
     y: 106.0
-  }
-  component_properties {
-    id: "enemy_shoot"
-    properties {
-      id: "shootingMode"
-      value: "machine_gun"
-      type: PROPERTY_TYPE_HASH
-    }
   }
 }
 instances {
@@ -144,14 +128,6 @@ instances {
     x: -92.0
     y: 106.0
   }
-  component_properties {
-    id: "enemy_shoot"
-    properties {
-      id: "shootingMode"
-      value: "machine_gun"
-      type: PROPERTY_TYPE_HASH
-    }
-  }
 }
 instances {
   id: "player_enemy_shoot3"
@@ -159,14 +135,6 @@ instances {
   position {
     x: -290.0
     y: 106.0
-  }
-  component_properties {
-    id: "enemy_shoot"
-    properties {
-      id: "shootingMode"
-      value: "machine_gun"
-      type: PROPERTY_TYPE_HASH
-    }
   }
 }
 instances {
