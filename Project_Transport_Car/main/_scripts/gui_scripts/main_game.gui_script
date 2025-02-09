@@ -1,22 +1,5 @@
-local function update_timer_text(remaining_time, nodeString)
-	local timer_node = gui.get_node(hash(nodeString))  -- Convert the string to a hash
-	gui.set_text(timer_node, tostring(remaining_time))
-end
-
 function init(self)
 	gui.set_render_order(0)
-end
-
-function final(self)
-	-- Add finalization code here
-	-- Learn more: https://defold.com/manuals/script/
-	-- Remove this function if not needed
-end
-
-function update(self, dt)
-	-- Add update code here
-	-- Learn more: https://defold.com/manuals/script/
-	-- Remove this function if not needed
 end
 
 function on_message(self, message_id, message, sender)
@@ -25,17 +8,6 @@ function on_message(self, message_id, message, sender)
 		local text = gui.get_node("scrap_amount_text")
 		gui.set_text(text, tostring(message.newCurrencyTotal))
 	end	
-
-	if message_id == hash("updateHealth") then
-		-- TODO : I think it is more efficient to have the node as self variable instead of instiating a new variable
-		local health_text = gui.get_node("player_health_text")
-		local cur_health = gui.get_text(health_text)
-		gui.set_text(health_text, tostring(cur_health - message.healthAdjust))
-	end
-
-	if message_id == hash("upgradeMaxHealth") then
-
-	end
 	
 	if message_id == hash("updateBullet") then
 		-- TODO : I think it is more efficient to have the node as self variable instead of instiating a new variable
@@ -44,26 +16,5 @@ function on_message(self, message_id, message, sender)
 		local text = gui.get_node("bullet_text")
 		gui.set_text(text, tostring(current_bullet_amount .. "/" .. max_bullet_amount))
 	end
-
-	if message_id == hash("startTimer") then
-		self.winCounter = message.time
-		
-		timer.delay(0.1, true, function(_, handle, time_elapsed) 
-			self.winCounter = self.winCounter - 0.1
-			update_timer_text(string.format("%.1f", self.winCounter), "time_text")
-
-			if self.winCounter <= 0 then
-				self.winCounter = 0
-				update_timer_text('', "time_text")
-				timer.cancel(handle)
-				msg.post("0_game_managers:/game_manager_go#game_manager", "finishCombatZone")	
-			end
-		end)
-	end
 end
 
-function on_reload(self)
-	-- Add reload-handling code here
-	-- Learn more: https://defold.com/manuals/hot-reload/
-	-- Remove this function if not needed
-end

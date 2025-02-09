@@ -1,65 +1,65 @@
 images {
-  image: "/assets/images/background.png"
+  image: "/assets/images/old/background.png"
 }
 images {
-  image: "/assets/images/logo.png"
+  image: "/assets/images/old/logo.png"
 }
 images {
   image: "/builtins/graphics/particle_blob.png"
 }
 images {
-  image: "/assets/images/enemies/circlebot.png"
+  image: "/assets/images/old/enemies/circlebot.png"
 }
 images {
-  image: "/assets/images/enemies/hovercraftbot.png"
+  image: "/assets/images/old/enemies/hovercraftbot.png"
 }
 images {
-  image: "/assets/images/enemies/minibot1.png"
+  image: "/assets/images/old/enemies/minibot1.png"
 }
 images {
-  image: "/assets/images/enemies/squarebot.png"
+  image: "/assets/images/old/enemies/squarebot.png"
 }
 images {
-  image: "/assets/images/enemies/tallbot.png"
+  image: "/assets/images/old/enemies/tallbot.png"
 }
 images {
-  image: "/assets/images/flower/flower3.png"
+  image: "/assets/images/old/flower/flower3.png"
 }
 images {
-  image: "/assets/images/grass_background.png"
+  image: "/assets/images/old/grass_background.png"
 }
 images {
-  image: "/assets/images/missile.png"
+  image: "/assets/images/old/missile.png"
   pivot_x: 0.25
 }
 images {
-  image: "/assets/images/OIP.jpg"
+  image: "/assets/images/old/OIP.jpg"
 }
 images {
-  image: "/assets/images/particleFX/Particle2.png"
+  image: "/assets/images/old/particleFX/Particle2.png"
 }
 images {
-  image: "/assets/images/particleFX/Particle7.png"
+  image: "/assets/images/old/particleFX/Particle7.png"
 }
 images {
-  image: "/assets/images/gun1_muzzle_flash.png"
+  image: "/assets/images/old/gun1_muzzle_flash.png"
 }
 images {
-  image: "/assets/images/particleFX/bulletCasing.png"
+  image: "/assets/images/old/particleFX/bulletCasing.png"
 }
 images {
-  image: "/assets/images/particleFX/Particle1.png"
+  image: "/assets/images/old/particleFX/Particle1.png"
 }
 images {
-  image: "/assets/images/particleFX/tireMarks.png"
+  image: "/assets/images/old/particleFX/tireMarks.png"
 }
 images {
-  image: "/assets/images/Flower_2.0.png"
+  image: "/assets/images/old/Flower_2.0.png"
 }
 images {
-  image: "/assets/images/gui_test.png"
+  image: "/assets/images/old/gui_test.png"
 }
 images {
-  image: "/assets/images/mood_sheet_correct_resolution.png"
+  image: "/assets/images/old/mood_sheet_correct_resolution.png"
 }
 extrude_borders: 2

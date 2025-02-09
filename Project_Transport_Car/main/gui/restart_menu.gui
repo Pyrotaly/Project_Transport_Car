@@ -2,6 +2,10 @@ fonts {
   name: "default"
   font: "/builtins/fonts/default.font"
 }
+textures {
+  name: "final_atlas"
+  texture: "/assets/atlases/final_atlas.atlas"
+}
 nodes {
   size {
     x: 200.0
@@ -15,43 +19,11 @@ nodes {
 }
 nodes {
   position {
-    x: 640.0
-    y: 360.0
-  }
-  scale {
-    x: 5.3
-    y: 5.3
-    z: 5.3
-  }
-  size {
-    x: 200.0
-    y: 100.0
-  }
-  color {
-    y: 0.4
-    z: 0.4
-  }
-  type: TYPE_BOX
-  id: "background"
-  parent: "folder"
-  inherit_alpha: true
-  size_mode: SIZE_MODE_AUTO
-}
-nodes {
-  position {
     x: 661.0
-    y: 377.0
-  }
-  size {
-    x: 200.0
-    y: 100.0
-  }
-  color {
-    x: 0.502
-    y: 0.2
-    z: 0.302
+    y: 311.0
   }
   type: TYPE_BOX
+  texture: "final_atlas/goButton"
   id: "restart_button"
   parent: "folder"
   inherit_alpha: true
@@ -61,6 +33,9 @@ nodes {
   position {
     x: 661.0
     y: 525.0
+  }
+  scale {
+    x: 1.473811
   }
   size {
     x: 200.0
@@ -78,6 +53,10 @@ nodes {
   size_mode: SIZE_MODE_AUTO
 }
 nodes {
+  position {
+    x: 660.0
+    y: 526.0
+  }
   scale {
     x: 3.14
     y: 3.14
@@ -88,10 +67,11 @@ nodes {
     y: 100.0
   }
   type: TYPE_TEXT
-  text: "you died"
+  text: "try again?\n"
+  ""
   font: "default"
   id: "text"
-  parent: "restart1"
+  parent: "folder"
   inherit_alpha: true
 }
 material: "/builtins/materials/gui.material"

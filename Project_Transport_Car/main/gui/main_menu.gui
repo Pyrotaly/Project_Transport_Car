@@ -2,17 +2,32 @@ fonts {
   name: "default"
   font: "/builtins/fonts/default.font"
 }
+textures {
+  name: "final_atlas"
+  texture: "/assets/atlases/final_atlas.atlas"
+}
 nodes {
   position {
     x: 640.0
     y: 360.0
   }
-  size {
-    x: 200.0
-    y: 100.0
+  type: TYPE_BOX
+  texture: "final_atlas/capsule2"
+  id: "box"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+}
+nodes {
+  position {
+    x: 532.0
+    y: 209.0
+  }
+  rotation {
+    z: 5.407
   }
   type: TYPE_BOX
-  id: "box"
+  texture: "final_atlas/goButton"
+  id: "box1"
   inherit_alpha: true
   size_mode: SIZE_MODE_AUTO
 }

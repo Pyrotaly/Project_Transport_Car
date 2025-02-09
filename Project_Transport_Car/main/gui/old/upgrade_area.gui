@@ -1,4 +1,4 @@
-script: "/main/_scripts/gui_scripts/upgrades.gui_script"
+script: "/main/_scripts/gui_scripts/old/upgrades.gui_script"
 fonts {
   name: "default"
   font: "/builtins/fonts/default.font"

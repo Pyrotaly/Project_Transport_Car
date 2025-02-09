@@ -1,0 +1,21 @@
+name: "2_combat_zone"
+instances {
+  id: "camera"
+  prototype: "/orthographic/camera.go"
+}
+collection_instances {
+  id: "road_background"
+  collection: "/main/collections/road_background.collection"
+  position {
+    z: -1.0
+  }
+}
+collection_instances {
+  id: "player"
+  collection: "/main/collections/player/player.collection"
+  position {
+    x: 1231.0
+    y: 375.0
+  }
+}
+scale_along_z: 0

@@ -1,0 +1,12 @@
+function init(self)
+	msg.post(".", "acquire_input_focus")
+	self.confirm_node = gui.get_node("confirm")
+end
+
+function on_input(self, action_id, action)
+	if action_id == hash("leftTrigger") and action.pressed then
+		if gui.pick_node(self.confirm_node, action.x, action.y) then
+			msg.post("0_game_managers:/game_manager_go#game_manager", "loadCombatZone")
+		end
+	end
+end

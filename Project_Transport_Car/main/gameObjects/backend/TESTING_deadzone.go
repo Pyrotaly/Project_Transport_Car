@@ -1,4 +1,4 @@
 components {
   id: "TESTING_deadzone"
-  component: "/main/gui/TESTING_deadzone.gui"
+  component: "/main/gui/old/TESTING_deadzone.gui"
 }

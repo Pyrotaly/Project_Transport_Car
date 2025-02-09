@@ -1,0 +1,121 @@
+images {
+  image: "/assets/images/finale/ammoIcon.png"
+}
+images {
+  image: "/assets/images/finale/background.png"
+}
+images {
+  image: "/assets/images/finale/capsule.png"
+}
+images {
+  image: "/assets/images/finale/capsule2.png"
+}
+images {
+  image: "/assets/images/finale/car_animation/car0000.png"
+}
+images {
+  image: "/assets/images/finale/car_animation/car0002.png"
+}
+images {
+  image: "/assets/images/finale/car_animation/car0004.png"
+}
+images {
+  image: "/assets/images/finale/cutscenes/cutscene map.png"
+}
+images {
+  image: "/assets/images/finale/enemies/enemy1.png"
+}
+images {
+  image: "/assets/images/finale/enemies/enemy2.png"
+}
+images {
+  image: "/assets/images/finale/flower_animation/flower0002.png"
+}
+images {
+  image: "/assets/images/finale/flower_animation/flower0005.png"
+}
+images {
+  image: "/assets/images/finale/flower_animation/flower0008.png"
+}
+images {
+  image: "/assets/images/finale/flower_animation/flower0011.png"
+}
+images {
+  image: "/assets/images/finale/flower_animation/flower0014.png"
+}
+images {
+  image: "/assets/images/finale/flower_animation/flower0017.png"
+}
+images {
+  image: "/assets/images/finale/flower_animation/flower0020.png"
+}
+images {
+  image: "/assets/images/finale/flower_animation/flower0023.png"
+}
+images {
+  image: "/assets/images/finale/flower_animation/flower0026.png"
+}
+images {
+  image: "/assets/images/finale/flower_animation/flower0029.png"
+}
+images {
+  image: "/assets/images/finale/flower_animation/flower0032.png"
+}
+images {
+  image: "/assets/images/finale/flower_animation/flower0035.png"
+}
+images {
+  image: "/assets/images/finale/gun_animation/gun10000.png"
+}
+images {
+  image: "/assets/images/finale/gun_animation/gun10002.png"
+}
+images {
+  image: "/assets/images/finale/gun_animation/gun10004.png"
+}
+images {
+  image: "/assets/images/finale/gun_animation/gun10006.png"
+}
+images {
+  image: "/assets/images/finale/gun_animation/gun10008.png"
+}
+images {
+  image: "/assets/images/finale/hand.png"
+}
+images {
+  image: "/assets/images/finale/shotgun.png"
+}
+images {
+  image: "/assets/images/finale/truck_animation/truck0000.png"
+}
+images {
+  image: "/assets/images/finale/truck_animation/truck0002.png"
+}
+images {
+  image: "/assets/images/finale/truck_animation/truck0004.png"
+}
+images {
+  image: "/assets/images/finale/truck_animation/truck0005.png"
+}
+images {
+  image: "/assets/images/finale/ui/gear.png"
+}
+images {
+  image: "/assets/images/finale/ui/healthIcon.png"
+}
+images {
+  image: "/assets/images/finale/upgrades/upgrade1.png"
+}
+images {
+  image: "/assets/images/finale/upgrades/upgrade2.png"
+}
+images {
+  image: "/assets/images/finale/upgrades/upgrade3.png"
+}
+images {
+  image: "/assets/images/finale/upgrades/upgradeBackground.png"
+}
+images {
+  image: "/assets/images/finale/goButton.png"
+}
+extrude_borders: 2

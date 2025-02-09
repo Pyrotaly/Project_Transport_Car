@@ -1,0 +1,60 @@
+local upgrades = require("main._scripts.modules.upgrades_module")
+
+function init(self)
+	msg.post(".", "acquire_input_focus")
+	gui.set_render_order(3)
+
+	self.toggleStoreButton = gui.get_node("toggle_store")
+	self.storeNodes = gui.get_node("store_folder")
+	self.mapButton = gui.get_node("next_area")
+	self.is_map_gui_loaded = false
+
+	gui.set_enabled(self.mapButton, false)
+	
+	self.upgrade_buttons = {
+		{ node = gui.get_node("car_speed"), upgrade_type = "max_speed", entity = "car" },
+		{ node = gui.get_node("car_health"), upgrade_type = "max_health", entity = "car" },
+		-- { node = gui.get_node("car_heal"), upgrade_type = "heal", entity = "car" },
+		{ node = gui.get_node("player_bigger_mag"), upgrade_type = "bigger_mag", entity = "player"},
+		{ node = gui.get_node("player_reduce_primary_spray"), upgrade_type = "reduce_spread", entity = "player"},
+		{ node = gui.get_node("player_damage"), upgrade_type = "damage", entity = "player" },
+		{ node = gui.get_node("player_missile"), upgrade_type = "missile", entity = "player" },
+		{ node = gui.get_node("player_backwards_shot"), upgrade_type = "shoot_back", entity = "player" },
+		{ node = gui.get_node("player_spray"), upgrade_type = "spray", entity = "player" }
+	}
+end
+
+function on_input(self, action_id, action)
+	if action_id == hash("leftTrigger") and action.pressed then
+		for _, button in ipairs(self.upgrade_buttons) do
+			if gui.pick_node(button.node, action.x, action.y) and gui.is_enabled(self.storeNodes) then
+				upgrades.buy_upgrade(button.entity, button.upgrade_type)
+			end
+		end
+
+		if gui.pick_node(self.toggleStoreButton, action.x, action.y) and gui.is_enabled(self.toggleStoreButton) then
+			local is_enabled = gui.is_enabled(self.storeNodes)
+			gui.set_enabled(self.storeNodes, not is_enabled)
+			gui.set_enabled(self.mapButton, is_enabled)
+		end
+
+		if gui.pick_node(self.mapButton, action.x, action.y) and gui.is_enabled(self.mapButton) then
+			if self.is_map_gui_loaded then
+				msg.post("0_game_managers:/proxy_loader#level_loader_manager", "unloadGUI", { guiNumber = 1 })
+				gui.set_enabled(self.toggleStoreButton, true)
+			else
+				msg.post("0_game_managers:/proxy_loader#level_loader_manager", "loadGUI", { guiNumber = 1 })
+				gui.set_enabled(self.toggleStoreButton, false)
+			end
+			
+			-- Toggle state
+			self.is_map_gui_loaded = not self.is_map_gui_loaded
+		end
+	end
+end
+
+function on_reload(self)
+	-- Add reload-handling code here
+	-- Learn more: https://defold.com/manuals/hot-reload/
+	-- Remove this function if not needed
+end

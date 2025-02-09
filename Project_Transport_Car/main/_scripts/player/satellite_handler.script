@@ -5,7 +5,7 @@ local CAMERA_ID = hash("/camera")
 local SOUND_ID = hash("")
 
 local orbitCenter
-local orbitRadius = 70
+local orbitRadius = 20
 local additionalRotation = math.pi  -- 90 degrees in radians
 local world = vmath.vector3(0, 0, 1)
 
