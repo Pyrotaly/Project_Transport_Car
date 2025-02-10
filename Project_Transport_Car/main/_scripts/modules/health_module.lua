@@ -5,6 +5,8 @@
 -- health_manager.lua
 local M = {}
 
+local camera = require "orthographic.camera"
+
 local pers_data = require("main._scripts.modules.persistant_data_module")
 local playerUpgrade = require("main._scripts.modules.upgrades_module")
 local enemyScaling = require("main._scripts.modules.enemy_scaling_module")
@@ -49,6 +51,7 @@ function M.on_damage(entity, damage)
 	-- Set different time-steps based on the entity type
 	if entity.health_type == hash("player") then
 		msg.post("0_game_managers:/proxy_loader#proxy_level_2", "set_time_step", { factor = 0.7, mode = 1 })
+		camera.shake(hash("/camera"), 0.009, 0.1, hash("both"))
 		
 		timer.delay(0.25, false, function()
 			msg.post("2_combat_zone:/2_gui_player_menu/go#main_game", "updateHealth", { healthAdjust = damage })
@@ -61,19 +64,24 @@ end
 
 -- Event triggered when the entity dies
 function M.on_death(entity, damage)
-
+	particlefx.play(entity.explosionPfx)
+	sound.play(entity.explosionSound, { delay = 0, gain = 0.5, pan = 0, speed = 1 })
 	if entity.health_type == hash("player") then
+		msg.post("0_game_managers:/proxy_loader#proxy_level_2", "set_time_step", { factor = 1, mode = 1 })
 		msg.post("2_combat_zone:/2_gui_player_menu/go#main_game", "updateHealth", { healthAdjust = damage })
-		msg.post("0_game_managers:/proxy_loader#proxy_level_2", "playerDied")
-		go.delete()
+		msg.post("2_combat_zone:/game_over_ui#restart_menu", "playerDied")
+		
 	else
 		msg.post("2_combat_zone:/game_over_ui#restart_menu", "finishCombatZone")
 		if entity.health_type == hash("enemy") then
 			pers_data.adjust_currency(98)
 		end
 		
-		go.delete()
 	end
+
+	timer.delay(0.2, false, function()
+		go.delete(entity.id)  -- Ensure you're deleting the correct entity
+	end)
 end
 
 return M

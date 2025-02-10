@@ -46,6 +46,7 @@ function on_input(self, action_id, action)
 				gui.set_enabled(self.continue_button, true)
 				local text = gui.get_node("scrap_amount_text")
 				gui.set_text(text, tostring(99)) -- Update text as needed
+				sound.play("/go#store_toggle", { delay = 0, gain = 0.5, pan = 0, speed = 1 })
 			end
 		end
 	end
@@ -53,6 +54,7 @@ function on_input(self, action_id, action)
 	if action_id == hash("leftTrigger") and action.pressed then
 		if gui.pick_node(self.continue_button, action.x, action.y) and gui.is_enabled(self.continue_button) then
 			msg.post("0_game_managers:/game_manager_go#fader_gui", "blackFadeOut", { next_scene = "loadCombatZone" })
+			
 		end
 	end
 end

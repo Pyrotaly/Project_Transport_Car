@@ -6,5 +6,9 @@ embedded_instances {
   "  id: \"finale_upgrades\"\n"
   "  component: \"/main/gui/finale_upgrades.gui\"\n"
   "}\n"
+  "components {\n"
+  "  id: \"store_toggle\"\n"
+  "  component: \"/assets/soundFX/4_zone/store_toggle.ogg\"\n"
+  "}\n"
   ""
 }

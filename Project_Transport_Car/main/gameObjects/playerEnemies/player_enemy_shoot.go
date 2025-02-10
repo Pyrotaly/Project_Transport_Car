@@ -64,6 +64,21 @@ components {
   id: "truck_ai"
   component: "/main/_scripts/car_ai/truck_ai.script"
 }
+components {
+  id: "enemy_explosion"
+  component: "/assets/soundFX/1_zone/enemy_explosion.wav"
+}
+components {
+  id: "bombExplosion"
+  component: "/main/particleFX/bombExplosion.particlefx"
+  position {
+    x: 192.0
+  }
+}
+components {
+  id: "car_collision"
+  component: "/assets/soundFX/Audio/car/car_collision.wav"
+}
 embedded_components {
   id: "sprite"
   type: "sprite"
