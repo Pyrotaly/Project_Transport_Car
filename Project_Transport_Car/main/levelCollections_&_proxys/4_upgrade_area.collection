@@ -10,5 +10,9 @@ embedded_instances {
   "  id: \"store_toggle\"\n"
   "  component: \"/assets/soundFX/4_zone/store_toggle.ogg\"\n"
   "}\n"
+  "components {\n"
+  "  id: \"ui_1\"\n"
+  "  component: \"/assets/soundFX/16 bit/ui_1.wav\"\n"
+  "}\n"
   ""
 }

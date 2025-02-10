@@ -15,7 +15,7 @@ local screenToWorld = vmath.vector3(0, 0, 0)
 local currentGun = "1"
 
 local items = {
-	gun1 = { damage = 10, speed = 5000, name = "Blaster", life = 0.4, shakeIntensity = 0.003, gunCooldown = 0.075, maxMagSize = 30 + upgrades.get_upgrade_value("player", "bigger_mag"), curMagSize = 30 },
+	gun1 = { damage = 50, speed = 5000, name = "Blaster", life = 0.4, shakeIntensity = 0.003, gunCooldown = 0.075, maxMagSize = 30 + upgrades.get_upgrade_value("player", "bigger_mag"), curMagSize = 30 },
 	gun2 = { damage = 35, speed = 2.0, name = "Pistol", life = 0.4, shakeIntensity = 0.005, gunCooldown = 0.05, maxMagSize = 50 + upgrades.get_upgrade_value("player", "bigger_mag"), curMagSize = 50 },
 	gun3 = { damage = 75, speed = 1.0, name = "Rocket Launcher", life = 0.4, shakeIntensity = 0.005, gunCooldown = 0.2, maxMagSize = 50 + upgrades.get_upgrade_value("player", "bigger_mag"), curMagSize = 50}
 }
@@ -45,7 +45,7 @@ local function fire_missile(self, position, rotation)
 	factory.create("factories#missile", missile_position, missile_rotation, {
 		speed = 2000,
 		life = 5,
-		damage = totalDamage,
+		damage = 3000,
 		mask = hash("enemy")
 	}, 2)
 end
@@ -58,7 +58,7 @@ local function spawn_extra_projectile(position, rotation)
 		factory.create("factories#bullet_" .. currentGun, position, new_rotation, {
 			speed = items["gun" .. currentGun].speed,
 			life = items["gun" .. currentGun].life,
-			bulletDamage = 50,
+			bulletDamage = 30,
 			mask = hash("enemy")
 		}, 1)
 	end

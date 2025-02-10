@@ -46,7 +46,8 @@ local function shoot(self)
 	local player_position = go.get_position(self.target)
 	local direction = player_position - thisPos
 	local base_angle = math.atan2(direction.y, direction.x)
-
+	
+	sound.play("#projecty_audio", { delay = 0, gain = 0.5, pan = 0, speed = 1 })
 	-- Fire bullets for shotgun evenly in a cone
 	if self.shootingMode == hash("shotgun") then
 		local spread = shooting_mode.spread
@@ -79,6 +80,7 @@ function init(self)
 	-- self.shootingMode = "default" -- Adjust this to match your shooting mode setup
 	self.timer = 0 -- Timer to track the behavior switching
 	self.state_duration = 3 -- Duration for both shooting and pausing (in seconds)
+	
 end
 
 -- ---------------------------------------------------------

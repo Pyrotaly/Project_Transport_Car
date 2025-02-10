@@ -26,7 +26,6 @@ function init(self)
 	self.last_dir_x = 0
 
 	particlefx.play("particleFX1#smoke2")
-	-- particlefx.play("particleFX#tire_marks")
 	msg.post("#sprite", "play_animation", { id = hash("flower_idle") })
 	msg.post("player#car", "play_animation", { id = hash("car") })
 	

@@ -51,10 +51,23 @@ function on_input(self, action_id, action)
 		end
 	end
 
+
+	local is_hovering_now = gui.pick_node(self.continue_button, action.x, action.y)
+
+	-- If the hover state changes, update the blend mode
+	if is_hovering_now and not self.is_hovering then
+		gui.set_blend_mode(self.continue_button, gui.BLEND_ADD)
+	elseif not is_hovering_now and self.is_hovering then
+		gui.set_blend_mode(self.continue_button, gui.BLEND_ALPHA)
+	end
+
+	-- Update hover state
+	self.is_hovering = is_hovering_now
+	
 	if action_id == hash("leftTrigger") and action.pressed then
 		if gui.pick_node(self.continue_button, action.x, action.y) and gui.is_enabled(self.continue_button) then
 			msg.post("0_game_managers:/game_manager_go#fader_gui", "blackFadeOut", { next_scene = "loadCombatZone" })
-			
+			sound.play("/go#ui_1", { delay = 0, gain = 0.5, pan = 0, speed = 2 })
 		end
 	end
 end

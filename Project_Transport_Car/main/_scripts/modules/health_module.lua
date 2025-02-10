@@ -47,7 +47,8 @@ end
 -- Event triggered when the entity takes damage
 function M.on_damage(entity, damage)
 	-- Add your own damage logic or animations here
-
+	
+	sound.play(entity.onHit, { delay = 0, gain = 2, pan = 0, speed = 1 })
 	-- Set different time-steps based on the entity type
 	if entity.health_type == hash("player") then
 		msg.post("0_game_managers:/proxy_loader#proxy_level_2", "set_time_step", { factor = 0.7, mode = 1 })
@@ -65,7 +66,7 @@ end
 -- Event triggered when the entity dies
 function M.on_death(entity, damage)
 	particlefx.play(entity.explosionPfx)
-	sound.play(entity.explosionSound, { delay = 0, gain = 0.5, pan = 0, speed = 1 })
+	sound.play(entity.explosionSound, { delay = 0, gain = 1, pan = 0, speed = 1 })
 	if entity.health_type == hash("player") then
 		msg.post("0_game_managers:/proxy_loader#proxy_level_2", "set_time_step", { factor = 1, mode = 1 })
 		msg.post("2_combat_zone:/2_gui_player_menu/go#main_game", "updateHealth", { healthAdjust = damage })

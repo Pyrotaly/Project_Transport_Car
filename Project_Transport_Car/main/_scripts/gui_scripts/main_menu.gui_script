@@ -1,13 +1,27 @@
 function init(self)
 	msg.post(".", "acquire_input_focus")
 	self.confirm_node = gui.get_node("confirm")
+	self.is_hovering = false -- Track hover state
 end
 
 function on_input(self, action_id, action)
-	if action_id == hash("leftTrigger") and action.pressed then
-		if gui.pick_node(self.confirm_node, action.x, action.y) then
-			-- Step 1: Fade to black before loading
-			msg.post("0_game_managers:/game_manager_go#fader_gui", "blackFadeOut", { next_scene = "loadUpgradeZone" })
-		end
+	local is_hovering_now = gui.pick_node(self.confirm_node, action.x, action.y)
+
+	-- If the hover state changes, update the blend mode
+	if is_hovering_now and not self.is_hovering then
+		gui.set_blend_mode(self.confirm_node, gui.BLEND_ADD)
+	elseif not is_hovering_now and self.is_hovering then
+		gui.set_blend_mode(self.confirm_node, gui.BLEND_ALPHA)
+	end
+
+	-- Update hover state
+	self.is_hovering = is_hovering_now
+
+	-- Handle click event
+	if action_id == hash("leftTrigger") and action.pressed and is_hovering_now then
+		-- Step 1: Fade to black before loading
+		
+		sound.play("/go#ui_1", { delay = 0, gain = 0.5, pan = 0, speed = 2 })
+		msg.post("0_game_managers:/game_manager_go#fader_gui", "blackFadeOut", { next_scene = "loadUpgradeZone" })
 	end
 end

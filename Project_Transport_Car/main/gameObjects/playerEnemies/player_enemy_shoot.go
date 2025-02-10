@@ -79,6 +79,14 @@ components {
   id: "car_collision"
   component: "/assets/soundFX/Audio/car/car_collision.wav"
 }
+components {
+  id: "projecty_audio"
+  component: "/assets/soundFX/Audio/gun_shot/projecty_audio.wav"
+}
+components {
+  id: "car_collision1"
+  component: "/assets/soundFX/Audio/car/car_collision.wav"
+}
 embedded_components {
   id: "sprite"
   type: "sprite"
