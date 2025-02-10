@@ -17,7 +17,6 @@ function on_message(self, message_id, message, sender)
 		
 		msg.post("/proxy_loader#level_loader_manager", "loadLevel", { newLevel = 4 })
 
-		-- Step 2: Tell fader GUI to fade back in once the scene is loaded
 		timer.delay(0.5, false, function()
 			msg.post("0_game_managers:/game_manager_go#fader_gui", "blackFadeIn")
 		end)
@@ -25,23 +24,14 @@ function on_message(self, message_id, message, sender)
 	
 	if message_id == hash("loadCombatZone") then
 		msg.post("/proxy_loader#level_loader_manager", "loadLevel", { newLevel = 2 })
-		msg.post("/proxy_loader#level_loader_manager", "loadGUI", { guiNumber = 2 })
 
 		timer.delay(0.5, false, function()
 			msg.post("0_game_managers:/game_manager_go#fader_gui", "blackFadeIn")
 		end)
 	end
 
-	if message_id == hash("finishCombatZone") then
-		-- TODO : do some better transitoins
-		msg.post("/proxy_loader#level_loader_manager", "loadLevel", { newLevel = 4 })
-		msg.post("/proxy_loader#level_loader_manager", "loadGUI", { guiNumber = 4 })
-	end
-
-	if message_id == hash("gameOver") then
-		print("gameOver")
-		msg.post("/proxy_loader#level_loader_manager", "loadLevel", { newLevel = 4 })
-		msg.post("/proxy_loader#level_loader_manager", "loadGUI", { guiNumber = 4 })
+	if message_id == hash("Victory") then
+		msg.post("/proxy_loader#level_loader_manager", "loadLevel", { newLevel = 5 })
 	end
 end
 

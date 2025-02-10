@@ -4,6 +4,8 @@ function init(self)
 	self.pistol_nodes = gui.get_node("bullets")
 	self.shotgun_nodes = gui.get_node("bullets1")
 	gui.set_enabled(self.shotgun_nodes, false)
+
+	print(msg.url())
 end
 
 function on_message(self, message_id, message, sender)
@@ -12,6 +14,13 @@ function on_message(self, message_id, message, sender)
 		local text = gui.get_node("scrap_amount_text")
 		gui.set_text(text, tostring(message.newCurrencyTotal))
 	end	
+
+	if message_id == hash("updateHealth") then
+		-- TODO : I think it is more efficient to have the node as self variable instead of instiating a new variable
+		local health_text = gui.get_node("player_health_text")
+		local cur_health = gui.get_text(health_text)
+		gui.set_text(health_text, tostring(cur_health - message.healthAdjust))
+	end
 	
 	if message_id == hash("updateBullet") then
 		-- TODO : I think it is more efficient to have the node as self variable instead of instiating a new variable

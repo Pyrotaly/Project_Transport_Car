@@ -25,8 +25,11 @@ function init(self)
 	self.speed_x = 0 
 	self.last_dir_x = 0
 
-	particlefx.play("particleFX#smoke2")
+	particlefx.play("particleFX1#smoke2")
 	-- particlefx.play("particleFX#tire_marks")
+	msg.post("#sprite", "play_animation", { id = hash("flower_idle") })
+	msg.post("player#car", "play_animation", { id = hash("car") })
+	
 end
 
 function final(self)
@@ -41,10 +44,10 @@ function update(self, dt)
 	elseif pos.x > 2518.0 + 1000 then
 		pos.x = 2518.0 + 1000
 	end
-	if pos.y < 200 then
-		pos.y = 200
-	elseif pos.y > 850 then
-		pos.y = 850
+	if pos.y < 300 then
+		pos.y = 300
+	elseif pos.y > 900 then
+		pos.y = 900
 	end
 	go.set_position(pos)
 end

@@ -21,7 +21,7 @@ nodes {
 nodes {
   position {
     x: 394.0
-    y: 595.0
+    y: 485.0
   }
   type: TYPE_BOX
   texture: "final_atlas/upgrade1"
@@ -68,7 +68,7 @@ nodes {
 nodes {
   position {
     x: 502.0
-    y: 441.0
+    y: 317.0
   }
   type: TYPE_BOX
   texture: "final_atlas/upgrade2"
@@ -110,55 +110,6 @@ nodes {
   font: "default"
   id: "upgrade_1_cost1"
   parent: "player_missile"
-  inherit_alpha: true
-}
-nodes {
-  position {
-    x: 392.0
-    y: 211.0
-  }
-  type: TYPE_BOX
-  texture: "final_atlas/upgrade3"
-  id: "player_shotgun"
-  inherit_alpha: true
-  size_mode: SIZE_MODE_AUTO
-}
-nodes {
-  position {
-    x: 509.0
-    y: 9.0
-  }
-  type: TYPE_BOX
-  texture: "final_atlas/gear"
-  id: "box5"
-  parent: "player_shotgun"
-  inherit_alpha: true
-  size_mode: SIZE_MODE_AUTO
-}
-nodes {
-  position {
-    x: 383.6842
-    y: 6.0
-  }
-  scale {
-    x: 4.8
-    y: 4.8
-    z: 4.8
-  }
-  size {
-    x: 200.0
-    y: 100.0
-  }
-  color {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-  }
-  type: TYPE_TEXT
-  text: "100"
-  font: "default"
-  id: "upgrade_1_cost2"
-  parent: "player_shotgun"
   inherit_alpha: true
 }
 nodes {

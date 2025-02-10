@@ -48,15 +48,11 @@ function M.on_damage(entity, damage)
 
 	-- Set different time-steps based on the entity type
 	if entity.health_type == hash("player") then
+		msg.post("0_game_managers:/proxy_loader#proxy_level_2", "set_time_step", { factor = 0.7, mode = 1 })
+		
 		timer.delay(0.25, false, function()
-			print(damage)
-			msg.post("gui_player_menu:/go#main_game", "updateHealth", { healthAdjust = damage })
+			msg.post("2_combat_zone:/2_gui_player_menu/go#main_game", "updateHealth", { healthAdjust = damage })
 
-			-- TODO : make the set time step update to loaded proxy so
-			msg.post("0_game_managers:/proxy_loader#proxy_level_2", "set_time_step", {factor = 1, mode = 1})
-		end)
-	else
-		timer.delay(0.005, false, function()
 			-- TODO : make the set time step update to loaded proxy so
 			msg.post("0_game_managers:/proxy_loader#proxy_level_2", "set_time_step", {factor = 1, mode = 1})
 		end)
@@ -65,31 +61,18 @@ end
 
 -- Event triggered when the entity dies
 function M.on_death(entity, damage)
-	print("has died!")
-	-- Add your own death logic here, like playing an animation or removing the entity
 
-	-- Set different time-steps based on the entity type
 	if entity.health_type == hash("player") then
-		timer.delay(0.025, false, function()
-			-- TODO : make the set time step update to loaded proxy so
-			msg.post("0_game_managers:/proxy_loader#proxy_level_2", "set_time_step", {factor = 1, mode = 1})
-			msg.post("gui_player_menu:/go#main_game", "updateHealth", { healthAdjust = damage })
-			-- TODO: game over screen
-			msg.post("0_game_managers:/proxy_loader#proxy_level_2", "set_time_step", {factor = 0, mode = 1})
-			msg.post("2_combat_zone:/game_over_ui#restart_menu", "playerDied")
-			go.delete()
-		end)
+		msg.post("2_combat_zone:/2_gui_player_menu/go#main_game", "updateHealth", { healthAdjust = damage })
+		msg.post("0_game_managers:/proxy_loader#proxy_level_2", "playerDied")
+		go.delete()
 	else
-		timer.delay(0.005, false, function()
-			-- TODO : make the set time step update to loaded proxy so
-			msg.post("0_game_managers:/proxy_loader#proxy_level_2", "set_time_step", {factor = 1, mode = 1})
-
-			if entity.health_type == hash("enemy") then
-				pers_data.adjust_currency(98)
-			end
-
-			go.delete()
-		end)
+		msg.post("2_combat_zone:/game_over_ui#restart_menu", "finishCombatZone")
+		if entity.health_type == hash("enemy") then
+			pers_data.adjust_currency(98)
+		end
+		
+		go.delete()
 	end
 end
 

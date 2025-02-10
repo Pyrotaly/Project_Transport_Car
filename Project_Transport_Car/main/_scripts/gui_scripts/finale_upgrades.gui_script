@@ -7,7 +7,6 @@ function init(self)
 	
 	self.upgrade_buttons = {
 		{ node = gui.get_node("player_missile"), upgrade_type = "missile", entity = "player" , bought = false},
-		{ node = gui.get_node("player_shotgun"), upgrade_type = "shotgun", entity = "player" },
 		{ node = gui.get_node("player_spray"), upgrade_type = "spray", entity = "player" }
 	}
 

@@ -37,6 +37,19 @@ instances {
     x: 1367.0
     y: 637.0
   }
+  component_properties {
+    id: "enemy_shoot"
+    properties {
+      id: "bulletDamage"
+      value: "20.0"
+      type: PROPERTY_TYPE_NUMBER
+    }
+  }
+  scale3 {
+    x: 1.66
+    y: 1.66
+    z: 1.66
+  }
 }
 collection_instances {
   id: "road_background"
@@ -58,6 +71,10 @@ collection_instances {
     y: 576.0
   }
 }
+collection_instances {
+  id: "2_gui_player_menu"
+  collection: "/main/levelCollections_&_proxys/gui_collections/2_gui_player_menu.collection"
+}
 scale_along_z: 0
 embedded_instances {
   id: "game_over_ui"
@@ -66,4 +83,7 @@ embedded_instances {
   "  component: \"/main/gui/restart_menu.gui\"\n"
   "}\n"
   ""
+  position {
+    z: 1.0
+  }
 }

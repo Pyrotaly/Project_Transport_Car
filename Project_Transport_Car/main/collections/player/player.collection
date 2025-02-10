@@ -7,6 +7,7 @@ scale_along_z: 0
 embedded_instances {
   id: "player"
   children: "particleFX"
+  children: "particleFX1"
   data: "components {\n"
   "  id: \"player_controller\"\n"
   "  component: \"/main/_scripts/player/player_controller.script\"\n"
@@ -31,7 +32,7 @@ embedded_instances {
   "embedded_components {\n"
   "  id: \"sprite\"\n"
   "  type: \"sprite\"\n"
-  "  data: \"default_animation: \\\"flower0011\\\"\\n"
+  "  data: \"default_animation: \\\"flower_idle\\\"\\n"
   "material: \\\"/assets/shader/sprite_1.material\\\"\\n"
   "textures {\\n"
   "  sampler: \\\"texture_sampler\\\"\\n"
@@ -65,6 +66,25 @@ embedded_instances {
   "}\\n"
   "\"\n"
   "}\n"
+  "embedded_components {\n"
+  "  id: \"car\"\n"
+  "  type: \"sprite\"\n"
+  "  data: \"default_animation: \\\"car\\\"\\n"
+  "material: \\\"/builtins/materials/sprite.material\\\"\\n"
+  "textures {\\n"
+  "  sampler: \\\"texture_sampler\\\"\\n"
+  "  texture: \\\"/assets/atlases/final_atlas.atlas\\\"\\n"
+  "}\\n"
+  "\"\n"
+  "  position {\n"
+  "    y: -128.0\n"
+  "  }\n"
+  "  scale {\n"
+  "    x: 0.48\n"
+  "    y: 0.48\n"
+  "    z: 0.48\n"
+  "  }\n"
+  "}\n"
   ""
 }
 embedded_instances {
@@ -84,7 +104,7 @@ embedded_instances {
   data: "embedded_components {\n"
   "  id: \"sprite\"\n"
   "  type: \"sprite\"\n"
-  "  data: \"default_animation: \\\"gun10000\\\"\\n"
+  "  data: \"default_animation: \\\"gun_1\\\"\\n"
   "material: \\\"/builtins/materials/sprite.material\\\"\\n"
   "textures {\\n"
   "  sampler: \\\"texture_sampler\\\"\\n"
@@ -113,16 +133,25 @@ embedded_instances {
   "  id: \"bullet_casing\"\n"
   "  component: \"/main/particleFX/bullet_casing.particlefx\"\n"
   "}\n"
-  "components {\n"
+  ""
+}
+embedded_instances {
+  id: "particleFX1"
+  data: "components {\n"
   "  id: \"smoke2\"\n"
   "  component: \"/main/particleFX/smoke2.particlefx\"\n"
   "  position {\n"
   "    z: 1.0\n"
   "  }\n"
   "}\n"
-  "components {\n"
-  "  id: \"tire_marks\"\n"
-  "  component: \"/main/particleFX/tire_marks.particlefx\"\n"
-  "}\n"
   ""
+  position {
+    x: -42.0
+    y: -144.0
+  }
+  scale3 {
+    x: 0.52
+    y: 0.52
+    z: 0.52
+  }
 }

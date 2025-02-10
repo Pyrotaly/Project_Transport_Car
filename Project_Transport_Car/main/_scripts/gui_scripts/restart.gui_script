@@ -1,10 +1,26 @@
+local perData = require("main._scripts.modules.persistant_data_module")
+
 function init(self)
+	msg.post(".", "acquire_input_focus")
+	
+	self.restart_node = gui.get_node("restart_button")
 	self.ui = gui.get_node("folder")
 	gui.set_enabled(self.ui, false)
+	print(msg.url())
 end
 
 function on_message(self, message_id, message, sender)
-	if message_id == ("playerDied") then
+	if message_id == hash("playerDied") then
+		print("hey")
+		gui.set_enabled(self.ui, true)
+	end
+end
 
+function on_input(self, action_id, action)
+	if action_id == hash("leftTrigger") and action.pressed then
+		if gui.pick_node(self.restart_node, action.x, action.y) and gui.is_enabled(self.ui) then
+			msg.post("0_game_managers:/game_manager_go#fader_gui", "blackFadeOut", { next_scene = "loadUpgradeZone" })
+			perData.adjust_currency(100)
+		end
 	end
 end
