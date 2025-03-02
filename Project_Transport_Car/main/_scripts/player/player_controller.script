@@ -13,8 +13,6 @@ local function apply_upgrade()
 end
 
 function init(self)
-	camera.follow(CAMERA_ID, "/player/player", {lerp=0.3})
-	camera.deadzone(CAMERA_ID, 400.0, 300.0, 400.0, 300.0)
 	msg.post(".", "acquire_input_focus")
 
 	self.curQuad = 0
@@ -27,9 +25,10 @@ function init(self)
 	self.speed_x = 0 
 	self.last_dir_x = 0
 
-	particlefx.play("particleFX#smoke2")
-	-- particlefx.play("particleFX#tire_marks")
-	msg.post("0_game_managers:/game_manager_go#fader_gui", "blackFadeIn")
+	particlefx.play("particleFX1#smoke2")
+	msg.post("#sprite", "play_animation", { id = hash("flower_idle") })
+	msg.post("player#car", "play_animation", { id = hash("car") })
+	
 end
 
 function final(self)
@@ -38,17 +37,16 @@ end
 
 function update(self, dt)
 	local pos = go.get_position()
-	local width = window.get_size() + 1750
-	local height = window.get_size() - 200
-	if pos.x < 200 then
-		pos.x = 200
-	elseif pos.x > width then
-		pos.x = width
+
+	if pos.x < 1500 then
+		pos.x = 1500
+	elseif pos.x > 2518.0 + 1000 then
+		pos.x = 2518.0 + 1000
 	end
-	if pos.y < 0 then
-		pos.y = 0
-	elseif pos.y > height then
-		pos.y = height
+	if pos.y < 300 then
+		pos.y = 300
+	elseif pos.y > 900 then
+		pos.y = 900
 	end
 	go.set_position(pos)
 end

@@ -1,15 +1,22 @@
+function init(self)
+	gui.set_render_order(1)
+end
+
 function on_message(self, message_id, message, sender)
 	local black_node = gui.get_node("black_fader")
 
 	if message_id == hash("blackFadeOut") then
 		gui.set_color(black_node, vmath.vector4(0, 0, 0, 0)) -- Start transparent
-		gui.animate(black_node, gui.PROP_COLOR, vmath.vector4(0, 0, 0, 1), gui.EASING_LINEAR, 0.5, function()
-			msg.post(sender, "blackFadeOutComplete")
+		gui.animate(black_node, gui.PROP_COLOR, vmath.vector4(0, 0, 0, 1), gui.EASING_LINEAR, 0.25, 0, function()
+			-- Step 2: Load the next scene after fading to black
+			if message.next_scene then
+				msg.post("0_game_managers:/game_manager_go#game_manager", message.next_scene)
+			end
 		end)
 	end
 
 	if message_id == hash("blackFadeIn") then
 		gui.set_color(black_node, vmath.vector4(0, 0, 0, 1)) -- Start black
-		gui.animate(black_node, gui.PROP_COLOR, vmath.vector4(0, 0, 0, 0), gui.EASING_LINEAR, 0.5)
+		gui.animate(black_node, gui.PROP_COLOR, vmath.vector4(0, 0, 0, 0), gui.EASING_LINEAR, 0.25)
 	end
 end

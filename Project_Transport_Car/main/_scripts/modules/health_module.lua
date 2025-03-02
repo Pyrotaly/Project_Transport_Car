@@ -5,6 +5,8 @@
 -- health_manager.lua
 local M = {}
 
+local camera = require "orthographic.camera"
+
 local pers_data = require("main._scripts.modules.persistant_data_module")
 local playerUpgrade = require("main._scripts.modules.upgrades_module")
 local enemyScaling = require("main._scripts.modules.enemy_scaling_module")
@@ -45,52 +47,42 @@ end
 -- Event triggered when the entity takes damage
 function M.on_damage(entity, damage)
 	-- Add your own damage logic or animations here
-
+	
+	sound.play(entity.onHit, { delay = 0, gain = 2, pan = 0, speed = 1 })
 	-- Set different time-steps based on the entity type
 	if entity.health_type == hash("player") then
+		msg.post("0_game_managers:/proxy_loader#proxy_level_2", "set_time_step", { factor = 0.7, mode = 1 })
+		camera.shake(hash("/camera"), 0.009, 0.1, hash("both"))
+		
 		timer.delay(0.25, false, function()
-			print(damage)
-			msg.post("gui_player_menu:/go#main_game", "updateHealth", { healthAdjust = damage })
+			msg.post("2_combat_zone:/2_gui_player_menu/go#main_game", "updateHealth", { healthAdjust = damage })
 
 			-- TODO : make the set time step update to loaded proxy so
-			msg.post("0_game_managers:/proxy_loader#proxy_level_1", "set_time_step", {factor = 1, mode = 1})
-		end)
-	else
-		timer.delay(0.005, false, function()
-			-- TODO : make the set time step update to loaded proxy so
-			msg.post("0_game_managers:/proxy_loader#proxy_level_4", "set_time_step", {factor = 1, mode = 1})
+			msg.post("0_game_managers:/proxy_loader#proxy_level_2", "set_time_step", {factor = 1, mode = 1})
 		end)
 	end
 end
 
 -- Event triggered when the entity dies
 function M.on_death(entity, damage)
-	print("has died!")
-	-- Add your own death logic here, like playing an animation or removing the entity
-
-	-- Set different time-steps based on the entity type
+	particlefx.play(entity.explosionPfx)
+	sound.play(entity.explosionSound, { delay = 0, gain = 1, pan = 0, speed = 1 })
 	if entity.health_type == hash("player") then
-		timer.delay(0.025, false, function()
-			-- TODO : make the set time step update to loaded proxy so
-			msg.post("0_game_managers:/proxy_loader#proxy_level_1", "set_time_step", {factor = 1, mode = 1})
-			msg.post("gui_player_menu:/go#main_game", "updateHealth", { healthAdjust = damage })
-			-- TODO: game over screen
-			msg.post("0_game_managers:/proxy_loader#proxy_level_1", "set_time_step", {factor = 0, mode = 1})
-			msg.post("0_game_managers:/game_manager_go#game_manager", "gameOver")
-			go.delete()
-		end)
+		msg.post("0_game_managers:/proxy_loader#proxy_level_2", "set_time_step", { factor = 1, mode = 1 })
+		msg.post("2_combat_zone:/2_gui_player_menu/go#main_game", "updateHealth", { healthAdjust = damage })
+		msg.post("2_combat_zone:/game_over_ui#restart_menu", "playerDied")
+		
 	else
-		timer.delay(0.005, false, function()
-			-- TODO : make the set time step update to loaded proxy so
-			msg.post("0_game_managers:/proxy_loader#proxy_level_4", "set_time_step", {factor = 1, mode = 1})
-
-			if entity.health_type == hash("enemy") then
-				pers_data.adjust_currency(40)
-			end
-
-			go.delete()
-		end)
+		msg.post("2_combat_zone:/game_over_ui#restart_menu", "finishCombatZone")
+		if entity.health_type == hash("enemy") then
+			pers_data.adjust_currency(98)
+		end
+		
 	end
+
+	timer.delay(0.2, false, function()
+		go.delete(entity.id)  -- Ensure you're deleting the correct entity
+	end)
 end
 
 return M

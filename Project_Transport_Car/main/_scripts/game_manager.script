@@ -1,11 +1,6 @@
 function init(self)
-	msg.post("/proxy_loader#level_loader_manager", "loadLevel", { newLevel = 4 })
-	msg.post("/proxy_loader#level_loader_manager", "loadGUI", { guiNumber = 4 })
-	msg.post("/proxy_loader#level_loader_manager", "loadGUI", { guiNumber = 2 })
-
-	-- TODO : Delete later for testing done
-	msg.post(".", "loadCombatZone", {newLevel = 1, newCoords = { 1, 1}, lastCoords = { 5, 5 }} )
-	msg.post("proxy_loader#proxy_level_1", "set_time_step", {factor = 1, mode = 1})
+	msg.post("0_game_managers:/game_manager_go#fader_gui", "blackFadeIn")
+	msg.post("/proxy_loader#level_loader_manager", "loadLevel", { newLevel = 1 })
 end
 
 function fixed_update(self, dt)
@@ -13,39 +8,30 @@ function fixed_update(self, dt)
 end
 
 function on_message(self, message_id, message, sender)
-	if message_id == hash("loadCombatZone") then
+	if message_id == hash("loadCutScene") then
+		msg.post("0_game_managers:/game_manager_go#fader_gui", "blackFadeIn")
+		msg.post("/proxy_loader#level_loader_manager", "loadLevel", { newLevel = 5 })
+	end
 
-		local newCoords = message.newCoords
-		local lastCoords = message.lastCoords
-
-		-- Ensure lastCoords is valid before calculating distance
-		local distance = 0
-		if lastCoords and lastCoords.x and lastCoords.y then
-			local dx = newCoords.x - lastCoords.x
-			local dy = newCoords.y - lastCoords.y
-			distance = math.ceil(math.sqrt(dx * dx + dy * dy))  -- Round up to nearest whole number
-		end
+	if message_id == hash("loadUpgradeZone") then
 		
-		-- Send messages to load the new level
-		msg.post("/proxy_loader#level_loader_manager", "loadLevel", { newLevel = message.newLevel })
+		msg.post("/proxy_loader#level_loader_manager", "loadLevel", { newLevel = 4 })
 
-		-- have to wait for it to load... this is not ideal but yea
-		timer.delay(3, false, function()
-			msg.post("gui_player_menu:/go#main_game", "startTimer", { time = 300 }) -- TODO : set this up
+		timer.delay(0.5, false, function()
+			msg.post("0_game_managers:/game_manager_go#fader_gui", "blackFadeIn")
+		end)
+	end
+	
+	if message_id == hash("loadCombatZone") then
+		msg.post("/proxy_loader#level_loader_manager", "loadLevel", { newLevel = 2 })
+
+		timer.delay(0.5, false, function()
+			msg.post("0_game_managers:/game_manager_go#fader_gui", "blackFadeIn")
 		end)
 	end
 
-	if message_id == hash("finishCombatZone") then
-		-- TODO : do some better transitoins
-		msg.post("/proxy_loader#level_loader_manager", "loadLevel", { newLevel = 4 })
-		msg.post("/proxy_loader#level_loader_manager", "loadGUI", { guiNumber = 4 })
-	end
-
-	if message_id == hash("gameOver") then
-		
-		print("gameOver")
-		msg.post("/proxy_loader#level_loader_manager", "loadLevel", { newLevel = 4 })
-		msg.post("/proxy_loader#level_loader_manager", "loadGUI", { guiNumber = 4 })
+	if message_id == hash("Victory") then
+		msg.post("/proxy_loader#level_loader_manager", "loadLevel", { newLevel = 5 })
 	end
 end
 

@@ -8,12 +8,12 @@ components {
   }
   properties {
     id: "life"
-    value: "1.0"
+    value: "2.5"
     type: PROPERTY_TYPE_NUMBER
   }
   properties {
     id: "bulletDamage"
-    value: "1.0"
+    value: "20.0"
     type: PROPERTY_TYPE_NUMBER
   }
   properties {
@@ -33,12 +33,12 @@ components {
   }
   properties {
     id: "radius"
-    value: "2000.0"
+    value: "2500.0"
     type: PROPERTY_TYPE_NUMBER
   }
   properties {
     id: "shootingMode"
-    value: "shotgun"
+    value: "machine_gun"
     type: PROPERTY_TYPE_HASH
   }
 }
@@ -51,7 +51,7 @@ components {
   component: "/main/_scripts/entities/health_manager.script"
   properties {
     id: "max_health"
-    value: "200.0"
+    value: "3000.0"
     type: PROPERTY_TYPE_NUMBER
   }
   properties {
@@ -60,14 +60,41 @@ components {
     type: PROPERTY_TYPE_HASH
   }
 }
+components {
+  id: "truck_ai"
+  component: "/main/_scripts/car_ai/truck_ai.script"
+}
+components {
+  id: "enemy_explosion"
+  component: "/assets/soundFX/1_zone/enemy_explosion.wav"
+}
+components {
+  id: "bombExplosion"
+  component: "/main/particleFX/bombExplosion.particlefx"
+  position {
+    x: 192.0
+  }
+}
+components {
+  id: "car_collision"
+  component: "/assets/soundFX/Audio/car/car_collision.wav"
+}
+components {
+  id: "projecty_audio"
+  component: "/assets/soundFX/Audio/gun_shot/projecty_audio.wav"
+}
+components {
+  id: "car_collision1"
+  component: "/assets/soundFX/Audio/car/car_collision.wav"
+}
 embedded_components {
   id: "sprite"
   type: "sprite"
-  data: "default_animation: \"squarebot\"\n"
+  data: "default_animation: \"truck\"\n"
   "material: \"/assets/shader/sprite_1.material\"\n"
   "textures {\n"
   "  sampler: \"texture_sampler\"\n"
-  "  texture: \"/assets/atlases/main.atlas\"\n"
+  "  texture: \"/assets/atlases/final_atlas.atlas\"\n"
   "}\n"
   ""
   position {
@@ -93,8 +120,8 @@ embedded_components {
   "    index: 0\n"
   "    count: 3\n"
   "  }\n"
-  "  data: 87.8\n"
-  "  data: 87.8\n"
+  "  data: 298.84003\n"
+  "  data: 147.95029\n"
   "  data: 87.8\n"
   "}\n"
   ""

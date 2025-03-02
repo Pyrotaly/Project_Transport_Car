@@ -1,0 +1,97 @@
+local pers_data = require("main._scripts.modules.persistant_data_module")
+
+function init(self)
+	msg.post(".", "acquire_input_focus")
+	gui.set_render_order(2)
+	
+	self.selected_nodes = {}
+	self.pending_selection = nil
+
+	self.confirmNode = gui.get_node("confirm_button")
+	gui.set_enabled(self.confirmNode, false)
+	
+	self.coordinates = {
+		{0, 5, 0},
+		{1, 2, 1},
+		{7, 2, 1},
+		{2, 5, 2},
+		{6, 6, 2},
+		{4, 10, 3}
+	}
+
+	-- Loop through each coordinate pair
+	for _, coord in ipairs(self.coordinates) do
+		local x, y = coord[1], coord[2]
+		local node_name = tostring(x) .. "_" .. tostring(y) .. "_box"
+		self["map_" .. x .. "_" .. y] = gui.get_node(node_name)
+
+-- 		print("Assigned node:", node_name)
+	end
+	
+end
+
+function final(self)
+	-- Add finalization code here
+	-- Learn more: https://defold.com/manuals/script/
+	-- Remove this function if not needed
+end
+
+function update(self, dt)
+	-- Add update code here
+	-- Learn more: https://defold.com/manuals/script/
+	-- Remove this function if not needed
+end
+
+function on_message(self, message_id, message, sender)
+	-- Add message-handling code here
+	-- Learn more: https://defold.com/manuals/message-passing/
+	-- Remove this function if not needed
+end
+
+function on_input(self, action_id, action)
+	if action_id == hash("leftTrigger") and action.pressed then
+
+		if gui.pick_node(self.confirmNode, action.x, action.y) and gui.is_enabled(self.confirmNode) then
+			-- print("Confirmed destination: " .. self.pending_selection.node_name .. ", Load Level: " .. self.pending_selection.level)
+
+			local lastSelectedNodeCoordiantes = pers_data.get_latest_selected()
+
+			local payload = {
+				newLevel = self.pending_selection.level,
+				newCoords = {x = self.pending_selection.x, y = self.pending_selection.y},
+				lastCoords = lastSelectedNodeCoordiantes and {x = lastSelectedNodeCoordiantes.x, y = lastSelectedNodeCoordiantes.y}
+			}
+
+			-- unload map and upgrade
+			msg.post("0_game_managers:/proxy_loader#level_loader_manager", "unloadGUI", { guiNumber = 1 })
+			msg.post("0_game_managers:/proxy_loader#level_loader_manager", "unloadGUI", { guiNumber = 4 })
+
+			pers_data.mark_selected(self.pending_selection.node_name)
+			msg.post("0_game_managers:/game_manager_go#game_manager", "loadCombatZone", payload )
+		end
+
+		-- Check if any node is clicked
+		for _, coord in ipairs(self.coordinates) do
+			local x, y, level = coord[1], coord[2], coord[3]
+			local node_name = tostring(x) .. "_" .. tostring(y) .. "_box"
+			local node = self["map_" .. x .. "_" .. y]
+
+			-- If the node is clicked and hasn't been selected before
+			if gui.pick_node(node, action.x, action.y) and not pers_data.is_selected(node_name) and gui.is_enabled(node)  then
+				-- print("Node " .. node_name .. " clicked at coordinates: (" .. x .. ", " .. y .. "), Level: " .. level)
+
+				self.pending_selection = {node_name = node_name, x = x, y = y, level = level}
+
+				-- Allow player to confirm their destination
+				gui.set_enabled(self.confirmNode, true)
+			end
+		end
+	end 
+end
+
+
+function on_reload(self)
+	-- Add reload-handling code here
+	-- Learn more: https://defold.com/manuals/hot-reload/
+	-- Remove this function if not needed
+end

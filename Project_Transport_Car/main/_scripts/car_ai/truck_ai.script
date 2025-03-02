@@ -1,0 +1,20 @@
+local function move_object(self)
+	local target_y = math.random(self.min_y, self.max_y)
+
+	go.animate(".", "position.y", go.PLAYBACK_ONCE_FORWARD, target_y, go.EASING_INOUTSINE, self.move_time, 0, function()
+		timer.delay(self.wait_time, false, function()
+			move_object(self) -- Move again after wait time
+		end)
+	end)
+end
+
+
+function init(self)
+	msg.post("#sprite", "play_animation", { id = hash("truck") }) 
+	self.min_y = 300
+	self.max_y = 900
+	self.move_time = 1.5  -- Time it takes to move up or down
+	self.wait_time = 1  -- Time to wait before changing direction
+
+	move_object(self)
+end

@@ -3,8 +3,8 @@ scale_along_z: 0
 embedded_instances {
   id: "go"
   data: "components {\n"
-  "  id: \"upgrade_area\"\n"
-  "  component: \"/main/gui/upgrade_area.gui\"\n"
+  "  id: \"finale_upgrades\"\n"
+  "  component: \"/main/gui/finale_upgrades.gui\"\n"
   "}\n"
   ""
   position {

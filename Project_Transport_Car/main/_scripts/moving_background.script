@@ -1,54 +1,61 @@
 function init(self)
-	self.speed = 1000  -- Adjust speed as needed
+	self.speed = 1000 -- Adjust speed as needed
+	self.bg_width = 2560 -- Width of one background sprite
+	self.wrap_x = -2560 -- The threshold to wrap around
+
+	-- List of background game objects
+	self.bg_entities = {
+		"/road_background/go1",
+		"/road_background/go2",
+		"/road_background/go3"
+	}
+end
+
+local function get_leftmost_bg(self)
+	local leftmost = self.bg_entities[1]
+	local min_x = go.get_position(leftmost).x
+
+	for _, bg in ipairs(self.bg_entities) do
+		local pos_x = go.get_position(bg).x
+		if pos_x < min_x then
+			leftmost = bg
+			min_x = pos_x
+		end
+	end
+
+	return leftmost, min_x
+end
+
+local function get_rightmost_bg(self)
+	local rightmost = self.bg_entities[1]
+	local max_x = go.get_position(rightmost).x
+
+	for _, bg in ipairs(self.bg_entities) do
+		local pos_x = go.get_position(bg).x
+		if pos_x > max_x then
+			rightmost = bg
+			max_x = pos_x
+		end
+	end
+
+	return rightmost, max_x
 end
 
 function update(self, dt)
-	local pos = go.get_position("/background/environmentFolder")
-
-	local screen_width = tonumber(sys.get_config("display.width"))
-	
-	pos.x = pos.x - self.speed * dt  -- Move downward
-
-	-- If background moves off-screen, reset its position
-	if pos.x < -screen_width then
-		pos.x = screen_width
+	-- Move both backgrounds left
+	for _, bg in ipairs(self.bg_entities) do
+		local pos = go.get_position(bg)
+		pos.x = pos.x - self.speed * dt
+		go.set_position(pos, bg)
 	end
 
-	go.set_position(pos, "/background/environmentFolder")
+	-- Get leftmost background
+	local leftmost_bg, leftmost_x = get_leftmost_bg(self)
+
+	-- If it's fully off-screen, move it to the right of the rightmost one
+	if leftmost_x < self.wrap_x then
+		local _, rightmost_x = get_rightmost_bg(self) -- Get rightmost x position
+		local new_x = rightmost_x + self.bg_width -- Place it exactly to the right
+		go.set_position(vmath.vector3(new_x, go.get_position(leftmost_bg).y, 0), leftmost_bg)
+	end
 end
-
---[[
-
-function init(self)
-	self.speed = 300  -- Adjust base speed
-end
-
-function update(self, dt)
-	local bg_far = go.get_position("bg_far")    -- Farthest background
-	local bg_mid = go.get_position("bg_mid")    -- Midground
-	local bg_near = go.get_position("bg_near")  -- Closest (fastest moving)
-
-	-- Move layers at different speeds
-	bg_far.x = bg_far.x + (self.speed * 0.3) * dt
-	bg_mid.x = bg_mid.x + (self.speed * 0.6) * dt
-	bg_near.x = bg_near.x + (self.speed * 1.0) * dt
-
-	-- Loop backgrounds when off-screen
-	local screen_width = tonumber(sys.get_config("display.width")) -- Get screen width
-	if bg_far.x > screen_width then
-		bg_far.x = -screen_width
-	end
-	if bg_mid.x > screen_width then
-		bg_mid.x = -screen_width
-	end
-	if bg_near.x > screen_width then
-		bg_near.x = -screen_width
-	end
-
-	-- Apply new positions
-	go.set_position(bg_far, "bg_far")
-	go.set_position(bg_mid, "bg_mid")
-	go.set_position(bg_near, "bg_near")
-end
-
-]]--

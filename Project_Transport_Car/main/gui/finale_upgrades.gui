@@ -1,0 +1,176 @@
+script: "/main/_scripts/gui_scripts/finale_upgrades.gui_script"
+fonts {
+  name: "default"
+  font: "/builtins/fonts/default.font"
+}
+textures {
+  name: "final_atlas"
+  texture: "/assets/atlases/final_atlas.atlas"
+}
+nodes {
+  position {
+    x: 640.0
+    y: 360.0
+  }
+  type: TYPE_BOX
+  texture: "final_atlas/upgradeBackground"
+  id: "background"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+}
+nodes {
+  position {
+    x: 394.0
+    y: 485.0
+  }
+  type: TYPE_BOX
+  texture: "final_atlas/upgrade1"
+  id: "player_spray"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+}
+nodes {
+  position {
+    x: 764.0
+  }
+  type: TYPE_BOX
+  texture: "final_atlas/gear"
+  id: "box3"
+  parent: "player_spray"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+}
+nodes {
+  position {
+    x: 617.6842
+  }
+  scale {
+    x: 4.8
+    y: 4.8
+    z: 4.8
+  }
+  size {
+    x: 200.0
+    y: 100.0
+  }
+  color {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  }
+  type: TYPE_TEXT
+  text: "100"
+  font: "default"
+  id: "upgrade_1_cost"
+  parent: "player_spray"
+  inherit_alpha: true
+}
+nodes {
+  position {
+    x: 502.0
+    y: 317.0
+  }
+  type: TYPE_BOX
+  texture: "final_atlas/upgrade2"
+  id: "player_missile"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+}
+nodes {
+  position {
+    x: 655.0
+  }
+  type: TYPE_BOX
+  texture: "final_atlas/gear"
+  id: "box4"
+  parent: "player_missile"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+}
+nodes {
+  position {
+    x: 508.6842
+  }
+  scale {
+    x: 4.8
+    y: 4.8
+    z: 4.8
+  }
+  size {
+    x: 200.0
+    y: 100.0
+  }
+  color {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  }
+  type: TYPE_TEXT
+  text: "100"
+  font: "default"
+  id: "upgrade_1_cost1"
+  parent: "player_missile"
+  inherit_alpha: true
+}
+nodes {
+  position {
+    x: 1074.0
+    y: 98.0
+  }
+  color {
+    x: 0.8
+    y: 0.6
+    z: 0.8
+  }
+  type: TYPE_BOX
+  texture: "final_atlas/gear"
+  id: "scrap_amount"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+}
+nodes {
+  position {
+    x: 118.0
+  }
+  scale {
+    x: 4.8
+    y: 4.8
+    z: 4.8
+  }
+  size {
+    x: 200.0
+    y: 100.0
+  }
+  color {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  }
+  type: TYPE_TEXT
+  text: "199"
+  font: "default"
+  id: "scrap_amount_text"
+  parent: "scrap_amount"
+  inherit_alpha: true
+}
+nodes {
+  position {
+    x: 901.0
+    y: 100.0
+  }
+  rotation {
+    z: -1.167
+  }
+  scale {
+    x: 0.54
+    y: 0.54
+    z: 0.54
+  }
+  type: TYPE_BOX
+  texture: "final_atlas/goButton"
+  id: "confirm"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+}
+material: "/builtins/materials/gui.material"
+adjust_reference: ADJUST_REFERENCE_PARENT

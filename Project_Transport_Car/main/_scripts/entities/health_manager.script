@@ -5,6 +5,9 @@ go.property("health_type", hash("___")) -- player, enemy, car
 function init(self)
 	health_module.init(self)
 	self.spriteUrl = msg.url("#sprite")
+	self.explosionPfx = msg.url("#bombExplosion")
+	self.explosionSound = msg.url("#enemy_explosion")
+	self.onHit = msg.url("#car_collision")
 end
 
 function on_message(self, message_id, message, sender)

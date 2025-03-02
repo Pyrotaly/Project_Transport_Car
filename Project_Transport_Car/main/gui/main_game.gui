@@ -4,48 +4,12 @@ fonts {
   font: "/builtins/fonts/default.font"
 }
 textures {
-  name: "main"
-  texture: "/assets/atlases/main.atlas"
+  name: "final_atlas"
+  texture: "/assets/atlases/final_atlas.atlas"
 }
 nodes {
   position {
-    x: 666.0
-    y: 649.0
-  }
-  size {
-    x: 200.0
-    y: 100.0
-  }
-  color {
-    x: 0.8
-    y: 0.6
-    z: 0.8
-  }
-  type: TYPE_BOX
-  id: "time_remaining"
-  inherit_alpha: true
-  size_mode: SIZE_MODE_AUTO
-}
-nodes {
-  scale {
-    x: 6.52
-    y: 6.52
-    z: 6.52
-  }
-  size {
-    x: 200.0
-    y: 100.0
-  }
-  type: TYPE_TEXT
-  text: "0"
-  font: "default"
-  id: "time_text"
-  parent: "time_remaining"
-  inherit_alpha: true
-}
-nodes {
-  position {
-    x: 115.0
+    x: 64.0
     y: 160.0
   }
   scale {
@@ -53,18 +17,16 @@ nodes {
     y: 0.76
     z: 0.76
   }
-  color {
-    x: 0.8
-    y: 0.6
-    z: 0.8
-  }
   type: TYPE_BOX
-  texture: "main/gui_test"
+  texture: "final_atlas/healthIcon"
   id: "player_health"
   inherit_alpha: true
   size_mode: SIZE_MODE_AUTO
 }
 nodes {
+  position {
+    x: 173.6842
+  }
   scale {
     x: 4.8
     y: 4.8
@@ -83,28 +45,23 @@ nodes {
 }
 nodes {
   position {
-    x: 117.0
+    x: 80.0
     y: 62.0
   }
-  size {
-    x: 200.0
-    y: 100.0
-  }
-  color {
-    x: 0.8
-    y: 0.6
-    z: 0.8
-  }
   type: TYPE_BOX
+  texture: "final_atlas/ammoIcon"
   id: "bullets"
   inherit_alpha: true
   size_mode: SIZE_MODE_AUTO
 }
 nodes {
+  position {
+    x: 175.0
+  }
   scale {
-    x: 4.8
-    y: 4.8
-    z: 4.8
+    x: 3.84
+    y: 3.84
+    z: 3.84
   }
   size {
     x: 200.0
@@ -119,24 +76,50 @@ nodes {
 }
 nodes {
   position {
-    x: 1152.0
-    y: 72.0
+    x: 115.0
+    y: 62.0
+  }
+  type: TYPE_BOX
+  texture: "final_atlas/shotgun"
+  id: "bullets1"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+}
+nodes {
+  position {
+    x: 169.0
+  }
+  scale {
+    x: 3.84
+    y: 3.84
+    z: 3.84
   }
   size {
     x: 200.0
     y: 100.0
   }
-  color {
-    x: 0.8
-    y: 0.6
-    z: 0.8
+  type: TYPE_TEXT
+  text: "1/1"
+  font: "default"
+  id: "bullet_text1"
+  parent: "bullets1"
+  inherit_alpha: true
+}
+nodes {
+  position {
+    x: 1105.0
+    y: 72.0
   }
   type: TYPE_BOX
+  texture: "final_atlas/gear"
   id: "scrap_amount"
   inherit_alpha: true
   size_mode: SIZE_MODE_AUTO
 }
 nodes {
+  position {
+    x: 118.0
+  }
   scale {
     x: 4.8
     y: 4.8
@@ -147,7 +130,7 @@ nodes {
     y: 100.0
   }
   type: TYPE_TEXT
-  text: "500"
+  text: "99"
   font: "default"
   id: "scrap_amount_text"
   parent: "scrap_amount"

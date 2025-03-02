@@ -2,12 +2,13 @@ local M = {
 	player_upgrades_base = {
 		-- heal = 5,
 		-- health = 10,
-		bigger_mag = 5,
+		bigger_mag = 0,
 		reduce_spread = 0,
 		damage = 0,
 		missile = 0,  -- Track if missile shooting is unlocked
 		spray = 0,  -- Track extra projectiles unlocked
 		shoot_back = 0,  -- Track backward shooting upgrade
+		shotgun = 0
 	},
 	player_upgrades_increment = {
 		-- heal = 10,
@@ -18,6 +19,7 @@ local M = {
 		missile = 1,
 		spray = 1,  -- Track extra projectiles unlocked
 		shoot_back = 1,  -- Track backward shooting upgrade
+		shotgun = 1
 	},
 	car_upgrades_base = {
 		max_speed = 0,
@@ -36,9 +38,10 @@ local M = {
 			bigger_mag = {cost = 50, max_purchases = 3},
 			reduce_spread = {cost = 50, max_purchases = 3},
 			damage = {cost = 75, max_purchases = -1},
-			missile = {cost = 200, max_purchases = 1},
-			spray = {cost = 150, max_purchases = 1},
+			missile = {cost = 100, max_purchases = 1},
+			spray = {cost = 100, max_purchases = 1},
 			shoot_back = {cost = 100, max_purchases = 1},
+			shotgun = {cost = 100, max_purchases = 1}
 		},
 		car = {
 			max_speed = {cost = 200, max_purchases = 5},
@@ -70,7 +73,7 @@ function M.apply_player_upgrade(upgrade)
 		print("Player Upgrade Applied: ", upgrade, " -> ", M.player_upgrades_base[upgrade])
 		
 		-- Upgrades should only be possible in the upgrade level so the player will always be in proxy collection 4
-		msg.post("4_upgrade_area:/player/player#player_controller", "upgradeOccured")
+		-- msg.post("4_upgrade_area:/player/player#player_controller", "upgradeOccured")
 	else
 		print("Invalid Player Upgrade: ", upgrade)
 	end
@@ -128,5 +131,25 @@ function M.buy_upgrade(entity, upgrade)
 	print("Bought upgrade:", upgrade, "New Balance:", pers_data.get_currency())
 	return true
 end
+
+function M.is_upgrade_maxed(entity, upgrade)
+	local upgrade_data = M.upgrade_costs[entity] and M.upgrade_costs[entity][upgrade]
+
+	if not upgrade_data then
+		return false -- Invalid upgrade, assume not maxed
+	end
+
+	local max_purchases = upgrade_data.max_purchases
+	local current_purchases = M.player_purchase_counts[entity][upgrade] or 0
+
+	-- If max purchases is -1, it's infinite, so return false (not maxed)
+	if max_purchases == -1 then
+		return false
+	end
+
+	-- Return true if the upgrade has been purchased the max number of times
+	return current_purchases >= max_purchases
+end
+
 
 return M

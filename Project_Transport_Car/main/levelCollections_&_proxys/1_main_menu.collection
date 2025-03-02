@@ -1,0 +1,14 @@
+name: "1_level"
+scale_along_z: 0
+embedded_instances {
+  id: "go"
+  data: "components {\n"
+  "  id: \"main_menu\"\n"
+  "  component: \"/main/gui/main_menu.gui\"\n"
+  "}\n"
+  "components {\n"
+  "  id: \"ui_1\"\n"
+  "  component: \"/assets/soundFX/16 bit/ui_1.wav\"\n"
+  "}\n"
+  ""
+}

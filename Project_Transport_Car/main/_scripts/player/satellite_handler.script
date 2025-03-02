@@ -5,7 +5,7 @@ local CAMERA_ID = hash("/camera")
 local SOUND_ID = hash("")
 
 local orbitCenter
-local orbitRadius = 70
+local orbitRadius = 20
 local additionalRotation = math.pi  -- 90 degrees in radians
 local world = vmath.vector3(0, 0, 1)
 
@@ -15,7 +15,7 @@ local screenToWorld = vmath.vector3(0, 0, 0)
 local currentGun = "1"
 
 local items = {
-	gun1 = { damage = 10, speed = 5000, name = "Blaster", life = 0.4, shakeIntensity = 0.003, gunCooldown = 0.075, maxMagSize = 30 + upgrades.get_upgrade_value("player", "bigger_mag"), curMagSize = 30 },
+	gun1 = { damage = 50, speed = 5000, name = "Blaster", life = 0.4, shakeIntensity = 0.003, gunCooldown = 0.075, maxMagSize = 30 + upgrades.get_upgrade_value("player", "bigger_mag"), curMagSize = 30 },
 	gun2 = { damage = 35, speed = 2.0, name = "Pistol", life = 0.4, shakeIntensity = 0.005, gunCooldown = 0.05, maxMagSize = 50 + upgrades.get_upgrade_value("player", "bigger_mag"), curMagSize = 50 },
 	gun3 = { damage = 75, speed = 1.0, name = "Rocket Launcher", life = 0.4, shakeIntensity = 0.005, gunCooldown = 0.2, maxMagSize = 50 + upgrades.get_upgrade_value("player", "bigger_mag"), curMagSize = 50}
 }
@@ -27,7 +27,7 @@ local function apply_upgrade()
 	-- TODO : do this for all guns
 	local biggerMagUpgrade = upgrades.get_upgrade_value("player", "bigger_mag")
 	items.gun1.maxMagSize = 30 + biggerMagUpgrade
-	msg.post("gui_player_menu:/go#main_game", "updateBullet", { 
+	msg.post("2_combat_zone:/2_gui_player_menu/go#main_game", "updateBullet", { 
 		maxMagSize = items["gun" .. currentGun].maxMagSize,
 		curMagSize = items["gun" .. currentGun].curMagSize
 	})
@@ -45,7 +45,7 @@ local function fire_missile(self, position, rotation)
 	factory.create("factories#missile", missile_position, missile_rotation, {
 		speed = 2000,
 		life = 5,
-		damage = totalDamage,
+		damage = 3000,
 		mask = hash("enemy")
 	}, 2)
 end
@@ -58,7 +58,7 @@ local function spawn_extra_projectile(position, rotation)
 		factory.create("factories#bullet_" .. currentGun, position, new_rotation, {
 			speed = items["gun" .. currentGun].speed,
 			life = items["gun" .. currentGun].life,
-			bulletDamage = 50,
+			bulletDamage = 30,
 			mask = hash("enemy")
 		}, 1)
 	end
@@ -110,7 +110,7 @@ local function reload(self)
 	-- Simulate reload delay
 	timer.delay(1, false, function()
 		items["gun" .. currentGun].curMagSize = items["gun" .. currentGun].maxMagSize
-		msg.post("gui_player_menu:/go#main_game", "updateBullet", { 
+		msg.post("2_combat_zone:/2_gui_player_menu/go#main_game", "updateBullet", { 
 			maxMagSize = items["gun" .. currentGun].maxMagSize, -- Call the function here
 			curMagSize = items["gun" .. currentGun].curMagSize
 		})
@@ -129,13 +129,16 @@ local function shoot(self)
 		return
 	end
 
+	
+	msg.post("satellite#sprite", "play_animation", { id = hash("gun_1") }) 
+
 	sound.play("player_sounds/guns#gun1_shoot", { delay = 0, gain = 0.5, pan = 0, speed = 1 })
 	self.canShoot = false
 
 	self.shot_counter = self.shot_counter + 1
 	
 	items["gun" .. currentGun].curMagSize = items["gun" .. currentGun].curMagSize - 1
-	msg.post("gui_player_menu:/go#main_game", "updateBullet", { 
+	msg.post("2_combat_zone:/2_gui_player_menu/go#main_game", "updateBullet", { 
 		maxMagSize = items["gun" .. currentGun].maxMagSize, -- Call the function here
 		curMagSize = items["gun" .. currentGun].curMagSize
 	})
@@ -172,7 +175,7 @@ function init(self)
 	self.shot_counter = 0
 
 	-- TODO : Update the bullet ui for all guns when swtiching, maybe have switching guns have a swap time
-	msg.post("gui_player_menu:/go#main_game", "updateBullet", { 
+	msg.post("2_combat_zone:/2_gui_player_menu/go#main_game", "updateBullet", { 
 		maxMagSize = items["gun" .. currentGun].maxMagSize, -- Call the function here
 		curMagSize = items["gun" .. currentGun].curMagSize
 	})

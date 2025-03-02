@@ -12,7 +12,7 @@ go.property("shootingMode", hash("normal")) -- Options: "normal", "machine_gun",
 -- Weapon configs
 local SHOOTING_MODES = {
 	[hash("normal")] = { cooldown = 0.5, bullets = 1, spread = 0 },
-	[hash("machine_gun")] = { cooldown = 0.1, bullets = 1, spread = 30 },
+	[hash("machine_gun")] = { cooldown = 0.15, bullets = 1, spread = 30 },
 	[hash("sniper")] = { cooldown = 1.5, bullets = 1, spread = 0 },
 	[hash("shotgun")] = { cooldown = 0.8, bullets = 8, spread = 15 }, -- 5 bullets with a spread angle
 }
@@ -27,7 +27,7 @@ local function spawn_bullet(self, angle)
 		life = self.life,
 		bulletDamage = bulletDamage,
 		mask = hash("bulletMask")
-	}, 0.6)
+	}, 1.5)
 end
 
 local function shoot(self)
@@ -36,13 +36,18 @@ local function shoot(self)
 		print("Invalid shooting mode: " .. tostring(self.shootingMode))
 		return
 	end
-	local parent_id = go.get_parent()
-	local thisPos = go.get_position() + go.get_position(parent_id)
+	local thisPos = go.get_position()
+
+	if not self.target or not go.exists(self.target) then
+		print("Target does not exist. Aborting shoot.")
+		return
+	end
 	
 	local player_position = go.get_position(self.target)
 	local direction = player_position - thisPos
 	local base_angle = math.atan2(direction.y, direction.x)
-
+	
+	sound.play("#projecty_audio", { delay = 0, gain = 0.5, pan = 0, speed = 1 })
 	-- Fire bullets for shotgun evenly in a cone
 	if self.shootingMode == hash("shotgun") then
 		local spread = shooting_mode.spread
@@ -58,12 +63,7 @@ local function shoot(self)
 			local angle = start_angle + (i / (num_bullets - 1)) * (end_angle - start_angle)
 			spawn_bullet(self, angle)
 		end
-	elseif self.shootingMode == hash("sniper") then
-		-- shooting_mode.spread
-		-- TODO : make sniper bullet
-		spawn_bullet(self, base_angle)
-	else
-		-- Fire single or multiple bullets without even spread
+	elseif	self.shootingMode == hash("machine_gun") then
 		for i = 1, shooting_mode.bullets do
 			local spread = shooting_mode.spread
 			local offset_angle = base_angle + math.rad((math.random() * spread) - (spread / 2))
@@ -79,7 +79,8 @@ function init(self)
 	self.state = "pause" -- Initial state
 	-- self.shootingMode = "default" -- Adjust this to match your shooting mode setup
 	self.timer = 0 -- Timer to track the behavior switching
-	self.state_duration = 5 -- Duration for both shooting and pausing (in seconds)
+	self.state_duration = 3 -- Duration for both shooting and pausing (in seconds)
+	
 end
 
 -- ---------------------------------------------------------
@@ -117,8 +118,7 @@ function update(self, dt)
 	-- ---------------------------------------------------------
 	-- Debugging
 	-- ---------------------------------------------------------
-	local parent_id = go.get_parent()
-	local thisPos = go.get_position() + go.get_position(parent_id)
+	local thisPos = go.get_position()
 
 	if not self.target or not go.exists(self.target) then
 		self.target = nil -- Clear the invalid reference
