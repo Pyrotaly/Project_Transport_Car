@@ -1,7 +1,7 @@
 [project]
 title = Project_Transport_Car
 dependencies#0 = https://github.com/rgrams/debug-draw/archive/master.zip
-dependencies#1 = https://github.com/britzl/defold-orthographic/archive/master.zip
+dependencies#1 = https://github.com/britzl/defold-orthographic/archive/refs/tags/3.3.2.zip
 
 [bootstrap]
 main_collection = /main/levelCollections_&_proxys/0_game_managers.collectionc

@@ -52,11 +52,6 @@ instances {
       type: PROPERTY_TYPE_NUMBER
     }
     properties {
-      id: "projection"
-      value: "FIXED_AUTO"
-      type: PROPERTY_TYPE_HASH
-    }
-    properties {
       id: "follow"
       value: "true"
       type: PROPERTY_TYPE_BOOLEAN
